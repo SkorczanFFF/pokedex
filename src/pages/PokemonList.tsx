@@ -90,7 +90,7 @@ export const PokemonList = () => {
         setIsSearchMode(true);
       } else {
         setSearchError(
-          `No Pokemon found containing "${searchTerm}". Please try a different search term.`
+          `No Pokémon found containing "${searchTerm}". Please try a different search term.`
         );
         setSearchResults([]);
         setIsSearchMode(false);
@@ -119,7 +119,7 @@ export const PokemonList = () => {
     return (
       <div className="mx-auto px-4 py-8 xl:max-w-7xl">
         <div className="flex justify-between items-center mb-8 flex-col md:flex-row gap-4 md:gap-0">
-          <h1 className="text-2xl">Pokemon List</h1>
+          <h1 className="text-2xl">Pokémon List</h1>
           <FilterControls
             itemsPerPage={itemsPerPage}
             onItemsPerPageChange={handleItemsPerPageChange}
@@ -144,7 +144,7 @@ export const PokemonList = () => {
   return (
     <div className="mx-auto px-4 py-8 xl:max-w-7xl">
       <div className="flex justify-between items-center mb-8 flex-col md:flex-row gap-4 md:gap-0">
-        <h1 className="text-2xl">Pokemon List</h1>
+        <h1 className="text-2xl">Pokémon List</h1>
         <FilterControls
           itemsPerPage={itemsPerPage}
           onItemsPerPageChange={handleItemsPerPageChange}

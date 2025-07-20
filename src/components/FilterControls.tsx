@@ -74,6 +74,7 @@ export const FilterControls = ({
 
       {!isSearchMode && (
         <div className="flex items-center gap-2">
+          <label className="text-sm flex md:hidden">Per page:</label>
           <select
             value={itemsPerPage}
             onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
