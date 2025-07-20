@@ -1,5 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
+/* For Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* optional */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #e12025;
+}
+
 /* HTML: <div class="loader"></div> */
 .loader {
   width: 140px;

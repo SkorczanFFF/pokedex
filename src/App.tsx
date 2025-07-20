@@ -5,6 +5,7 @@ import { PokemonDetails } from "./pages/PokemonDetails";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import "./App.css";
+import ScrollToTopButton from "./components/ScrollToTopButton";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +29,7 @@ function App() {
               <Route path="/pokemon/:name" element={<PokemonDetails />} />
             </Routes>
           </main>
+          <ScrollToTopButton />
           <Footer />
         </div>
       </BrowserRouter>

@@ -1,21 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPokemonDetails, getPokemonList } from "../services/pokemon";
+import {
+  getPokemonDetails,
+  getPokemonList,
+  searchPokemonBySubstring,
+} from "../services/pokemon";
 import { PokemonCard } from "../components/PokemonCard";
+import { FilterControls } from "../components/FilterControls";
+import { Pagination } from "../components/Pagination";
 import type { Pokemon } from "../types/pokemon";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
-
-const ITEMS_PER_PAGE_OPTIONS = [20, 40, 60];
 
 export const PokemonList = () => {
   const { page } = useParams<{ page: string }>();
   const navigate = useNavigate();
   const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [isSearchMode, setIsSearchMode] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<Pokemon[]>([]);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
   const currentPage = Number(page) || 1;
 
-  // Validate page number
   useEffect(() => {
     if (!page || isNaN(Number(page)) || Number(page) < 1) {
       navigate("/1", { replace: true });
@@ -30,6 +38,7 @@ export const PokemonList = () => {
     queryKey: ["pokemonList", currentPage, itemsPerPage],
     queryFn: () =>
       getPokemonList(itemsPerPage, (currentPage - 1) * itemsPerPage),
+    enabled: !isSearchMode,
   });
 
   const {
@@ -45,7 +54,7 @@ export const PokemonList = () => {
       );
       return details;
     },
-    enabled: !!pokemonList?.results,
+    enabled: !!pokemonList?.results && !isSearchMode,
   });
 
   const totalPages = pokemonList
@@ -53,10 +62,10 @@ export const PokemonList = () => {
     : 0;
 
   useEffect(() => {
-    if (totalPages > 0 && currentPage > totalPages) {
+    if (totalPages > 0 && currentPage > totalPages && !isSearchMode) {
       navigate(`/${totalPages}`, { replace: true });
     }
-  }, [totalPages, currentPage, navigate]);
+  }, [totalPages, currentPage, navigate, isSearchMode]);
 
   const handlePageChange = (newPage: number) => {
     navigate(`/${newPage}`);
@@ -69,36 +78,90 @@ export const PokemonList = () => {
     window.scrollTo(0, 0);
   };
 
-  if (isListLoading || isDetailsLoading) {
+  const handleSearch = async (searchTerm: string) => {
+    setIsSearching(true);
+    setSearchError(null);
+    setSearchTerm(searchTerm);
+
+    try {
+      const results = await searchPokemonBySubstring(searchTerm);
+      if (results.length > 0) {
+        setSearchResults(results);
+        setIsSearchMode(true);
+      } else {
+        setSearchError(
+          `No Pokemon found containing "${searchTerm}". Please try a different search term.`
+        );
+        setSearchResults([]);
+        setIsSearchMode(false);
+      }
+    } catch {
+      setSearchError("An error occurred while searching. Please try again.");
+      setSearchResults([]);
+      setIsSearchMode(false);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleClearSearch = () => {
+    setIsSearchMode(false);
+    setSearchTerm("");
+    setSearchResults([]);
+    setSearchError(null);
+  };
+
+  if (isSearching || (!isSearchMode && (isListLoading || isDetailsLoading))) {
     return <Loader />;
   }
 
-  if (listError || detailsError) {
+  if (searchError) {
+    return (
+      <div className="mx-auto px-4 py-8 xl:max-w-7xl">
+        <div className="flex justify-between items-center mb-8 flex-col md:flex-row gap-4 md:gap-0">
+          <h1 className="text-2xl">Pokemon List</h1>
+          <FilterControls
+            itemsPerPage={itemsPerPage}
+            onItemsPerPageChange={handleItemsPerPageChange}
+            onSearch={handleSearch}
+            isSearchMode={isSearchMode}
+            onClearSearch={handleClearSearch}
+          />
+        </div>
+        <div className="text-center text-red-600 py-8">
+          <p>{searchError}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isSearchMode && (listError || detailsError)) {
     return <Error errorType="list" />;
   }
+
+  const pokemonToDisplay = isSearchMode ? searchResults : pokemonDetails || [];
 
   return (
     <div className="mx-auto px-4 py-8 xl:max-w-7xl">
       <div className="flex justify-between items-center mb-8 flex-col md:flex-row gap-4 md:gap-0">
         <h1 className="text-2xl">Pokemon List</h1>
-        <div className="flex items-center gap-4">
-          <label className="text-sm">Items per page:</label>
-          <select
-            value={itemsPerPage}
-            onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
-            className="border-2 px-2 py-1 text-sm bg-white"
-          >
-            {ITEMS_PER_PAGE_OPTIONS.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+        <FilterControls
+          itemsPerPage={itemsPerPage}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          onSearch={handleSearch}
+          isSearchMode={isSearchMode}
+          onClearSearch={handleClearSearch}
+        />
       </div>
 
+      {isSearchMode && (
+        <h2 className="text-lg font-semibold mb-8 text-center md:text-left">
+          Search Results for "{searchTerm}" ({searchResults.length} found)
+        </h2>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {pokemonDetails?.map((pokemon: Pokemon) => (
+        {pokemonToDisplay.map((pokemon: Pokemon) => (
           <PokemonCard
             key={pokemon.id}
             pokemon={pokemon}
@@ -107,53 +170,12 @@ export const PokemonList = () => {
         ))}
       </div>
 
-      {totalPages > 1 && (
-        <div className="mt-8 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-2">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointe text-sm hover:bg-[#FFCD0B] disabled:hover:bg-gray-300"
-          >
-            Prev
-          </button>
-
-          <div className="flex gap-1">
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              let pageNumber;
-              if (totalPages <= 5) {
-                pageNumber = i + 1;
-              } else if (currentPage <= 3) {
-                pageNumber = i + 1;
-              } else if (currentPage >= totalPages - 2) {
-                pageNumber = totalPages - 4 + i;
-              } else {
-                pageNumber = currentPage - 2 + i;
-              }
-
-              return (
-                <button
-                  key={pageNumber}
-                  onClick={() => handlePageChange(pageNumber)}
-                  className={`w-10 h-10 text-sm cursor-pointer ${
-                    currentPage === pageNumber
-                      ? "bg-[#356DB2] text-white"
-                      : "bg-gray-300 hover:bg-[#FFCD0B]"
-                  }`}
-                >
-                  {pageNumber}
-                </button>
-              );
-            })}
-          </div>
-
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointe text-sm hover:bg-[#FFCD0B] cursor-pointer disabled:hover:bg-gray-300"
-          >
-            Next
-          </button>
-        </div>
+      {!isSearchMode && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       )}
     </div>
   );
