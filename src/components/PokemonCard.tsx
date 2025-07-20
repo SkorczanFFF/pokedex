@@ -3,9 +3,10 @@ import type { Pokemon } from "../types/pokemon";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
+  currentPage?: number;
 }
 
-export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
+export const PokemonCard = ({ pokemon, currentPage = 1 }: PokemonCardProps) => {
   const imageUrl =
     pokemon.sprites.other["official-artwork"].front_default ||
     pokemon.sprites.front_default;
@@ -13,6 +14,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   return (
     <Link
       to={`/pokemon/${pokemon.name}`}
+      state={{ fromPage: currentPage }}
       className="block bg-white p-4 hover:translate-y-[-10px]"
     >
       <div className="aspect-square">

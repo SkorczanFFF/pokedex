@@ -1,11 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { getPokemonDetails } from "../services/pokemon";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
 
 export const PokemonDetails = () => {
   const { name } = useParams<{ name: string }>();
+  const location = useLocation();
+
+  const previousPage = location.state?.fromPage || 1;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const {
     data: pokemon,
@@ -28,13 +36,13 @@ export const PokemonDetails = () => {
   return (
     <div className="container mx-auto px-4 py-8 lg:max-w-7xl">
       <Link
-        to="/"
+        to={`/${previousPage}`}
         className="inline-block mb-8 text-black bg-[#FECB09] hover:bg-[#E12025] hover:text-white px-4 py-2"
       >
         Back to List
       </Link>
 
-      <div className="bg-[#F2F9EF] p-6">
+      <div className="bg-white p-6">
         <div className="grid md:grid-cols-2 gap-8">
           <div>
             <img
@@ -77,7 +85,9 @@ export const PokemonDetails = () => {
                         <div className="flex w-full h-4 bg-[#EAEBF2] overflow-hidden">
                           <div
                             className="h-full bg-[#356DB2]"
-                            style={{ width: `${stat.base_stat}%` }}
+                            style={{
+                              width: `${(stat.base_stat / 160) * 100}%`,
+                            }}
                           ></div>
                         </div>
                         <span className="ml-0 md:ml-2 w-12 text-right text-xs">
