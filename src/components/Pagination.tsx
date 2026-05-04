@@ -2,23 +2,31 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  onPrefetch?: (page: number) => void;
 }
 
 export const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
+  onPrefetch,
 }: PaginationProps) => {
   if (totalPages <= 1) {
     return null;
   }
 
+  const handlePrefetch = (page: number) => {
+    if (page < 1 || page > totalPages || page === currentPage) return;
+    onPrefetch?.(page);
+  };
+
   return (
     <div className="mt-8 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-2">
       <button
         onClick={() => onPageChange(currentPage - 1)}
+        onMouseEnter={() => handlePrefetch(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointe text-sm hover:bg-[#FFCD0B] disabled:hover:bg-gray-300"
+        className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-[#FFCD0B] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
       >
         Prev
       </button>
@@ -36,12 +44,16 @@ export const Pagination = ({
             pageNumber = currentPage - 2 + i;
           }
 
+          const isActive = currentPage === pageNumber;
+
           return (
             <button
               key={pageNumber}
               onClick={() => onPageChange(pageNumber)}
+              onMouseEnter={() => handlePrefetch(pageNumber)}
+              aria-current={isActive ? "page" : undefined}
               className={`w-10 h-10 text-sm cursor-pointer ${
-                currentPage === pageNumber
+                isActive
                   ? "bg-[#356DB2] text-white"
                   : "bg-gray-300 hover:bg-[#FFCD0B]"
               }`}
@@ -54,8 +66,9 @@ export const Pagination = ({
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
+        onMouseEnter={() => handlePrefetch(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointe text-sm hover:bg-[#FFCD0B] cursor-pointer disabled:hover:bg-gray-300"
+        className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-[#FFCD0B] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
       >
         Next
       </button>

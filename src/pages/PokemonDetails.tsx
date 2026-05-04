@@ -1,15 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { getPokemonDetails } from "../services/pokemon";
+import {
+  getDescription,
+  getGeneration,
+  getGenus,
+  getPokemonDetails,
+  getPokemonSpecies,
+} from "../services/pokemon";
+import { typeClass } from "../utils/types";
 import Loader from "../components/Loader";
-import Error from "../components/Error";
+import ErrorView from "../components/ErrorView";
 
 export const PokemonDetails = () => {
   const { name } = useParams<{ name: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const previousPage = location.state?.fromPage || 1;
+  const navState =
+    (location.state as { from?: string; scrollY?: number } | null) ?? null;
+  const backTo = navState?.from ?? "/";
+
+  const handleBack = () => {
+    navigate(backTo, {
+      state:
+        typeof navState?.scrollY === "number"
+          ? { restoreScroll: navState.scrollY }
+          : null,
+    });
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -25,22 +44,42 @@ export const PokemonDetails = () => {
     enabled: !!name,
   });
 
+  const { data: species } = useQuery({
+    queryKey: ["species", pokemon?.id],
+    queryFn: () => getPokemonSpecies(pokemon!.id),
+    enabled: !!pokemon?.id,
+  });
+
   if (isLoading) {
     return <Loader />;
   }
 
   if (error || !pokemon) {
-    return <Error errorType="details" />;
+    return <ErrorView errorType="details" />;
   }
 
+  const playCry = () => {
+    if (!pokemon.cries?.latest) return;
+    const audio = new Audio(pokemon.cries.latest);
+    audio.volume = 0.3;
+    audio.play().catch(() => {
+      /* user-gesture missing or autoplay blocked */
+    });
+  };
+
+  const description = species ? getDescription(species) : "";
+  const genus = species ? getGenus(species) : "";
+  const generation = species ? getGeneration(species) : "";
+  const meta = [generation, genus].filter(Boolean).join(" · ");
+
   return (
-    <div className="container mx-auto px-4 py-8 lg:max-w-7xl">
-      <Link
-        to={`/${previousPage}`}
-        className="inline-block mb-8 text-black bg-[#FECB09] hover:bg-[#E12025] hover:text-white px-4 py-2"
+    <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
+      <button
+        onClick={handleBack}
+        className="inline-block mb-8 text-black bg-[#FECB09] hover:bg-[#E12025] hover:text-white px-4 py-2 cursor-pointer"
       >
         Back to List
-      </Link>
+      </button>
 
       <div className="bg-white p-6">
         <div className="grid md:grid-cols-2 gap-8">
@@ -56,16 +95,38 @@ export const PokemonDetails = () => {
           </div>
 
           <div>
-            <h1 className="text-2xl capitalize mb-4">{pokemon.name}</h1>
+            <div className="flex items-center gap-3 mb-4 flex-wrap">
+              <h1 className="text-2xl capitalize">{pokemon.name}</h1>
+              {pokemon.cries?.latest && (
+                <button
+                  onClick={playCry}
+                  aria-label={`Play ${pokemon.name} cry`}
+                  className="text-xs px-2 py-1 bg-[#FECB09] hover:bg-[#E12025] hover:text-white cursor-pointer"
+                >
+                  ▶ Cry
+                </button>
+              )}
+            </div>
+
+            {meta && (
+              <p className="text-xs text-gray-500 mb-3">{meta}</p>
+            )}
+            {description && (
+              <p className="text-xs leading-relaxed mb-6">{description}</p>
+            )}
 
             <div className="flex gap-2 mb-6">
               {pokemon.types.map((type) => (
-                <span
+                <Link
                   key={type.type.name}
-                  className="px-4 py-1 text-xs bg-gray-100"
+                  to={`/?type=${type.type.name}`}
+                  aria-label={`Show all ${type.type.name} type Pokémon`}
+                  className={`px-4 py-1 text-xs cursor-pointer hover:opacity-80 ${typeClass(
+                    type.type.name
+                  )}`}
                 >
                   {type.type.name}
-                </span>
+                </Link>
               ))}
             </div>
 

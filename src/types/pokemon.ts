@@ -28,6 +28,8 @@ export interface Pokemon {
       name: string;
     };
   }[];
+  species: { url: string };
+  cries: { latest: string | null; legacy: string | null };
 }
 
 export interface PokemonListResponse {
@@ -38,4 +40,31 @@ export interface PokemonListResponse {
     name: string;
     url: string;
   }[];
+}
+
+export interface PokemonTypeResponse {
+  name: string;
+  pokemon: {
+    pokemon: { name: string; url: string };
+    slot: number;
+  }[];
+}
+
+export interface PokemonGenerationResponse {
+  id: number;
+  name: string;
+  main_region: { name: string; url: string };
+  pokemon_species: { name: string; url: string }[];
+}
+
+export interface PokemonSpecies {
+  flavor_text_entries: {
+    flavor_text: string;
+    language: { name: string };
+    version: { name: string };
+  }[];
+  genera: { genus: string; language: { name: string } }[];
+  generation: { name: string };
+  habitat: { name: string } | null;
+  evolution_chain: { url: string };
 }

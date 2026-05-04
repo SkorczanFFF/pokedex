@@ -1,4 +1,4 @@
-function Error({ errorType }: { errorType: string }) {
+function ErrorView({ errorType }: { errorType: string }) {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="text-[#E12025] text-center">
@@ -11,4 +11,4 @@ function Error({ errorType }: { errorType: string }) {
   );
 }
 
-export default Error;
+export default ErrorView;

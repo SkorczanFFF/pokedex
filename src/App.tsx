@@ -24,9 +24,9 @@ function App() {
           <Navbar />
           <main className="flex-grow pt-12">
             <Routes>
-              <Route path="/" element={<Navigate to="/1" replace />} />
-              <Route path="/:page" element={<PokemonList />} />
+              <Route path="/" element={<PokemonList />} />
               <Route path="/pokemon/:name" element={<PokemonDetails />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
           <ScrollToTopButton />
