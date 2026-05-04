@@ -15,11 +15,7 @@ import { SkeletonGrid } from "../components/Skeleton";
 import { TypeFilter } from "../components/TypeFilter";
 import ErrorView from "../components/ErrorView";
 import { isPokemonType } from "../utils/types";
-import {
-  formatGen,
-  genApiName,
-  isGenSlug,
-} from "../utils/generations";
+import { formatGen, genApiName, isGenSlug } from "../utils/generations";
 import type { Pokemon } from "../types/pokemon";
 
 const PER_PAGE_OPTIONS = [20, 40, 60];
@@ -43,11 +39,14 @@ export const PokemonList = () => {
 
   const genParam = params.get("gen");
   const activeGen = isGenSlug(genParam) ? genParam : null;
-  const isGenMode = !isSearchMode && activeGen !== null;
 
   const typeParam = params.get("type");
   const activeType = isPokemonType(typeParam) ? typeParam : null;
-  const isTypeMode = !isSearchMode && !isGenMode && activeType !== null;
+
+  const isTypeMode = !isSearchMode && activeType !== null;
+  const isGenMode = !isSearchMode && activeGen !== null;
+  const isCombinedMode = isTypeMode && isGenMode;
+  const isFilterMode = isTypeMode || isGenMode;
 
   const update = (patch: Record<string, string | null>) => {
     setParams((prev) => {
@@ -72,13 +71,13 @@ export const PokemonList = () => {
     update({ q, type: null, gen: null, page: null });
   const handleClearSearch = () => update({ q: null, page: "1" });
 
-  // Selecting a value clears the other modes; clearing only nulls itself.
+  // Type and gen combine — clearing one doesn't touch the other.
   const handleTypeChange = (t: string | null) => {
     if (t === null) {
       if (activeType === null) return;
       update({ type: null, page: "1" });
     } else {
-      update({ type: t, q: null, gen: null, page: "1" });
+      update({ type: t, q: null, page: "1" });
     }
     window.scrollTo(0, 0);
   };
@@ -87,7 +86,7 @@ export const PokemonList = () => {
       if (activeGen === null) return;
       update({ gen: null, page: "1" });
     } else {
-      update({ gen: g, q: null, type: null, page: "1" });
+      update({ gen: g, q: null, page: "1" });
     }
     window.scrollTo(0, 0);
   };
@@ -101,7 +100,7 @@ export const PokemonList = () => {
     queryKey: ["pokemonList", currentPage, itemsPerPage],
     queryFn: () =>
       getPokemonList(itemsPerPage, (currentPage - 1) * itemsPerPage),
-    enabled: !isSearchMode && !isTypeMode && !isGenMode,
+    enabled: !isSearchMode && !isFilterMode,
   });
 
   const {
@@ -116,11 +115,10 @@ export const PokemonList = () => {
         pokemonList.results.map((p) => getPokemonDetails(p.name))
       );
     },
-    enabled:
-      !!pokemonList?.results && !isSearchMode && !isTypeMode && !isGenMode,
+    enabled: !!pokemonList?.results && !isSearchMode && !isFilterMode,
   });
 
-  // ── Type filter ─────────────────────────────────────────────
+  // ── Type list ───────────────────────────────────────────────
   const {
     data: typeData,
     isLoading: isTypeListLoading,
@@ -132,33 +130,7 @@ export const PokemonList = () => {
     staleTime: Infinity,
   });
 
-  const typePageSlice =
-    isTypeMode && typeData
-      ? typeData.pokemon
-          .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-          .map((entry) => entry.pokemon)
-      : [];
-
-  const {
-    data: typeDetails,
-    isLoading: isTypeDetailsLoading,
-    error: typeDetailsError,
-  } = useQuery({
-    queryKey: ["typeDetails", activeType, currentPage, itemsPerPage],
-    queryFn: async () =>
-      Promise.all(
-        typePageSlice.map((p) =>
-          queryClient.fetchQuery({
-            queryKey: ["pokemon", p.name],
-            queryFn: () => getPokemonDetails(p.name),
-            staleTime: 1000 * 60 * 5,
-          })
-        )
-      ),
-    enabled: isTypeMode && !!typeData,
-  });
-
-  // ── Generation filter ───────────────────────────────────────
+  // ── Generation list ─────────────────────────────────────────
   const {
     data: genData,
     isLoading: isGenListLoading,
@@ -170,26 +142,42 @@ export const PokemonList = () => {
     staleTime: Infinity,
   });
 
-  const genPageSlice =
-    isGenMode && genData
-      ? genData.pokemon_species.slice(
-          (currentPage - 1) * itemsPerPage,
-          currentPage * itemsPerPage
-        )
-      : [];
+  // ── Filtered name list (type, gen, or intersection) ─────────
+  const filteredNames: { name: string }[] = (() => {
+    if (isCombinedMode) {
+      if (!typeData || !genData) return [];
+      const genSet = new Set(genData.pokemon_species.map((s) => s.name));
+      return typeData.pokemon
+        .map((p) => p.pokemon)
+        .filter((p) => genSet.has(p.name));
+    }
+    if (isTypeMode && typeData) return typeData.pokemon.map((p) => p.pokemon);
+    if (isGenMode && genData) return genData.pokemon_species;
+    return [];
+  })();
+
+  const filteredPageNames = filteredNames.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const {
-    data: genDetails,
-    isLoading: isGenDetailsLoading,
-    error: genDetailsError,
+    data: filteredDetails,
+    isLoading: isFilteredDetailsLoading,
+    error: filteredDetailsError,
   } = useQuery({
-    queryKey: ["genDetails", activeGen, currentPage, itemsPerPage],
+    queryKey: [
+      "filteredDetails",
+      activeType,
+      activeGen,
+      currentPage,
+      itemsPerPage,
+    ],
     queryFn: async (): Promise<Pokemon[]> => {
-      // Some species names 404 on /pokemon/{name} (form-only mons like deoxys).
-      // Promise.allSettled lets the page render with the rest. TODO: lazy-resolve
-      // via /pokemon-species/{name}.varieties[is_default].
+      // Promise.allSettled because a few species names 404 on /pokemon/{name}
+      // (form-only mons like deoxys, wormadam). Failed entries silently drop.
       const settled = await Promise.allSettled(
-        genPageSlice.map((p) =>
+        filteredPageNames.map((p) =>
           queryClient.fetchQuery({
             queryKey: ["pokemon", p.name],
             queryFn: () => getPokemonDetails(p.name),
@@ -203,7 +191,7 @@ export const PokemonList = () => {
         )
         .map((r) => r.value);
     },
-    enabled: isGenMode && !!genData,
+    enabled: isFilterMode && filteredPageNames.length > 0,
   });
 
   // ── Search ──────────────────────────────────────────────────
@@ -240,14 +228,8 @@ export const PokemonList = () => {
   // ── Aggregate ───────────────────────────────────────────────
   const totalPages = isSearchMode
     ? 0
-    : isGenMode
-    ? genData
-      ? Math.ceil(genData.pokemon_species.length / itemsPerPage)
-      : 0
-    : isTypeMode
-    ? typeData
-      ? Math.ceil(typeData.pokemon.length / itemsPerPage)
-      : 0
+    : isFilterMode
+    ? Math.ceil(filteredNames.length / itemsPerPage)
     : pokemonList
     ? Math.ceil(pokemonList.count / itemsPerPage)
     : 0;
@@ -263,22 +245,18 @@ export const PokemonList = () => {
 
   const isSearching = isSearchMode && (isAllNamesLoading || isSearchLoading);
   const isLoadingDefault =
-    !isSearchMode &&
-    !isTypeMode &&
-    !isGenMode &&
-    (isListLoading || isDetailsLoading);
-  const isLoadingType =
-    isTypeMode && (isTypeListLoading || isTypeDetailsLoading);
-  const isLoadingGen =
-    isGenMode && (isGenListLoading || isGenDetailsLoading);
-  const isLoadingList = isLoadingDefault || isLoadingType || isLoadingGen;
+    !isSearchMode && !isFilterMode && (isListLoading || isDetailsLoading);
+  const isLoadingFilter =
+    isFilterMode &&
+    ((isTypeMode && isTypeListLoading) ||
+      (isGenMode && isGenListLoading) ||
+      isFilteredDetailsLoading);
+  const isLoadingList = isLoadingDefault || isLoadingFilter;
 
   const pokemonToDisplay: Pokemon[] = isSearchMode
     ? searchResults
-    : isGenMode
-    ? genDetails ?? []
-    : isTypeMode
-    ? typeDetails ?? []
+    : isFilterMode
+    ? filteredDetails ?? []
     : pokemonDetails ?? [];
 
   const hasData = pokemonToDisplay.length > 0;
@@ -295,34 +273,22 @@ export const PokemonList = () => {
     navigate(`${location.pathname}${location.search}`, { replace: true });
   }, [hasData, location, navigate]);
 
-  const hasNoMatches =
+  const hasNoSearchMatches =
     isSearchMode && !isSearching && pokemonToDisplay.length === 0;
+  const hasNoFilterMatches =
+    isFilterMode && !isLoadingFilter && filteredNames.length === 0;
 
   const showListError =
-    (!isSearchMode &&
-      !isTypeMode &&
-      !isGenMode &&
-      (listError || detailsError)) ||
-    (isTypeMode && (typeError || typeDetailsError)) ||
-    (isGenMode && (genError || genDetailsError));
+    (!isSearchMode && !isFilterMode && (listError || detailsError)) ||
+    (isFilterMode && (typeError || genError || filteredDetailsError));
 
-  // Pagination prefetch — different fetcher per mode
+  // Pagination prefetch — delegates to the right slice per mode
   const handlePrefetchPage = (page: number) => {
-    if (isGenMode && genData) {
-      const slice = genData.pokemon_species.slice(
+    if (isFilterMode) {
+      const slice = filteredNames.slice(
         (page - 1) * itemsPerPage,
         page * itemsPerPage
       );
-      slice.forEach((p) =>
-        queryClient.prefetchQuery({
-          queryKey: ["pokemon", p.name],
-          queryFn: () => getPokemonDetails(p.name),
-        })
-      );
-    } else if (isTypeMode && typeData) {
-      const slice = typeData.pokemon
-        .slice((page - 1) * itemsPerPage, page * itemsPerPage)
-        .map((e) => e.pokemon);
       slice.forEach((p) =>
         queryClient.prefetchQuery({
           queryKey: ["pokemon", p.name],
@@ -336,6 +302,13 @@ export const PokemonList = () => {
       });
     }
   };
+
+  const filterLabel = (() => {
+    if (isCombinedMode) return `${formatGen(activeGen!)} ${activeType} Pokémon`;
+    if (isTypeMode) return `${activeType} Pokémon`;
+    if (isGenMode) return `${formatGen(activeGen!)} Pokémon`;
+    return "";
+  })();
 
   return (
     <div className="mx-auto px-4 py-8 xl:max-w-7xl">
@@ -357,16 +330,9 @@ export const PokemonList = () => {
         <TypeFilter active={activeType} onChange={handleTypeChange} />
       )}
 
-      {isGenMode && genData && !isLoadingList && (
-        <h2 className="text-lg font-semibold mb-8 text-center md:text-left">
-          {formatGen(activeGen!)} Pokémon ({genData.pokemon_species.length}{" "}
-          total)
-        </h2>
-      )}
-
-      {isTypeMode && typeData && !isLoadingList && (
+      {isFilterMode && filteredNames.length > 0 && !isLoadingFilter && (
         <h2 className="text-lg font-semibold mb-8 text-center md:text-left capitalize">
-          {activeType} Pokémon ({typeData.pokemon.length} total)
+          {filterLabel} ({filteredNames.length} total)
         </h2>
       )}
 
@@ -377,11 +343,23 @@ export const PokemonList = () => {
         </h2>
       )}
 
-      {hasNoMatches && (
+      {hasNoSearchMatches && (
         <div className="text-center text-red-600 py-8">
           <p>
             No Pokémon found matching "{searchTerm}". Please try a different
             search term.
+          </p>
+        </div>
+      )}
+
+      {hasNoFilterMatches && (
+        <div className="text-center text-red-600 py-8">
+          <p>
+            No Pokémon match{" "}
+            {isCombinedMode
+              ? `${activeType} type in ${formatGen(activeGen!)}`
+              : "these filters"}
+            .
           </p>
         </div>
       )}
@@ -391,7 +369,8 @@ export const PokemonList = () => {
       ) : isLoadingList || isSearching ? (
         <SkeletonGrid count={itemsPerPage} />
       ) : (
-        !hasNoMatches && (
+        !hasNoSearchMatches &&
+        !hasNoFilterMatches && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {pokemonToDisplay.map((pokemon) => (
               <PokemonCard key={pokemon.id} pokemon={pokemon} />

@@ -21,3 +21,24 @@ export const formatGen = (slug: GenSlug | string): string => {
   const raw = slug.replace(/^generation-/, "");
   return `Gen ${raw.toUpperCase()}`;
 };
+
+const GEN_BOUNDARIES: { max: number; slug: GenSlug }[] = [
+  { max: 151, slug: "i" },
+  { max: 251, slug: "ii" },
+  { max: 386, slug: "iii" },
+  { max: 493, slug: "iv" },
+  { max: 649, slug: "v" },
+  { max: 721, slug: "vi" },
+  { max: 809, slug: "vii" },
+  { max: 905, slug: "viii" },
+  { max: 1025, slug: "ix" },
+];
+
+// IDs above 1025 are PokéAPI form variants (Mega/Gmax/etc.) — return null
+// so callers render nothing rather than guessing an incorrect generation.
+export const generationFromId = (id: number): GenSlug | null => {
+  for (const { max, slug } of GEN_BOUNDARIES) {
+    if (id <= max) return slug;
+  }
+  return null;
+};
