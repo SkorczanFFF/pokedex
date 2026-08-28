@@ -50,6 +50,12 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
           className="w-full h-full object-contain"
           loading="lazy"
         />
+        <span className="absolute top-[1px] left-[-1px] text-white text-[10px] leading-none px-2 py-1">
+          {pokemon.id}
+        </span>
+        <span className="absolute top-0 left-0 text-black text-[10px] leading-none px-2 py-1">
+          {pokemon.id}
+        </span>
         {gen && (
           <>
             <span className="absolute top-[1px] right-[-1px] text-white text-[10px] leading-none px-2 py-1">

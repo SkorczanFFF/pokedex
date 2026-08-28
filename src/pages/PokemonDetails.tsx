@@ -106,6 +106,7 @@ export const PokemonDetails = () => {
                   ▶ Cry
                 </button>
               )}
+              <span className="text-gray-500">[{pokemon.id}]</span>
             </div>
 
             {meta && (
