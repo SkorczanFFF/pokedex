@@ -1,23 +1,25 @@
 import { useTranslation } from "react-i18next";
-import { TYPE_NAMES, typeClass } from "../utils/types";
+import { MAX_TYPES, TYPE_NAMES, typeClass } from "../utils/types";
 import { useTypeLabel } from "../i18n/domain";
 
 interface TypeFilterProps {
-  active: string | null;
-  onChange: (type: string | null) => void;
+  active: readonly string[];
+  onToggle: (type: string) => void;
+  onClear: () => void;
 }
 
-export const TypeFilter = ({ active, onChange }: TypeFilterProps) => {
+export const TypeFilter = ({ active, onToggle, onClear }: TypeFilterProps) => {
   const { t } = useTranslation();
   const typeLabel = useTypeLabel();
+  const atLimit = active.length >= MAX_TYPES;
 
   return (
-    <div className="flex flex-wrap gap-2 mb-8 justify-center md:justify-start">
+    <div className="flex flex-wrap gap-2 justify-center md:justify-start">
       <button
-        onClick={() => onChange(null)}
-        aria-pressed={active === null}
+        onClick={onClear}
+        aria-pressed={active.length === 0}
         className={`px-3 py-1 text-xs cursor-pointer ${
-          active === null
+          active.length === 0
             ? "bg-black text-white"
             : "bg-gray-200 text-black hover:bg-gray-300"
         }`}
@@ -25,16 +27,26 @@ export const TypeFilter = ({ active, onChange }: TypeFilterProps) => {
         {t("filters.all")}
       </button>
       {TYPE_NAMES.map((type) => {
-        const isActive = active === type;
-        const isFaded = active !== null && !isActive;
+        const isActive = active.includes(type);
+        // Types combine with AND, and no Pokémon has three types — so once two
+        // are picked the rest are dead ends and get disabled rather than
+        // silently producing an empty list.
+        const isDisabled = !isActive && atLimit;
+        const isFaded = !isActive && active.length > 0;
         return (
           <button
             key={type}
-            onClick={() => onChange(isActive ? null : type)}
+            onClick={() => onToggle(type)}
+            disabled={isDisabled}
             aria-pressed={isActive}
-            className={`px-3 py-1 text-xs cursor-pointer ${typeClass(type)} ${
+            title={isDisabled ? t("filters.maxTypes", { max: MAX_TYPES }) : undefined}
+            className={`px-3 py-1 text-xs ${typeClass(type)} ${
               isActive ? "ring-2 ring-black ring-offset-1" : ""
-            } ${isFaded ? "opacity-50 hover:opacity-100" : ""}`}
+            } ${
+              isDisabled
+                ? "opacity-30 cursor-not-allowed"
+                : `cursor-pointer ${isFaded ? "opacity-50 hover:opacity-100" : ""}`
+            }`}
           >
             {typeLabel(type)}
           </button>

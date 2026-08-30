@@ -77,7 +77,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
           {pokemon.types.map((type) => (
             <span
               key={type.type.name}
-              className={`px-2 py-1 text-xs ${typeClass(type.type.name)}`}
+              className={`px-2 py-1 text-[10px] leading-4 ${typeClass(type.type.name)}`}
             >
               {typeLabel(type.type.name)}
             </span>

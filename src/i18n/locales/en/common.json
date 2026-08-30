@@ -27,20 +27,29 @@
     "clearSearch": "Clear search",
     "genLabel": "Gen:",
     "perPageLabel": "Per page:",
-    "all": "All"
+    "all": "All",
+    "title": "Filters",
+    "open": "Filters",
+    "openWithCount": "Filters ({{count}})",
+    "close": "Close filters",
+    "clearAll": "Clear all",
+    "typeHeading": "Type",
+    "maxTypes": "Max {{max}} types",
+    "showResults": "Show results",
+    "showResultsCount_one": "Show {{count}} result",
+    "showResultsCount_other": "Show {{count}} results"
   },
   "list": {
     "title": "Pokémon List",
-    "filterType": "Type: {{type}}",
+    "filterType_one": "Type: {{types}}",
+    "filterType_other": "Types: {{types}}",
     "filterGen": "Generation: {{gen}}",
-    "filterBoth": "Type: {{type}} · Generation: {{gen}}",
     "filterHeading_one": "{{label}} ({{count}} result)",
     "filterHeading_other": "{{label}} ({{count}} results)",
     "searchResults_one": "Search results for “{{query}}” ({{count}} result)",
     "searchResults_other": "Search results for “{{query}}” ({{count}} results)",
     "searchResultsCapped": "Search results for “{{query}}” ({{count}}+ results)",
     "noSearchMatches": "No Pokémon found matching “{{query}}”. Please try a different search term.",
-    "noFilterMatchesBoth": "No Pokémon match — type: {{type}}, generation: {{gen}}.",
     "noFilterMatches": "No Pokémon match these filters."
   },
   "pagination": {

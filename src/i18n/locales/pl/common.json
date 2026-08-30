@@ -9,8 +9,8 @@
     "pl": "Polski"
   },
   "gen": {
-    "badge": "Gen. {{roman}}",
-    "any": "---"
+    "badge": "Generacja {{roman}}",
+    "any": "dowolna"
   },
   "loader": {
     "loading": "Wczytywanie"
@@ -25,15 +25,29 @@
     "searchPlaceholder": "np. Meowth",
     "searchAction": "Szukaj",
     "clearSearch": "Wyczyść wyszukiwanie",
-    "genLabel": "Gen:",
+    "genLabel": "Generacja:",
     "perPageLabel": "Na stronę:",
-    "all": "Wszystkie"
+    "all": "Wszystkie",
+    "title": "Filtry",
+    "open": "Filtry",
+    "openWithCount": "Filtry ({{count}})",
+    "close": "Zamknij filtry",
+    "clearAll": "Wyczyść",
+    "typeHeading": "Typ",
+    "maxTypes": "Maks. {{max}} typy",
+    "showResults": "Pokaż wyniki",
+    "showResultsCount_one": "Pokaż {{count}} wynik",
+    "showResultsCount_few": "Pokaż {{count}} wyniki",
+    "showResultsCount_many": "Pokaż {{count}} wyników",
+    "showResultsCount_other": "Pokaż {{count}} wyniku"
   },
   "list": {
     "title": "Lista Pokémon",
-    "filterType": "Typ: {{type}}",
+    "filterType_one": "Typ: {{types}}",
+    "filterType_few": "Typy: {{types}}",
+    "filterType_many": "Typy: {{types}}",
+    "filterType_other": "Typy: {{types}}",
     "filterGen": "Generacja: {{gen}}",
-    "filterBoth": "Typ: {{type}} · Generacja: {{gen}}",
     "filterHeading_one": "{{label}} ({{count}} wynik)",
     "filterHeading_few": "{{label}} ({{count}} wyniki)",
     "filterHeading_many": "{{label}} ({{count}} wyników)",
@@ -44,7 +58,6 @@
     "searchResults_other": "Wyniki dla „{{query}}” ({{count}} wyniku)",
     "searchResultsCapped": "Wyniki dla „{{query}}” ({{count}}+ wyników)",
     "noSearchMatches": "Nie znaleziono Pokémonów pasujących do „{{query}}”. Spróbuj innej frazy.",
-    "noFilterMatchesBoth": "Brak Pokémonów — typ: {{type}}, generacja: {{gen}}.",
     "noFilterMatches": "Żaden Pokémon nie pasuje do tych filtrów."
   },
   "pagination": {

@@ -47,3 +47,21 @@ export type PokemonType = (typeof TYPE_NAMES)[number];
 
 export const isPokemonType = (s: string | null): s is PokemonType =>
   s !== null && (TYPE_NAMES as readonly string[]).includes(s);
+
+/** A Pokémon has at most two types, so an AND filter beyond two is always empty. */
+export const MAX_TYPES = 2;
+
+/** Reads `?type=grass,poison` — drops unknown slugs and duplicates, caps at MAX_TYPES. */
+export const parseTypes = (raw: string | null): PokemonType[] => {
+  if (!raw) return [];
+  const picked = new Set<PokemonType>();
+  for (const part of raw.split(",")) {
+    const slug = part.trim();
+    if (isPokemonType(slug)) picked.add(slug);
+    if (picked.size >= MAX_TYPES) break;
+  }
+  return [...picked];
+};
+
+export const serializeTypes = (types: readonly string[]): string | null =>
+  types.length > 0 ? types.join(",") : null;

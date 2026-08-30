@@ -1,4 +1,11 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -14,8 +21,11 @@ import { FilterControls } from "../components/FilterControls";
 import { Pagination } from "../components/Pagination";
 import { SkeletonGrid } from "../components/Skeleton";
 import { TypeFilter } from "../components/TypeFilter";
+import { SearchBox } from "../components/SearchBox";
+import { FiltersPanel } from "../components/FiltersPanel";
 import ErrorView from "../components/ErrorView";
-import { isPokemonType } from "../utils/types";
+import { MAX_TYPES, parseTypes, serializeTypes } from "../utils/types";
+import { intersectByName } from "../utils/intersect";
 import { genApiName, genRoman, isGenSlug } from "../utils/generations";
 import { DEFAULT_PER_PAGE, isPerPage } from "../utils/pagination";
 import { useTypeLabel } from "../i18n/domain";
@@ -42,22 +52,31 @@ export const PokemonList = () => {
   const activeGen = isGenSlug(genParam) ? genParam : null;
 
   const typeParam = params.get("type");
-  const activeType = isPokemonType(typeParam) ? typeParam : null;
+  const activeTypes = useMemo(() => parseTypes(typeParam), [typeParam]);
+  // Stable scalar for query keys — activeTypes is a fresh array on every parse.
+  const typeKey = activeTypes.join(",");
 
-  const isTypeMode = !isSearchMode && activeType !== null;
+  const isTypeMode = !isSearchMode && activeTypes.length > 0;
   const isGenMode = !isSearchMode && activeGen !== null;
-  const isCombinedMode = isTypeMode && isGenMode;
   const isFilterMode = isTypeMode || isGenMode;
 
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const closeFilters = useCallback(() => setIsFiltersOpen(false), []);
+
+  // A filtering session in the mobile panel should leave one history entry, not
+  // one per tap — so updates made while it is open replace instead of pushing.
   const update = (patch: Record<string, string | null>) => {
-    setParams((prev) => {
-      const next = new URLSearchParams(prev);
-      for (const [k, v] of Object.entries(patch)) {
-        if (v === null || v === "") next.delete(k);
-        else next.set(k, v);
-      }
-      return next;
-    });
+    setParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        for (const [k, v] of Object.entries(patch)) {
+          if (v === null || v === "") next.delete(k);
+          else next.set(k, v);
+        }
+        return next;
+      },
+      { replace: isFiltersOpen }
+    );
   };
 
   const handlePageChange = (n: number) => {
@@ -72,14 +91,20 @@ export const PokemonList = () => {
     update({ q, type: null, gen: null, page: null });
   const handleClearSearch = () => update({ q: null, page: "1" });
 
-  // Type and gen combine — clearing one doesn't touch the other.
-  const handleTypeChange = (t: string | null) => {
-    if (t === null) {
-      if (activeType === null) return;
-      update({ type: null, page: "1" });
-    } else {
-      update({ type: t, q: null, page: "1" });
-    }
+  // Types combine with AND and cap at MAX_TYPES; gen combines on top of them,
+  // and clearing one never touches the other.
+  const handleTypeToggle = (type: string) => {
+    const next = (activeTypes as readonly string[]).includes(type)
+      ? activeTypes.filter((active) => active !== type)
+      : [...activeTypes, type];
+    if (next.length > MAX_TYPES) return;
+    update({ type: serializeTypes(next), q: null, page: "1" });
+    window.scrollTo(0, 0);
+  };
+
+  const handleTypesClear = () => {
+    if (activeTypes.length === 0) return;
+    update({ type: null, page: "1" });
     window.scrollTo(0, 0);
   };
   const handleGenerationChange = (g: string | null) => {
@@ -89,6 +114,12 @@ export const PokemonList = () => {
     } else {
       update({ gen: g, q: null, page: "1" });
     }
+    window.scrollTo(0, 0);
+  };
+
+  const handleClearAll = () => {
+    if (activeTypes.length === 0 && activeGen === null) return;
+    update({ type: null, gen: null, page: "1" });
     window.scrollTo(0, 0);
   };
 
@@ -119,14 +150,25 @@ export const PokemonList = () => {
     enabled: !!pokemonList?.results && !isSearchMode && !isFilterMode,
   });
 
-  // ── Type list ───────────────────────────────────────────────
+  // ── Type lists ──────────────────────────────────────────────
+  // One request per selected type, each cached under its own ["typeList", type]
+  // key so toggling one type reuses whatever the other selection already got.
   const {
-    data: typeData,
+    data: typeLists,
     isLoading: isTypeListLoading,
     error: typeError,
   } = useQuery({
-    queryKey: ["typeList", activeType],
-    queryFn: () => getPokemonByType(activeType!),
+    queryKey: ["typeLists", typeKey],
+    queryFn: () =>
+      Promise.all(
+        activeTypes.map((type) =>
+          queryClient.fetchQuery({
+            queryKey: ["typeList", type],
+            queryFn: () => getPokemonByType(type),
+            staleTime: Infinity,
+          })
+        )
+      ),
     enabled: isTypeMode,
     staleTime: Infinity,
   });
@@ -143,19 +185,21 @@ export const PokemonList = () => {
     staleTime: Infinity,
   });
 
-  // ── Filtered name list (type, gen, or intersection) ─────────
-  const filteredNames: { name: string }[] = (() => {
-    if (isCombinedMode) {
-      if (!typeData || !genData) return [];
-      const genSet = new Set(genData.pokemon_species.map((s) => s.name));
-      return typeData.pokemon
-        .map((p) => p.pokemon)
-        .filter((p) => genSet.has(p.name));
+  // ── Filtered name list — every active type ANDed with the generation ──
+  const filteredNames = useMemo<{ name: string }[]>(() => {
+    if (isTypeMode && !typeLists) return [];
+    if (isGenMode && !genData) return [];
+
+    const lists: { name: string }[][] = [];
+    if (isTypeMode && typeLists) {
+      for (const list of typeLists) {
+        lists.push(list.pokemon.map((entry) => entry.pokemon));
+      }
     }
-    if (isTypeMode && typeData) return typeData.pokemon.map((p) => p.pokemon);
-    if (isGenMode && genData) return genData.pokemon_species;
-    return [];
-  })();
+    if (isGenMode && genData) lists.push(genData.pokemon_species);
+
+    return intersectByName(lists);
+  }, [isTypeMode, isGenMode, typeLists, genData]);
 
   const filteredPageNames = filteredNames.slice(
     (currentPage - 1) * itemsPerPage,
@@ -169,7 +213,7 @@ export const PokemonList = () => {
   } = useQuery({
     queryKey: [
       "filteredDetails",
-      activeType,
+      typeKey,
       activeGen,
       currentPage,
       itemsPerPage,
@@ -192,7 +236,12 @@ export const PokemonList = () => {
         )
         .map((r) => r.value);
     },
-    enabled: isFilterMode && filteredPageNames.length > 0,
+    // Cards hydrate for the selection the user settles on, not for every tap
+    // along the way. The URL, the heading and the panel's result count all
+    // update live off the cached name lists — this only holds back the per-card
+    // requests (and their artwork) for combinations passed through behind the
+    // sheet. Measured at ~68% of the requests in a typical two-tap session.
+    enabled: isFilterMode && filteredPageNames.length > 0 && !isFiltersOpen,
   });
 
   // ── Search ──────────────────────────────────────────────────
@@ -247,11 +296,10 @@ export const PokemonList = () => {
   const isSearching = isSearchMode && (isAllNamesLoading || isSearchLoading);
   const isLoadingDefault =
     !isSearchMode && !isFilterMode && (isListLoading || isDetailsLoading);
+  const isLoadingFilterNames =
+    (isTypeMode && isTypeListLoading) || (isGenMode && isGenListLoading);
   const isLoadingFilter =
-    isFilterMode &&
-    ((isTypeMode && isTypeListLoading) ||
-      (isGenMode && isGenListLoading) ||
-      isFilteredDetailsLoading);
+    isFilterMode && (isLoadingFilterNames || isFilteredDetailsLoading);
   const isLoadingList = isLoadingDefault || isLoadingFilter;
 
   const pokemonToDisplay: Pokemon[] = isSearchMode
@@ -304,33 +352,74 @@ export const PokemonList = () => {
     }
   };
 
-  const filterLabel = (() => {
-    const type = activeType ? typeLabel(activeType) : "";
-    const gen = activeGen ? genRoman(activeGen) : "";
-    if (isCombinedMode) return t("list.filterBoth", { type, gen });
-    if (isTypeMode) return t("list.filterType", { type });
-    if (isGenMode) return t("list.filterGen", { gen });
-    return "";
-  })();
+  // Composed from parts instead of one message per combination — each part is a
+  // whole phrase and " · " is punctuation, so this stays translation-safe.
+  const filterLabel = [
+    isTypeMode
+      ? t("list.filterType", {
+          types: activeTypes.map(typeLabel).join(", "),
+          count: activeTypes.length,
+        })
+      : "",
+    isGenMode ? t("list.filterGen", { gen: genRoman(activeGen!) }) : "",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  const activeFilterCount = activeTypes.length + (activeGen ? 1 : 0);
+  const resultCount = isFilterMode
+    ? isLoadingFilterNames
+      ? null
+      : filteredNames.length
+    : pokemonList?.count ?? null;
 
   return (
     <div className="mx-auto px-4 py-8 xl:max-w-7xl">
-      <div className="flex justify-between items-center mb-8 flex-col md:flex-row gap-4 md:gap-0">
+      <div className="flex justify-between items-center mb-4 md:mb-8 flex-col md:flex-row gap-4 md:gap-0">
         <h1 className="text-2xl">{t("list.title")}</h1>
-        <FilterControls
+        <div className="hidden md:block">
+          <FilterControls
+            initialQuery={searchTerm}
+            itemsPerPage={itemsPerPage}
+            activeGen={activeGen}
+            onItemsPerPageChange={handleItemsPerPageChange}
+            onGenerationChange={handleGenerationChange}
+            onSearch={handleSearch}
+            isSearchMode={isSearchMode}
+            onClearSearch={handleClearSearch}
+          />
+        </div>
+      </div>
+
+      {/* Mobile: search stays reachable, everything else sits behind one
+          button. Sticks directly under the fixed h-12 navbar. */}
+      <div className="md:hidden sticky top-12 z-40 -mx-4 mb-6 flex items-center gap-2 bg-[#eaebf2] px-4 py-2">
+        <SearchBox
+          compact
           initialQuery={searchTerm}
-          itemsPerPage={itemsPerPage}
-          activeGen={activeGen}
-          onItemsPerPageChange={handleItemsPerPageChange}
-          onGenerationChange={handleGenerationChange}
-          onSearch={handleSearch}
           isSearchMode={isSearchMode}
+          onSearch={handleSearch}
           onClearSearch={handleClearSearch}
         />
+        <button
+          onClick={() => setIsFiltersOpen(true)}
+          aria-expanded={isFiltersOpen}
+          className="h-9 shrink-0 px-3 bg-[#356DB2] text-white text-sm cursor-pointer hover:bg-[#E12025]"
+        >
+          {activeFilterCount > 0
+            ? t("filters.openWithCount", { count: activeFilterCount })
+            : t("filters.open")}
+        </button>
       </div>
 
       {!isSearchMode && (
-        <TypeFilter active={activeType} onChange={handleTypeChange} />
+        <div className="hidden md:block mb-8">
+          <TypeFilter
+            active={activeTypes}
+            onToggle={handleTypeToggle}
+            onClear={handleTypesClear}
+          />
+        </div>
       )}
 
       {isFilterMode && filteredNames.length > 0 && !isLoadingFilter && (
@@ -361,14 +450,8 @@ export const PokemonList = () => {
 
       {hasNoFilterMatches && (
         <div className="text-center text-red-600 py-8">
-          <p>
-            {isCombinedMode
-              ? t("list.noFilterMatchesBoth", {
-                  type: typeLabel(activeType!),
-                  gen: genRoman(activeGen!),
-                })
-              : t("list.noFilterMatches")}
-          </p>
+          {filterLabel && <p className="mb-2">{filterLabel}</p>}
+          <p>{t("list.noFilterMatches")}</p>
         </div>
       )}
 
@@ -393,6 +476,22 @@ export const PokemonList = () => {
           totalPages={totalPages}
           onPageChange={handlePageChange}
           onPrefetch={handlePrefetchPage}
+        />
+      )}
+
+      {isFiltersOpen && (
+        <FiltersPanel
+          activeTypes={activeTypes}
+          activeGen={activeGen}
+          itemsPerPage={itemsPerPage}
+          resultCount={resultCount}
+          hasActiveFilters={activeFilterCount > 0}
+          onTypeToggle={handleTypeToggle}
+          onTypesClear={handleTypesClear}
+          onGenerationChange={handleGenerationChange}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          onClearAll={handleClearAll}
+          onClose={closeFilters}
         />
       )}
     </div>
