@@ -76,7 +76,36 @@
     "heightValue": "{{value, number}} m",
     "weightValue": "{{value, number}} kg",
     "englishEntry": "Ten opis Pokédexu jest dostępny wyłącznie po angielsku",
-    "englishEntryShort": "EN"
+    "englishEntryShort": "EN",
+    "evolution": "Ewolucja"
+  },
+  "evolution": {
+    "none": "Ten Pokémon nie ewoluuje.",
+    "level": "Poz. {{level}}",
+    "levelUp": "Awans poziomu",
+    "useItem": "Użycie przedmiotu",
+    "trade": "Wymiana",
+    "tradeFor": "wymiana za {{species}}",
+    "shed": "Poz. 20 i wolne miejsce w drużynie",
+    "happiness": "wysoka przyjaźń",
+    "affection": "wysoka więź",
+    "beauty": "wysokie piękno",
+    "holding": "trzymając {{item}}",
+    "knowsMove": "znając {{move}}",
+    "knowsMoveType": "znając ruch typu {{type}}",
+    "location": "w lokacji {{location}}",
+    "party": "z {{species}} w drużynie",
+    "partyType": "z typem {{type}} w drużynie",
+    "rain": "podczas deszczu",
+    "upsideDown": "konsola do góry nogami",
+    "female": "tylko samica",
+    "male": "tylko samiec",
+    "day": "za dnia",
+    "night": "w nocy",
+    "dusk": "o zmierzchu",
+    "atkOverDef": "Atak > Obrona",
+    "atkEqualsDef": "Atak = Obrona",
+    "defOverAtk": "Obrona > Atak"
   },
   "scrollTop": "Przewiń do góry"
 }

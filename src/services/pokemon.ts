@@ -1,4 +1,5 @@
 import type {
+  EvolutionChainResponse,
   Pokemon,
   PokemonGenerationResponse,
   PokemonListResponse,
@@ -21,12 +22,37 @@ export const getPokemonList = async (
   return response.json();
 };
 
+/** Name of the default form behind a species slug, or null if there is no such species. */
+const getDefaultVariety = async (species: string): Promise<string | null> => {
+  const response = await fetch(`${API_URL}/pokemon-species/${species}`);
+  if (!response.ok) return null;
+  const data: PokemonSpecies = await response.json();
+  return data.varieties.find((v) => v.is_default)?.pokemon.name ?? null;
+};
+
 export const getPokemonDetails = async (name: string): Promise<Pokemon> => {
   const response = await fetch(`${API_URL}/pokemon/${name}`);
-  if (!response.ok) {
+  if (response.ok) {
+    return response.json();
+  }
+  if (response.status !== 404) {
     throw new Error(`Failed to fetch Pokemon ${name}`);
   }
-  return response.json();
+
+  // A dozen Pokédex species only ever exist as named forms, so /pokemon/wormadam
+  // 404s while /pokemon/wormadam-plant works. Anything holding a species slug —
+  // an evolution chain, the generation filter — would otherwise dead-end here,
+  // so resolve the species' default variety and retry once.
+  const fallback = await getDefaultVariety(name);
+  if (!fallback || fallback === name) {
+    throw new Error(`Failed to fetch Pokemon ${name}`);
+  }
+
+  const retry = await fetch(`${API_URL}/pokemon/${fallback}`);
+  if (!retry.ok) {
+    throw new Error(`Failed to fetch Pokemon ${name}`);
+  }
+  return retry.json();
 };
 
 export const getAllPokemonNames = async (): Promise<
@@ -67,6 +93,16 @@ export const getPokemonSpecies = async (
   const response = await fetch(`${API_URL}/pokemon-species/${id}`);
   if (!response.ok) {
     throw new Error(`Failed to fetch species ${id}`);
+  }
+  return response.json();
+};
+
+export const getEvolutionChain = async (
+  id: number
+): Promise<EvolutionChainResponse> => {
+  const response = await fetch(`${API_URL}/evolution-chain/${id}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch evolution chain ${id}`);
   }
   return response.json();
 };

@@ -48,7 +48,11 @@ export const SearchBox = ({
   return (
     <div
       className={`flex items-center gap-2 ${
-        compact ? "flex-1 min-w-0" : isSearchMode ? "flex-wrap justify-center" : ""
+        compact
+          ? "flex-1 min-w-0"
+          : isSearchMode
+            ? "flex-wrap justify-center"
+            : ""
       }`}
     >
       <label htmlFor={inputId} className={compact ? "sr-only" : "text-sm"}>
@@ -72,20 +76,7 @@ export const SearchBox = ({
           aria-label={t("filters.searchAction")}
           className="h-9 px-3 bg-[#FECB09] disabled:hover:text-black text-black hover:text-white text-sm hover:bg-[#E12025] disabled:opacity-50 disabled:bg-[#FECB09] disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-            className="h-4 w-4"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
+          {">"}
         </button>
         {isSearchMode && (
           <button

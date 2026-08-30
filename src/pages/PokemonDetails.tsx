@@ -12,6 +12,7 @@ import {
 import { typeClass } from "../utils/types";
 import { genRoman } from "../utils/generations";
 import { useAbilityLabel, useStatLabel, useTypeLabel } from "../i18n/domain";
+import { EvolutionChain } from "../components/EvolutionChain";
 import Loader from "../components/Loader";
 import ErrorView from "../components/ErrorView";
 
@@ -37,9 +38,11 @@ export const PokemonDetails = () => {
     });
   };
 
+  // Evolution links stay on this route with a different param, so the component
+  // is reused rather than remounted — the reset has to follow the name.
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [name]);
 
   const {
     data: pokemon,
@@ -116,7 +119,8 @@ export const PokemonDetails = () => {
                   aria-label={t("details.playCry", { name: pokemon.name })}
                   className="text-xs px-2 py-1 bg-[#FECB09] hover:bg-[#E12025] hover:text-white cursor-pointer"
                 >
-                  ▶ {t("details.cry")}
+                  {" > "}
+                  {t("details.cry")}
                 </button>
               )}
               <span className="text-gray-500">[{pokemon.id}]</span>
@@ -149,7 +153,7 @@ export const PokemonDetails = () => {
                     type: typeLabel(type.type.name),
                   })}
                   className={`px-4 py-1 text-xs cursor-pointer hover:opacity-80 ${typeClass(
-                    type.type.name
+                    type.type.name,
                   )}`}
                 >
                   {typeLabel(type.type.name)}
@@ -219,6 +223,13 @@ export const PokemonDetails = () => {
           </div>
         </div>
       </div>
+
+      {species && (
+        <EvolutionChain
+          chainUrl={species.evolution_chain.url}
+          currentId={pokemon.id}
+        />
+      )}
     </div>
   );
 };

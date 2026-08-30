@@ -67,4 +67,40 @@ export interface PokemonSpecies {
   generation: { name: string };
   habitat: { name: string } | null;
   evolution_chain: { url: string };
+  varieties: { is_default: boolean; pokemon: { name: string } }[];
+}
+
+/** One row of `evolution_details` — the conditions attached to a single step. */
+export interface EvolutionDetail {
+  version_group: { name: string; url: string };
+  trigger: { name: string };
+  item: { name: string } | null;
+  held_item: { name: string } | null;
+  known_move: { name: string } | null;
+  known_move_type: { name: string } | null;
+  location: { name: string } | null;
+  party_species: { name: string } | null;
+  party_type: { name: string } | null;
+  trade_species: { name: string } | null;
+  min_level: number | null;
+  min_happiness: number | null;
+  min_beauty: number | null;
+  min_affection: number | null;
+  gender: number | null;
+  time_of_day: string;
+  needs_overworld_rain: boolean;
+  turn_upside_down: boolean;
+  relative_physical_stats: number | null;
+}
+
+/** A node of the evolution tree. Branches (Eevee) mean several `evolves_to`. */
+export interface EvolutionLink {
+  species: { name: string; url: string };
+  evolution_details: EvolutionDetail[];
+  evolves_to: EvolutionLink[];
+}
+
+export interface EvolutionChainResponse {
+  id: number;
+  chain: EvolutionLink;
 }

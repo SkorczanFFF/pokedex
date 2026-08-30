@@ -68,7 +68,36 @@
     "heightValue": "{{value, number}} m",
     "weightValue": "{{value, number}} kg",
     "englishEntry": "This Pokédex entry is only available in English",
-    "englishEntryShort": "EN"
+    "englishEntryShort": "EN",
+    "evolution": "Evolution"
+  },
+  "evolution": {
+    "none": "This Pokémon does not evolve.",
+    "level": "Lvl. {{level}}",
+    "levelUp": "Level up",
+    "useItem": "Use item",
+    "trade": "Trade",
+    "tradeFor": "trade for {{species}}",
+    "shed": "Lvl. 20 with a free party slot",
+    "happiness": "high friendship",
+    "affection": "high affection",
+    "beauty": "high beauty",
+    "holding": "holding {{item}}",
+    "knowsMove": "knowing {{move}}",
+    "knowsMoveType": "knowing a {{type}} move",
+    "location": "at {{location}}",
+    "party": "with {{species}} in party",
+    "partyType": "with a {{type}} type in party",
+    "rain": "while raining",
+    "upsideDown": "console upside down",
+    "female": "female only",
+    "male": "male only",
+    "day": "daytime",
+    "night": "nighttime",
+    "dusk": "at dusk",
+    "atkOverDef": "Attack > Defense",
+    "atkEqualsDef": "Attack = Defense",
+    "defOverAtk": "Defense > Attack"
   },
   "scrollTop": "Scroll to top"
 }
