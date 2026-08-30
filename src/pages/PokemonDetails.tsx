@@ -119,6 +119,7 @@ export const PokemonDetails = () => {
                   ▶ {t("details.cry")}
                 </button>
               )}
+              <span className="text-gray-500">[{pokemon.id}]</span>
             </div>
 
             {meta && <p className="text-xs text-gray-500 mb-3">{meta}</p>}

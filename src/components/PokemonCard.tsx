@@ -24,13 +24,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   // Manual click handler so scrollY is captured at click time.
   // Link's `state` prop is fixed at render time, which produces a stale 0.
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (
-      e.button !== 0 ||
-      e.metaKey ||
-      e.ctrlKey ||
-      e.shiftKey ||
-      e.altKey
-    ) {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
       return;
     }
     e.preventDefault();
@@ -55,7 +49,13 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
           className="w-full h-full object-contain"
           loading="lazy"
         />
-        {genBadge && (
+        <span className="absolute top-[1px] left-[-1px] text-white text-[10px] leading-none px-2 py-1">
+          {pokemon.id}
+        </span>
+        <span className="absolute top-0 left-0 text-black text-[10px] leading-none px-2 py-1">
+          {pokemon.id}
+        </span>
+        {gen && (
           <>
             {/* Offset copy acts as a text shadow — hidden from screen readers
                 so the badge is not announced twice. */}
