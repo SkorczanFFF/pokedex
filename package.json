@@ -13,8 +13,11 @@
     "@tailwindcss/vite": "^4.1.11",
     "@tanstack/react-query": "^5.83.0",
     "@vercel/analytics": "^1.5.0",
+    "i18next": "^26.4.0",
+    "i18next-browser-languagedetector": "^8.2.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^17.0.12",
     "react-router-dom": "^7.7.0",
     "tailwindcss": "^4.1.11"
   },

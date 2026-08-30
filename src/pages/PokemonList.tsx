@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -15,14 +16,16 @@ import { SkeletonGrid } from "../components/Skeleton";
 import { TypeFilter } from "../components/TypeFilter";
 import ErrorView from "../components/ErrorView";
 import { isPokemonType } from "../utils/types";
-import { formatGen, genApiName, isGenSlug } from "../utils/generations";
+import { genApiName, genRoman, isGenSlug } from "../utils/generations";
+import { DEFAULT_PER_PAGE, isPerPage } from "../utils/pagination";
+import { useTypeLabel } from "../i18n/domain";
 import type { Pokemon } from "../types/pokemon";
 
-const PER_PAGE_OPTIONS = [20, 40, 60];
-const DEFAULT_PER_PAGE = 20;
 const SEARCH_LIMIT = 60;
 
 export const PokemonList = () => {
+  const { t } = useTranslation();
+  const typeLabel = useTypeLabel();
   const [params, setParams] = useSearchParams();
   const queryClient = useQueryClient();
   const location = useLocation();
@@ -31,9 +34,7 @@ export const PokemonList = () => {
 
   const currentPage = Math.max(1, Number(params.get("page")) || 1);
   const perRaw = Number(params.get("per"));
-  const itemsPerPage = PER_PAGE_OPTIONS.includes(perRaw)
-    ? perRaw
-    : DEFAULT_PER_PAGE;
+  const itemsPerPage = isPerPage(perRaw) ? perRaw : DEFAULT_PER_PAGE;
   const searchTerm = params.get("q") ?? "";
   const isSearchMode = searchTerm.length > 0;
 
@@ -304,16 +305,18 @@ export const PokemonList = () => {
   };
 
   const filterLabel = (() => {
-    if (isCombinedMode) return `${formatGen(activeGen!)} ${activeType} Pokémon`;
-    if (isTypeMode) return `${activeType} Pokémon`;
-    if (isGenMode) return `${formatGen(activeGen!)} Pokémon`;
+    const type = activeType ? typeLabel(activeType) : "";
+    const gen = activeGen ? genRoman(activeGen) : "";
+    if (isCombinedMode) return t("list.filterBoth", { type, gen });
+    if (isTypeMode) return t("list.filterType", { type });
+    if (isGenMode) return t("list.filterGen", { gen });
     return "";
   })();
 
   return (
     <div className="mx-auto px-4 py-8 xl:max-w-7xl">
       <div className="flex justify-between items-center mb-8 flex-col md:flex-row gap-4 md:gap-0">
-        <h1 className="text-2xl">Pokémon List</h1>
+        <h1 className="text-2xl">{t("list.title")}</h1>
         <FilterControls
           initialQuery={searchTerm}
           itemsPerPage={itemsPerPage}
@@ -331,35 +334,40 @@ export const PokemonList = () => {
       )}
 
       {isFilterMode && filteredNames.length > 0 && !isLoadingFilter && (
-        <h2 className="text-lg font-semibold mb-8 text-center md:text-left capitalize">
-          {filterLabel} ({filteredNames.length} total)
+        <h2 className="text-lg font-semibold mb-8 text-center md:text-left">
+          {t("list.filterHeading", {
+            label: filterLabel,
+            count: filteredNames.length,
+          })}
         </h2>
       )}
 
       {isSearchMode && !isSearching && pokemonToDisplay.length > 0 && (
         <h2 className="text-lg font-semibold mb-8 text-center md:text-left">
-          Search Results for "{searchTerm}" ({pokemonToDisplay.length} found
-          {pokemonToDisplay.length === SEARCH_LIMIT ? "+" : ""})
+          {t(
+            pokemonToDisplay.length === SEARCH_LIMIT
+              ? "list.searchResultsCapped"
+              : "list.searchResults",
+            { query: searchTerm, count: pokemonToDisplay.length }
+          )}
         </h2>
       )}
 
       {hasNoSearchMatches && (
         <div className="text-center text-red-600 py-8">
-          <p>
-            No Pokémon found matching "{searchTerm}". Please try a different
-            search term.
-          </p>
+          <p>{t("list.noSearchMatches", { query: searchTerm })}</p>
         </div>
       )}
 
       {hasNoFilterMatches && (
         <div className="text-center text-red-600 py-8">
           <p>
-            No Pokémon match{" "}
             {isCombinedMode
-              ? `${activeType} type in ${formatGen(activeGen!)}`
-              : "these filters"}
-            .
+              ? t("list.noFilterMatchesBoth", {
+                  type: typeLabel(activeType!),
+                  gen: genRoman(activeGen!),
+                })
+              : t("list.noFilterMatches")}
           </p>
         </div>
       )}

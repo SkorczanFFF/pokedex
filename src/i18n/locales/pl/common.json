@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "main": "Nawigacja główna",
+    "language": "Język",
+    "switchTo": "Zmień język na {{language}}"
+  },
+  "language": {
+    "en": "English",
+    "pl": "Polski"
+  },
+  "gen": {
+    "badge": "Gen. {{roman}}",
+    "any": "---"
+  },
+  "loader": {
+    "loading": "Wczytywanie"
+  },
+  "error": {
+    "list": "Błąd wczytywania listy Pokémon",
+    "details": "Błąd wczytywania szczegółów Pokémona",
+    "retry": "Spróbuj ponownie później"
+  },
+  "filters": {
+    "searchLabel": "Szukaj:",
+    "searchPlaceholder": "np. Meowth",
+    "searchAction": "Szukaj",
+    "clearSearch": "Wyczyść wyszukiwanie",
+    "genLabel": "Gen:",
+    "perPageLabel": "Na stronę:",
+    "all": "Wszystkie"
+  },
+  "list": {
+    "title": "Lista Pokémon",
+    "filterType": "Typ: {{type}}",
+    "filterGen": "Generacja: {{gen}}",
+    "filterBoth": "Typ: {{type}} · Generacja: {{gen}}",
+    "filterHeading_one": "{{label}} ({{count}} wynik)",
+    "filterHeading_few": "{{label}} ({{count}} wyniki)",
+    "filterHeading_many": "{{label}} ({{count}} wyników)",
+    "filterHeading_other": "{{label}} ({{count}} wyniku)",
+    "searchResults_one": "Wyniki dla „{{query}}” ({{count}} wynik)",
+    "searchResults_few": "Wyniki dla „{{query}}” ({{count}} wyniki)",
+    "searchResults_many": "Wyniki dla „{{query}}” ({{count}} wyników)",
+    "searchResults_other": "Wyniki dla „{{query}}” ({{count}} wyniku)",
+    "searchResultsCapped": "Wyniki dla „{{query}}” ({{count}}+ wyników)",
+    "noSearchMatches": "Nie znaleziono Pokémonów pasujących do „{{query}}”. Spróbuj innej frazy.",
+    "noFilterMatchesBoth": "Brak Pokémonów — typ: {{type}}, generacja: {{gen}}.",
+    "noFilterMatches": "Żaden Pokémon nie pasuje do tych filtrów."
+  },
+  "pagination": {
+    "prev": "Wstecz",
+    "next": "Dalej"
+  },
+  "details": {
+    "back": "Powrót do listy",
+    "playCry": "Odtwórz głos: {{name}}",
+    "cry": "Głos",
+    "showType": "Pokaż wszystkie Pokémony o typie: {{type}}",
+    "stats": "Statystyki",
+    "abilities": "Umiejętności",
+    "height": "Wzrost",
+    "weight": "Waga",
+    "heightValue": "{{value, number}} m",
+    "weightValue": "{{value, number}} kg",
+    "englishEntry": "Ten opis Pokédexu jest dostępny wyłącznie po angielsku",
+    "englishEntryShort": "EN"
+  },
+  "scrollTop": "Przewiń do góry"
+}

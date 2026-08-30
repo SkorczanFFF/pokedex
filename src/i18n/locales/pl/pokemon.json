@@ -1,0 +1,33 @@
+{
+  "types": {
+    "normal": "Normalny",
+    "fire": "Ognisty",
+    "water": "Wodny",
+    "electric": "Elektryczny",
+    "grass": "Trawiasty",
+    "ice": "Lodowy",
+    "fighting": "Walczący",
+    "poison": "Trujący",
+    "ground": "Ziemny",
+    "flying": "Latający",
+    "psychic": "Psychiczny",
+    "bug": "Robaczy",
+    "rock": "Skalny",
+    "ghost": "Duchowy",
+    "dragon": "Smoczy",
+    "dark": "Mroczny",
+    "steel": "Stalowy",
+    "fairy": "Wróżkowy"
+  },
+  "stats": {
+    "hp": "Punkty życia",
+    "attack": "Atak",
+    "defense": "Obrona",
+    "special-attack": "Atak specjalny",
+    "special-defense": "Obrona specjalna",
+    "speed": "Szybkość",
+    "accuracy": "Celność",
+    "evasion": "Uniki",
+    "special": "Specjalny"
+  }
+}

@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -11,6 +13,8 @@ export const Pagination = ({
   onPageChange,
   onPrefetch,
 }: PaginationProps) => {
+  const { t } = useTranslation();
+
   if (totalPages <= 1) {
     return null;
   }
@@ -28,7 +32,7 @@ export const Pagination = ({
         disabled={currentPage === 1}
         className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-[#FFCD0B] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
       >
-        Prev
+        {t("pagination.prev")}
       </button>
 
       <div className="flex gap-1">
@@ -70,7 +74,7 @@ export const Pagination = ({
         disabled={currentPage === totalPages}
         className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-[#FFCD0B] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
       >
-        Next
+        {t("pagination.next")}
       </button>
     </div>
   );

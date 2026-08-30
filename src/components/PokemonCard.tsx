@@ -1,7 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import type { Pokemon } from "../types/pokemon";
 import { typeClass } from "../utils/types";
-import { formatGen, generationFromId } from "../utils/generations";
+import { genRoman, generationFromId } from "../utils/generations";
+import { useTypeLabel } from "../i18n/domain";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -10,11 +12,14 @@ interface PokemonCardProps {
 export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
+  const typeLabel = useTypeLabel();
   const imageUrl =
     pokemon.sprites.other["official-artwork"].front_default ||
     pokemon.sprites.front_default;
   const target = `/pokemon/${pokemon.name}`;
   const gen = generationFromId(pokemon.id);
+  const genBadge = gen ? t("gen.badge", { roman: genRoman(gen) }) : null;
 
   // Manual click handler so scrollY is captured at click time.
   // Link's `state` prop is fixed at render time, which produces a stale 0.
@@ -50,13 +55,18 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
           className="w-full h-full object-contain"
           loading="lazy"
         />
-        {gen && (
+        {genBadge && (
           <>
-            <span className="absolute top-[1px] right-[-1px] text-white text-[10px] leading-none px-2 py-1">
-              {formatGen(gen)}
+            {/* Offset copy acts as a text shadow — hidden from screen readers
+                so the badge is not announced twice. */}
+            <span
+              aria-hidden="true"
+              className="absolute top-[1px] right-[-1px] text-white text-[10px] leading-none px-2 py-1"
+            >
+              {genBadge}
             </span>
             <span className="absolute top-0 right-0 text-black text-[10px] leading-none px-2 py-1">
-              {formatGen(gen)}
+              {genBadge}
             </span>
           </>
         )}
@@ -69,7 +79,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
               key={type.type.name}
               className={`px-2 py-1 text-xs ${typeClass(type.type.name)}`}
             >
-              {type.type.name}
+              {typeLabel(type.type.name)}
             </span>
           ))}
         </div>

@@ -1,0 +1,65 @@
+{
+  "nav": {
+    "main": "Main navigation",
+    "language": "Language",
+    "switchTo": "Switch language to {{language}}"
+  },
+  "language": {
+    "en": "English",
+    "pl": "Polski"
+  },
+  "gen": {
+    "badge": "Gen {{roman}}",
+    "any": "any"
+  },
+  "loader": {
+    "loading": "Loading"
+  },
+  "error": {
+    "list": "Error loading the Pokémon list",
+    "details": "Error loading the Pokémon details",
+    "retry": "Please try again later"
+  },
+  "filters": {
+    "searchLabel": "Search:",
+    "searchPlaceholder": "eg. Meowth",
+    "searchAction": "Search",
+    "clearSearch": "Clear search",
+    "genLabel": "Gen:",
+    "perPageLabel": "Per page:",
+    "all": "All"
+  },
+  "list": {
+    "title": "Pokémon List",
+    "filterType": "Type: {{type}}",
+    "filterGen": "Generation: {{gen}}",
+    "filterBoth": "Type: {{type}} · Generation: {{gen}}",
+    "filterHeading_one": "{{label}} ({{count}} result)",
+    "filterHeading_other": "{{label}} ({{count}} results)",
+    "searchResults_one": "Search results for “{{query}}” ({{count}} result)",
+    "searchResults_other": "Search results for “{{query}}” ({{count}} results)",
+    "searchResultsCapped": "Search results for “{{query}}” ({{count}}+ results)",
+    "noSearchMatches": "No Pokémon found matching “{{query}}”. Please try a different search term.",
+    "noFilterMatchesBoth": "No Pokémon match — type: {{type}}, generation: {{gen}}.",
+    "noFilterMatches": "No Pokémon match these filters."
+  },
+  "pagination": {
+    "prev": "Prev",
+    "next": "Next"
+  },
+  "details": {
+    "back": "Back to List",
+    "playCry": "Play {{name}} cry",
+    "cry": "Cry",
+    "showType": "Show all Pokémon of type {{type}}",
+    "stats": "Stats",
+    "abilities": "Abilities",
+    "height": "Height",
+    "weight": "Weight",
+    "heightValue": "{{value, number}} m",
+    "weightValue": "{{value, number}} kg",
+    "englishEntry": "This Pokédex entry is only available in English",
+    "englishEntryShort": "EN"
+  },
+  "scrollTop": "Scroll to top"
+}

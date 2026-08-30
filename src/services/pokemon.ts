@@ -5,7 +5,6 @@ import type {
   PokemonSpecies,
   PokemonTypeResponse,
 } from "../types/pokemon";
-import { formatGen } from "../utils/generations";
 
 const API_URL = "https://pokeapi.co/api/v2";
 
@@ -72,20 +71,32 @@ export const getPokemonSpecies = async (
   return response.json();
 };
 
-const pickEnglish = <T,>(
+const pickLang = <T>(
   arr: T[],
-  lang: (x: T) => string
-): T | undefined => arr.find((x) => lang(x) === "en");
+  getLang: (x: T) => string,
+  preferred: readonly string[]
+): T | undefined => {
+  for (const lang of preferred) {
+    const hit = arr.find((x) => getLang(x) === lang);
+    if (hit) return hit;
+  }
+  return undefined;
+};
 
-export const getDescription = (s: PokemonSpecies): string =>
-  pickEnglish(s.flavor_text_entries, (e) => e.language.name)
+// PokéAPI serves no Polish — its /language list has no `pl` — so a Polish UI
+// always falls through to English here. That is permanent, not a gap to fill.
+const preferredLangs = (locale: string): readonly string[] => [locale, "en"];
+
+export const getDescription = (s: PokemonSpecies, locale = "en"): string =>
+  pickLang(s.flavor_text_entries, (e) => e.language.name, preferredLangs(locale))
     ?.flavor_text.replace(/[\f\n\r\u00ad]/g, " ")
     .trim() ?? "";
 
-export const getGenus = (s: PokemonSpecies): string =>
-  pickEnglish(s.genera, (g) => g.language.name)?.genus ?? "";
+export const getGenus = (s: PokemonSpecies, locale = "en"): string =>
+  pickLang(s.genera, (g) => g.language.name, preferredLangs(locale))?.genus ?? "";
 
-export const getGeneration = (s: PokemonSpecies): string => {
+/** Raw generation slug (e.g. `generation-i`), or null. Display formatting is the UI's job. */
+export const getGeneration = (s: PokemonSpecies): string | null => {
   const raw = s.generation?.name ?? "";
-  return raw.startsWith("generation-") ? formatGen(raw) : "";
+  return raw.startsWith("generation-") ? raw : null;
 };

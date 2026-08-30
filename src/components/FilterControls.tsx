@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { GEN_SLUGS } from "../utils/generations";
-
-const ITEMS_PER_PAGE_OPTIONS = [20, 40, 60];
+import { PER_PAGE_OPTIONS } from "../utils/pagination";
 
 interface FilterControlsProps {
   initialQuery: string;
@@ -24,6 +24,7 @@ export const FilterControls = ({
   isSearchMode,
   onClearSearch,
 }: FilterControlsProps) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState(initialQuery);
 
   // Keep the box in sync with the URL (e.g. on back/forward, on direct link).
@@ -56,20 +57,23 @@ export const FilterControls = ({
           isSearchMode ? "flex-wrap justify-center" : ""
         }`}
       >
-        <label className="text-sm">Search:</label>
+        <label htmlFor="pokemon-search" className="text-sm">
+          {t("filters.searchLabel")}
+        </label>
         <input
+          id="pokemon-search"
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={handleKeyPress}
-          placeholder="eg. Meowth"
+          placeholder={t("filters.searchPlaceholder")}
           className="border-2 px-2 py-1 text-sm bg-white w-40"
         />
         <div className="flex items-center gap-2 justify-center">
           <button
             onClick={handleSearch}
             disabled={!searchTerm.trim()}
-            aria-label="Search"
+            aria-label={t("filters.searchAction")}
             className="px-3 py-2 bg-[#FECB09] disabled:hover:text-black text-black hover:text-white text-sm hover:bg-[#E12025] disabled:opacity-50 disabled:bg-[#FECB09] disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
           >
             <svg
@@ -90,7 +94,7 @@ export const FilterControls = ({
           {isSearchMode && (
             <button
               onClick={handleClearSearch}
-              aria-label="Clear search"
+              aria-label={t("filters.clearSearch")}
               className="px-3 py-[6px] bg-[#E12025] text-white text-sm hover:bg-red-700 cursor-pointer"
             >
               X
@@ -102,15 +106,18 @@ export const FilterControls = ({
       {!isSearchMode && (
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <label className="text-sm">Gen:</label>
+            <label htmlFor="gen-filter" className="text-sm">
+              {t("filters.genLabel")}
+            </label>
             <select
+              id="gen-filter"
               value={activeGen ?? ""}
               onChange={(e) =>
                 onGenerationChange(e.target.value === "" ? null : e.target.value)
               }
               className="border-2 px-2 py-[6px] text-sm bg-white"
             >
-              <option value="">any</option>
+              <option value="">{t("gen.any")}</option>
               {GEN_SLUGS.map((slug) => (
                 <option key={slug} value={slug}>
                   {slug.toUpperCase()}
@@ -120,13 +127,18 @@ export const FilterControls = ({
           </div>
 
           <div className="flex items-center gap-2">
-            <label className="text-sm flex md:hidden">Per page:</label>
+            {/* Visible on mobile, screen-reader-only on desktop — the select
+                still needs an accessible name at every width. */}
+            <label htmlFor="per-page" className="text-sm md:sr-only">
+              {t("filters.perPageLabel")}
+            </label>
             <select
+              id="per-page"
               value={itemsPerPage}
               onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
               className="border-2 px-2 py-[6px] text-sm bg-white"
             >
-              {ITEMS_PER_PAGE_OPTIONS.map((option) => (
+              {PER_PAGE_OPTIONS.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>

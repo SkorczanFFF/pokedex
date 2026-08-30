@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   getDescription,
   getGeneration,
@@ -9,6 +10,8 @@ import {
   getPokemonSpecies,
 } from "../services/pokemon";
 import { typeClass } from "../utils/types";
+import { genRoman } from "../utils/generations";
+import { useAbilityLabel, useStatLabel, useTypeLabel } from "../i18n/domain";
 import Loader from "../components/Loader";
 import ErrorView from "../components/ErrorView";
 
@@ -16,6 +19,10 @@ export const PokemonDetails = () => {
   const { name } = useParams<{ name: string }>();
   const location = useLocation();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const typeLabel = useTypeLabel();
+  const statLabel = useStatLabel();
+  const abilityLabel = useAbilityLabel();
 
   const navState =
     (location.state as { from?: string; scrollY?: number } | null) ?? null;
@@ -67,10 +74,16 @@ export const PokemonDetails = () => {
     });
   };
 
-  const description = species ? getDescription(species) : "";
-  const genus = species ? getGenus(species) : "";
-  const generation = species ? getGeneration(species) : "";
+  const locale = i18n.resolvedLanguage ?? "en";
+  // PokéAPI has no Polish species text, so these always resolve to English.
+  const description = species ? getDescription(species, locale) : "";
+  const genus = species ? getGenus(species, locale) : "";
+  const generationSlug = species ? getGeneration(species) : null;
+  const generation = generationSlug
+    ? t("gen.badge", { roman: genRoman(generationSlug) })
+    : "";
   const meta = [generation, genus].filter(Boolean).join(" · ");
+  const showEnglishMarker = locale !== "en";
 
   return (
     <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
@@ -78,7 +91,7 @@ export const PokemonDetails = () => {
         onClick={handleBack}
         className="inline-block mb-8 text-black bg-[#FECB09] hover:bg-[#E12025] hover:text-white px-4 py-2 cursor-pointer"
       >
-        Back to List
+        {t("details.back")}
       </button>
 
       <div className="bg-white p-6">
@@ -100,19 +113,30 @@ export const PokemonDetails = () => {
               {pokemon.cries?.latest && (
                 <button
                   onClick={playCry}
-                  aria-label={`Play ${pokemon.name} cry`}
+                  aria-label={t("details.playCry", { name: pokemon.name })}
                   className="text-xs px-2 py-1 bg-[#FECB09] hover:bg-[#E12025] hover:text-white cursor-pointer"
                 >
-                  ▶ Cry
+                  ▶ {t("details.cry")}
                 </button>
               )}
             </div>
 
-            {meta && (
-              <p className="text-xs text-gray-500 mb-3">{meta}</p>
-            )}
+            {meta && <p className="text-xs text-gray-500 mb-3">{meta}</p>}
             {description && (
-              <p className="text-xs leading-relaxed mb-6">{description}</p>
+              <p className="text-xs leading-relaxed mb-6">
+                {description}
+                {showEnglishMarker && (
+                  <span
+                    title={t("details.englishEntry")}
+                    className="ml-2 align-middle bg-gray-200 text-gray-600 text-[10px] px-1 py-[2px]"
+                  >
+                    <span aria-hidden="true">
+                      {t("details.englishEntryShort")}
+                    </span>
+                    <span className="sr-only">{t("details.englishEntry")}</span>
+                  </span>
+                )}
+              </p>
             )}
 
             <div className="flex gap-2 mb-6">
@@ -120,27 +144,29 @@ export const PokemonDetails = () => {
                 <Link
                   key={type.type.name}
                   to={`/?type=${type.type.name}`}
-                  aria-label={`Show all ${type.type.name} type Pokémon`}
+                  aria-label={t("details.showType", {
+                    type: typeLabel(type.type.name),
+                  })}
                   className={`px-4 py-1 text-xs cursor-pointer hover:opacity-80 ${typeClass(
                     type.type.name
                   )}`}
                 >
-                  {type.type.name}
+                  {typeLabel(type.type.name)}
                 </Link>
               ))}
             </div>
 
             <div className="space-y-6">
               <div>
-                <h2 className="text-lg mb-3">Stats</h2>
+                <h2 className="text-lg mb-3">{t("details.stats")}</h2>
                 <div className="space-y-3">
                   {pokemon.stats.map((stat) => (
                     <div
                       key={stat.stat.name}
                       className="flex items-center gap-2 flex-col md:flex-row"
                     >
-                      <span className="w-full md:w-32 capitalize text-xs">
-                        {stat.stat.name}:
+                      <span className="w-full md:w-32 text-xs">
+                        {statLabel(stat.stat.name)}:
                       </span>
                       <div className="flex items-center gap-2 w-full">
                         <div className="flex w-full h-4 bg-[#EAEBF2] overflow-hidden">
@@ -161,14 +187,14 @@ export const PokemonDetails = () => {
               </div>
 
               <div>
-                <h2 className="text-lg mb-3">Abilities</h2>
+                <h2 className="text-lg mb-3">{t("details.abilities")}</h2>
                 <div className="flex flex-wrap gap-2">
                   {pokemon.abilities.map((ability) => (
                     <span
                       key={ability.ability.name}
-                      className="px-3 py-1 bg-gray-100 capitalize text-xs"
+                      className="px-3 py-1 bg-gray-100 text-xs"
                     >
-                      {ability.ability.name}
+                      {abilityLabel(ability.ability.name)}
                     </span>
                   ))}
                 </div>
@@ -176,12 +202,16 @@ export const PokemonDetails = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h2 className="text-lg  mb-2">Height</h2>
-                  <p className=" text-xs">{pokemon.height / 10} m</p>
+                  <h2 className="text-lg  mb-2">{t("details.height")}</h2>
+                  <p className=" text-xs">
+                    {t("details.heightValue", { value: pokemon.height / 10 })}
+                  </p>
                 </div>
                 <div>
-                  <h2 className="text-lg mb-2">Weight</h2>
-                  <p className=" text-xs">{pokemon.weight / 10} kg</p>
+                  <h2 className="text-lg mb-2">{t("details.weight")}</h2>
+                  <p className=" text-xs">
+                    {t("details.weightValue", { value: pokemon.weight / 10 })}
+                  </p>
                 </div>
               </div>
             </div>

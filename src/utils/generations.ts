@@ -17,10 +17,9 @@ export const isGenSlug = (s: string | null): s is GenSlug =>
 
 export const genApiName = (slug: GenSlug): string => `generation-${slug}`;
 
-export const formatGen = (slug: GenSlug | string): string => {
-  const raw = slug.replace(/^generation-/, "");
-  return `Gen ${raw.toUpperCase()}`;
-};
+/** Roman numeral for a generation slug: `iv` or `generation-iv` -> `IV`. */
+export const genRoman = (slug: GenSlug | string): string =>
+  slug.replace(/^generation-/, "").toUpperCase();
 
 const GEN_BOUNDARIES: { max: number; slug: GenSlug }[] = [
   { max: 151, slug: "i" },

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ScrollToTopButton = () => {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   // Show button when page is scrolled down
@@ -20,7 +22,7 @@ const ScrollToTopButton = () => {
     isVisible && (
       <button
         onClick={scrollToTop}
-        aria-label="Scroll to top"
+        aria-label={t("scrollTop")}
         className="fixed bottom-6 right-6 z-50 bg-[#E12025] hover:bg-[#c11a1e] text-white pt-5 pl-[10px] pr-2 pb-0 cursor-pointer text-3xl"
       >
         ^
