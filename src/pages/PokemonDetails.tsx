@@ -165,29 +165,46 @@ export const PokemonDetails = () => {
               <div>
                 <h2 className="text-lg mb-3">{t("details.stats")}</h2>
                 <div className="space-y-3">
-                  {pokemon.stats.map((stat) => (
-                    <div
-                      key={stat.stat.name}
-                      className="flex items-center gap-2 flex-col md:flex-row"
-                    >
-                      <span className="w-full md:w-32 text-xs">
-                        {statLabel(stat.stat.name)}:
-                      </span>
-                      <div className="flex items-center gap-2 w-full">
-                        <div className="flex w-full h-4 bg-[#EAEBF2] overflow-hidden">
+                  {pokemon.stats.map((stat) => {
+                    // 160 is the top of the bar's scale; Blissey's 255 HP would
+                    // otherwise run past the track.
+                    const filled = Math.min((stat.base_stat / 160) * 100, 100);
+
+                    return (
+                      <div
+                        key={stat.stat.name}
+                        className="flex items-center gap-2 flex-col md:flex-row"
+                      >
+                        <span className="w-full md:w-32 text-xs">
+                          {statLabel(stat.stat.name)}:
+                        </span>
+                        <div className="relative flex w-full h-5 overflow-hidden bg-[#EAEBF2]">
                           <div
                             className="h-full bg-[#356DB2]"
-                            style={{
-                              width: `${(stat.base_stat / 160) * 100}%`,
-                            }}
-                          ></div>
+                            style={{ width: `${filled}%` }}
+                          />
+                          {/* Drawn twice and clipped at the fill edge, so a digit
+                              landing on that edge is white on the filled side and
+                              black on the empty one. A blend mode cannot do this —
+                              its result follows the backdrop, and difference over
+                              #356DB2 resolves to #CA924D, not to white. */}
+                          <span
+                            className="absolute inset-0 flex items-center justify-center text-[10px] leading-none text-white"
+                            style={{ clipPath: `inset(0 ${100 - filled}% 0 0)` }}
+                          >
+                            {stat.base_stat}
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0 flex items-center justify-center text-[10px] leading-none text-black"
+                            style={{ clipPath: `inset(0 0 0 ${filled}%)` }}
+                          >
+                            {stat.base_stat}
+                          </span>
                         </div>
-                        <span className="ml-0 md:ml-2 w-12 text-right text-xs">
-                          {stat.base_stat}
-                        </span>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
