@@ -99,5 +99,11 @@
     "atkEqualsDef": "Attack = Defense",
     "defOverAtk": "Defense > Attack"
   },
+  "notFound": {
+    "wild": "A wild 404 appeared!",
+    "missingPage": "This page does not exist in the POKéDEX.",
+    "pokedex": "POKéDEX",
+    "run": "RUN"
+  },
   "scrollTop": "Scroll to top"
 }

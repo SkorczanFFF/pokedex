@@ -13,6 +13,37 @@
   background-color: #e12025;
 }
 
+/* The 404 standing in for an opponent tears sideways in steps rather than
+   easing — easing would read as motion, stepping reads as a glitch. */
+@keyframes glitch-shift {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.glitch {
+  animation: glitch-shift 1.2s steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch {
+    animation: none;
+  }
+}
+
 /* HTML: <div class="loader"></div> */
 .loader {
   width: 140px;

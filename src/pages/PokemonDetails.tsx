@@ -8,11 +8,13 @@ import {
   getGenus,
   getPokemonDetails,
   getPokemonSpecies,
+  NotFoundError,
 } from "../services/pokemon";
 import { typeClass } from "../utils/types";
 import { genRoman } from "../utils/generations";
 import { useAbilityLabel, useStatLabel, useTypeLabel } from "../i18n/domain";
 import { EvolutionChain } from "../components/EvolutionChain";
+import { NotFound } from "./NotFound";
 import Loader from "../components/Loader";
 import ErrorView from "../components/ErrorView";
 
@@ -62,6 +64,10 @@ export const PokemonDetails = () => {
 
   if (isLoading) {
     return <Loader />;
+  }
+
+  if (error instanceof NotFoundError) {
+    return <NotFound />;
   }
 
   if (error || !pokemon) {

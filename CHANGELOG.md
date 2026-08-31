@@ -14,6 +14,20 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: 404 page as a gen 1 battle screen, 404s told apart from API failures`
+
+- **Added** — A 404 page laid out the way the Game Boy laid out a battle: the opponent's
+  status panel facing a glitching "404", Red's original 32×32 back sprite underneath
+  (`gfx/player/redb.png` from the pokered disassembly, self-hosted), and a bordered text
+  box reading "A wild 404 appeared!" in English or Polish. Unknown routes and Pokémon the
+  API does not have both land here.
+- **Changed** — Unknown routes used to redirect silently to the list, which hid every
+  broken link instead of reporting it. They now show the 404 page.
+- **Fixed** — A missing Pokémon is told apart from a failed request. `getPokemonDetails`
+  throws `NotFoundError` only once the API has confirmed the name does not exist, so a
+  typo no longer reads as an API outage, and React Query stops retrying it twice before
+  showing the page.
+
 ### `fix: cleanUrls broke the SPA rewrite, every deep link 404'd on Vercel`
 
 - **Fixed** — Refreshing or opening any URL below the root — `/pokemon/eevee`, a shared

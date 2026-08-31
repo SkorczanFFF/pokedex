@@ -1,7 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PokemonList } from "./pages/PokemonList";
 import { PokemonDetails } from "./pages/PokemonDetails";
+import { NotFound } from "./pages/NotFound";
+import { NotFoundError } from "./services/pokemon";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import "./App.css";
@@ -11,7 +13,10 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
-      retry: 2,
+      // A 404 is an answer, not a failure. Retrying it only delays the page
+      // that is already the right thing to show.
+      retry: (failureCount, error) =>
+        !(error instanceof NotFoundError) && failureCount < 2,
     },
   },
 });
@@ -26,7 +31,7 @@ function App() {
             <Routes>
               <Route path="/" element={<PokemonList />} />
               <Route path="/pokemon/:name" element={<PokemonDetails />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
           <ScrollToTopButton />

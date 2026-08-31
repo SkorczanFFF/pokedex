@@ -107,5 +107,11 @@
     "atkEqualsDef": "Atak = Obrona",
     "defOverAtk": "Obrona > Atak"
   },
+  "notFound": {
+    "wild": "Dziki 404 pojawił się!",
+    "missingPage": "Tej strony nie ma w POKéDEXIE.",
+    "pokedex": "POKéDEX",
+    "run": "UCIEKAJ"
+  },
   "scrollTop": "Przewiń do góry"
 }
