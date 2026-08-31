@@ -14,6 +14,14 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `fix: cleanUrls broke the SPA rewrite, every deep link 404'd on Vercel`
+
+- **Fixed** — Refreshing or opening any URL below the root — `/pokemon/eevee`, a shared
+  link, a new tab — returned Vercel's own 404 page. `cleanUrls: true` turns
+  `/index.html` into a redirect to `/` rather than a resolvable file, so the catch-all
+  rewrite pointing at it had nothing to land on. Broken since `vercel.json` was added in
+  `631bf07`.
+
 ### `refactor: stat value centred on the bar, split at the fill edge with clip-path`
 
 - **Changed** — Stat bars on the detail page. The value moved out of its own column and
