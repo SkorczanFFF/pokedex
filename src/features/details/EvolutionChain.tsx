@@ -9,8 +9,8 @@ import {
   type EvolutionNode,
 } from "@/domain/evolution";
 import { officialArtwork, resourceIdFromUrl } from "@/domain/resource";
-import { useEvolutionCondition } from "../i18n/domain";
-import type { EvolutionDetail } from "../types/pokemon";
+import { useEvolutionCondition } from "@/i18n/domain";
+import type { EvolutionDetail } from "@/types/pokemon";
 
 interface EvolutionChainProps {
   /** Absolute chain URL, exactly as `/pokemon-species` hands it over. */

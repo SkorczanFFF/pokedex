@@ -9,10 +9,6 @@ import plPokemon from "./locales/pl/pokemon.json";
 import plAbilities from "./locales/pl/abilities.json";
 
 export const SUPPORTED_LANGUAGES = ["en", "pl"] as const;
-export type Language = (typeof SUPPORTED_LANGUAGES)[number];
-
-export const isLanguage = (s: string | null | undefined): s is Language =>
-  s != null && (SUPPORTED_LANGUAGES as readonly string[]).includes(s);
 
 // Keep the document locale in sync with the UI. Registered before init() so the
 // initial detection is picked up too.

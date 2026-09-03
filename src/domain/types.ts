@@ -1,4 +1,4 @@
-export const TYPE_STYLES: Record<string, string> = {
+const TYPE_STYLES: Record<string, string> = {
   normal: "bg-[#A8A77A] text-white",
   fire: "bg-[#EE8130] text-white",
   water: "bg-[#6390F0] text-white",
@@ -45,7 +45,7 @@ export const TYPE_NAMES = [
 
 export type PokemonType = (typeof TYPE_NAMES)[number];
 
-export const isPokemonType = (s: string | null): s is PokemonType =>
+const isPokemonType = (s: string | null): s is PokemonType =>
   s !== null && (TYPE_NAMES as readonly string[]).includes(s);
 
 /** A Pokémon has at most two types, so an AND filter beyond two is always empty. */

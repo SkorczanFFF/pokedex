@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import type { EvolutionDetail } from "../types/pokemon";
+import type { EvolutionDetail } from "@/types/pokemon";
 
 /**
  * Turns a PokéAPI slug into a readable English label:
@@ -9,7 +9,7 @@ import type { EvolutionDetail } from "../types/pokemon";
  * Also the fallback for every domain lookup below, so an untranslated entry
  * renders as proper English rather than a raw slug or a blank.
  */
-export const humanize = (slug: string): string =>
+const humanize = (slug: string): string =>
   slug
     .split("-")
     .map((word) => (word ? word[0].toUpperCase() + word.slice(1) : word))

@@ -8,13 +8,13 @@ import { getPokemonSpecies } from "@/api/species";
 import { getDescription, getGeneration, getGenus } from "@/domain/species";
 import { typeClass } from "@/domain/types";
 import { genRoman } from "@/domain/dex";
-import { useAbilityLabel, useStatLabel, useTypeLabel } from "../i18n/domain";
-import { EvolutionChain } from "../components/EvolutionChain";
-import { NotFound } from "./NotFound";
-import Loader from "../components/Loader";
-import ErrorView from "../components/ErrorView";
+import { useAbilityLabel, useStatLabel, useTypeLabel } from "@/i18n/domain";
+import { EvolutionChain } from "./EvolutionChain";
+import { NotFound } from "@/features/not-found/NotFound";
+import Loader from "@/components/Loader";
+import ErrorView from "@/components/ErrorView";
 
-export const PokemonDetails = () => {
+export const PokemonDetailsPage = () => {
   const { name } = useParams<{ name: string }>();
   const location = useLocation();
   const navigate = useNavigate();

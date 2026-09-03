@@ -23,7 +23,7 @@ interface FiltersPanelProps {
  * content, scrolling internally once it would run past the viewport.
  *
  * Changes apply to the URL immediately, the same way the desktop controls do —
- * PokemonList just holds back the expensive detail fetch until this closes.
+ * the list page just holds back the expensive detail fetch until this closes.
  */
 export const FiltersPanel = ({
   activeTypes,

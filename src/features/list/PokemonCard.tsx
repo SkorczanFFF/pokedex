@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { Pokemon } from "../types/pokemon";
+import type { Pokemon } from "@/types/pokemon";
 import { typeClass } from "@/domain/types";
 import { genRoman, generationFromId } from "@/domain/dex";
-import { useTypeLabel } from "../i18n/domain";
+import { useTypeLabel } from "@/i18n/domain";
 
 interface PokemonCardProps {
   pokemon: Pokemon;

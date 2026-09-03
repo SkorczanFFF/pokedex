@@ -15,24 +15,24 @@ import {
   getPokemonDetails,
   getPokemonList,
 } from "@/api/pokemon";
-import { PokemonCard } from "../components/PokemonCard";
-import { FilterControls } from "../components/FilterControls";
-import { Pagination } from "../components/Pagination";
-import { SkeletonGrid } from "../components/Skeleton";
-import { TypeFilter } from "../components/TypeFilter";
-import { SearchBox } from "../components/SearchBox";
-import { FiltersPanel } from "../components/FiltersPanel";
-import ErrorView from "../components/ErrorView";
+import { PokemonCard } from "./PokemonCard";
+import { FilterControls } from "./FilterControls";
+import { Pagination } from "./Pagination";
+import { TypeFilter } from "./TypeFilter";
+import { SearchBox } from "./SearchBox";
+import { FiltersPanel } from "./FiltersPanel";
+import { SkeletonGrid } from "@/components/Skeleton";
+import ErrorView from "@/components/ErrorView";
 import { MAX_TYPES, parseTypes, serializeTypes } from "@/domain/types";
 import { intersectByName } from "@/domain/intersect";
 import { genApiName, genRoman, isGenSlug } from "@/domain/dex";
 import { DEFAULT_PER_PAGE, isPerPage } from "@/domain/pagination";
-import { useTypeLabel } from "../i18n/domain";
-import type { Pokemon } from "../types/pokemon";
+import { useTypeLabel } from "@/i18n/domain";
+import type { Pokemon } from "@/types/pokemon";
 
 const SEARCH_LIMIT = 60;
 
-export const PokemonList = () => {
+export const PokemonListPage = () => {
   const { t } = useTranslation();
   const typeLabel = useTypeLabel();
   const [params, setParams] = useSearchParams();

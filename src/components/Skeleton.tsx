@@ -1,4 +1,4 @@
-export const SkeletonCard = () => (
+const SkeletonCard = () => (
   <div className="bg-white p-4 animate-pulse">
     <div className="aspect-square bg-gray-200" />
     <div className="mt-4 h-5 w-2/3 bg-gray-200" />
