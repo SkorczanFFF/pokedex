@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { MAX_TYPES, TYPE_NAMES, typeClass } from "../utils/types";
+import { MAX_TYPES, TYPE_NAMES, typeClass } from "@/domain/types";
 import { useTypeLabel } from "../i18n/domain";
 
 interface TypeFilterProps {

@@ -1,5 +1,5 @@
-import type { EvolutionDetail, EvolutionLink } from "../types/pokemon";
-import { resourceIdFromUrl } from "./pokeapi";
+import type { EvolutionDetail, EvolutionLink } from "@/types/pokemon";
+import { resourceIdFromUrl } from "./resource";
 
 export interface EvolutionNode {
   /** Species slug — also the `/pokemon/:name` route segment. */

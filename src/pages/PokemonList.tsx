@@ -24,10 +24,10 @@ import { TypeFilter } from "../components/TypeFilter";
 import { SearchBox } from "../components/SearchBox";
 import { FiltersPanel } from "../components/FiltersPanel";
 import ErrorView from "../components/ErrorView";
-import { MAX_TYPES, parseTypes, serializeTypes } from "../utils/types";
-import { intersectByName } from "../utils/intersect";
-import { genApiName, genRoman, isGenSlug } from "../utils/generations";
-import { DEFAULT_PER_PAGE, isPerPage } from "../utils/pagination";
+import { MAX_TYPES, parseTypes, serializeTypes } from "@/domain/types";
+import { intersectByName } from "@/domain/intersect";
+import { genApiName, genRoman, isGenSlug } from "@/domain/dex";
+import { DEFAULT_PER_PAGE, isPerPage } from "@/domain/pagination";
 import { useTypeLabel } from "../i18n/domain";
 import type { Pokemon } from "../types/pokemon";
 

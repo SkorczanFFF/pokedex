@@ -1,7 +1,7 @@
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
-import { GEN_SLUGS } from "../utils/generations";
-import { PER_PAGE_OPTIONS } from "../utils/pagination";
+import { GEN_SLUGS } from "@/domain/dex";
+import { PER_PAGE_OPTIONS } from "@/domain/pagination";
 
 interface ListOptionsProps {
   activeGen: string | null;

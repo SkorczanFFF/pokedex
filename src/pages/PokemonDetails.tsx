@@ -10,8 +10,8 @@ import {
   getPokemonSpecies,
   NotFoundError,
 } from "../services/pokemon";
-import { typeClass } from "../utils/types";
-import { genRoman } from "../utils/generations";
+import { typeClass } from "@/domain/types";
+import { genRoman } from "@/domain/dex";
 import { useAbilityLabel, useStatLabel, useTypeLabel } from "../i18n/domain";
 import { EvolutionChain } from "../components/EvolutionChain";
 import { NotFound } from "./NotFound";

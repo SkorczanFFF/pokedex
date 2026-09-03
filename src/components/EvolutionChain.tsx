@@ -7,8 +7,8 @@ import {
   buildEvolutionTree,
   treeDepth,
   type EvolutionNode,
-} from "../utils/evolution";
-import { officialArtwork, resourceIdFromUrl } from "../utils/pokeapi";
+} from "@/domain/evolution";
+import { officialArtwork, resourceIdFromUrl } from "@/domain/resource";
 import { useEvolutionCondition } from "../i18n/domain";
 import type { EvolutionDetail } from "../types/pokemon";
 
