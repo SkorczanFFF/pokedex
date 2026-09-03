@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PokemonList } from "./pages/PokemonList";
 import { PokemonDetails } from "./pages/PokemonDetails";
 import { NotFound } from "./pages/NotFound";
-import { NotFoundError } from "./services/pokemon";
+import { NotFoundError } from "@/api/client";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import "./App.css";

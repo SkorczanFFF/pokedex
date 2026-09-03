@@ -2,14 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  getDescription,
-  getGeneration,
-  getGenus,
-  getPokemonDetails,
-  getPokemonSpecies,
-  NotFoundError,
-} from "../services/pokemon";
+import { NotFoundError } from "@/api/client";
+import { getPokemonDetails } from "@/api/pokemon";
+import { getPokemonSpecies } from "@/api/species";
+import { getDescription, getGeneration, getGenus } from "@/domain/species";
 import { typeClass } from "@/domain/types";
 import { genRoman } from "@/domain/dex";
 import { useAbilityLabel, useStatLabel, useTypeLabel } from "../i18n/domain";

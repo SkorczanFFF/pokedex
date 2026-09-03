@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getEvolutionChain } from "../services/pokemon";
+import { getEvolutionChain } from "@/api/evolution";
 import {
   buildEvolutionTree,
   treeDepth,

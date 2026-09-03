@@ -9,13 +9,12 @@ import {
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { getPokemonByGeneration, getPokemonByType } from "@/api/catalog";
 import {
   getAllPokemonNames,
-  getPokemonByGeneration,
-  getPokemonByType,
   getPokemonDetails,
   getPokemonList,
-} from "../services/pokemon";
+} from "@/api/pokemon";
 import { PokemonCard } from "../components/PokemonCard";
 import { FilterControls } from "../components/FilterControls";
 import { Pagination } from "../components/Pagination";
