@@ -2,25 +2,18 @@ import type {
   PokemonGenerationResponse,
   PokemonTypeResponse,
 } from "@/types/pokemon";
-import { API_URL } from "./client";
+import { get } from "./client";
 
 /** The two endpoints that answer "which Pokémon belong to X" with a name list. */
-export const getPokemonByType = async (
+export const getPokemonByType = (
   typeName: string
-): Promise<PokemonTypeResponse> => {
-  const response = await fetch(`${API_URL}/type/${typeName}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch type ${typeName}`);
-  }
-  return response.json();
-};
+): Promise<PokemonTypeResponse> =>
+  get<PokemonTypeResponse>(`type/${typeName}`, `Failed to fetch type ${typeName}`);
 
-export const getPokemonByGeneration = async (
+export const getPokemonByGeneration = (
   generationName: string
-): Promise<PokemonGenerationResponse> => {
-  const response = await fetch(`${API_URL}/generation/${generationName}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch generation ${generationName}`);
-  }
-  return response.json();
-};
+): Promise<PokemonGenerationResponse> =>
+  get<PokemonGenerationResponse>(
+    `generation/${generationName}`,
+    `Failed to fetch generation ${generationName}`
+  );

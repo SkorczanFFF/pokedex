@@ -1,20 +1,19 @@
 import type { PokemonSpecies } from "@/types/pokemon";
-import { API_URL } from "./client";
+import { get, request } from "./client";
 
-/** Name of the default form behind a species slug, or null if there is no such species. */
-export const getDefaultVariety = async (species: string): Promise<string | null> => {
-  const response = await fetch(`${API_URL}/pokemon-species/${species}`);
+/**
+ * Name of the default form behind a species slug, or null if there is no such
+ * species. Any failure reads as "no such species" here, because the one caller
+ * is already on its fallback path and has a NotFoundError ready either way.
+ */
+export const getDefaultVariety = async (
+  species: string
+): Promise<string | null> => {
+  const response = await request(`pokemon-species/${species}`);
   if (!response.ok) return null;
   const data: PokemonSpecies = await response.json();
   return data.varieties.find((v) => v.is_default)?.pokemon.name ?? null;
 };
 
-export const getPokemonSpecies = async (
-  id: number
-): Promise<PokemonSpecies> => {
-  const response = await fetch(`${API_URL}/pokemon-species/${id}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch species ${id}`);
-  }
-  return response.json();
-};
+export const getPokemonSpecies = (id: number): Promise<PokemonSpecies> =>
+  get<PokemonSpecies>(`pokemon-species/${id}`, `Failed to fetch species ${id}`);
