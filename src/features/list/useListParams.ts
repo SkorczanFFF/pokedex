@@ -7,7 +7,7 @@ import {
   parseTypes,
   serializeTypes,
   type PokemonType,
-} from "@/domain/types";
+} from "@/domain/pokemonTypes";
 
 /** The whole list view, read out of the query string. */
 export interface ListParams {

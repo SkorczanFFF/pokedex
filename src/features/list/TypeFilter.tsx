@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { MAX_TYPES, TYPE_NAMES, typeClass } from "@/domain/types";
-import { useTypeLabel } from "@/i18n/domain";
+import { MAX_TYPES, TYPE_NAMES, typeClass } from "@/domain/pokemonTypes";
+import { useTypeLabel } from "@/i18n/labels";
 
 interface TypeFilterProps {
   active: readonly string[];

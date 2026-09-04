@@ -9,7 +9,7 @@ import {
   type EvolutionNode,
 } from "@/domain/evolution";
 import { officialArtwork, resourceIdFromUrl } from "@/domain/resource";
-import { useEvolutionCondition } from "@/i18n/domain";
+import { useEvolutionCondition } from "@/i18n/evolutionCondition";
 import type { EvolutionDetail } from "@/types/pokemon";
 
 interface EvolutionChainProps {

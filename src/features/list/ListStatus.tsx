@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { genRoman } from "@/domain/dex";
-import { useTypeLabel } from "@/i18n/domain";
+import { useTypeLabel } from "@/i18n/labels";
 import type { ListData } from "./useListData";
 import type { ListParams } from "./useListParams";
 
