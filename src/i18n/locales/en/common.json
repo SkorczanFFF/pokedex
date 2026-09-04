@@ -12,8 +12,9 @@
     "retro": "Retro",
     "enable": "Switch to the Gen I–II Pokédex",
     "disable": "Switch back to the full Pokédex",
-    "notHere": "Not in this Pokédex",
-    "notHereBody": "{{name}} is #{{id}}, and the retro Pokédex ends at {{max}} — it had not been invented yet.",
+    "wild": "A wild {{name}} appeared!",
+    "notHereBody": "{{name}} is #{{id}}, from Gen {{gen}}. The retro Pokédex ends at {{max}}, so it had not been invented yet.",
+    "notHereBodyNoGen": "{{name}} is #{{id}}. The retro Pokédex ends at {{max}}, so it had not been invented yet.",
     "turnOff": "Turn retro off"
   },
   "gen": {

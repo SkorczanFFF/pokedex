@@ -16,6 +16,23 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the out-of-era notice becomes a battle screen with ??? for a sprite`
+
+- **Changed** — The notice added in the commit below was a plain bordered box. It is the
+  404 page's battle screen now: `???` where the sprite goes, which is what a Pokédex of
+  the day printed for an entry it had no data on, and the two ways out drawn as a Game
+  Boy menu. The panel still names the Pokémon and levels it at its own dex number —
+  `GABITE :L444`, the way the 404 screen levels a 404 at 404.
+- **Changed** — That screen's chrome moved to `components/BattleScreen`, so the status
+  panels, Red's back sprite and the text box come from one place rather than two copies
+  drifting apart. Both screens tear the same way, so the animation stayed a
+  fixture rather than becoming a flag with one possible value.
+- **Changed** — The message names the generation as well as the number — "Gabite is #444,
+  from Gen IV". It is read from the dex id, so it costs no request: the species payload is
+  the one call this page deliberately skips. Above 1025, where PokéAPI numbers the
+  alternate forms, no generation can be derived and the sentence drops that clause rather
+  than printing an empty one.
+
 ### `feat: a Pokémon outside the era says so, and offers the way out`
 
 - **Added** — Opening a Pokémon the era does not cover — by link, by bookmark, or by

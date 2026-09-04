@@ -54,42 +54,34 @@ export const PokemonDetailsPage = () => {
   if (isLoading) return <Loader />;
   if (error instanceof NotFoundError) return <NotFound />;
   if (error || !pokemon) return <ErrorView errorType="details" />;
+  if (outOfEra) return <NotInEra pokemon={pokemon} />;
 
   return (
     <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
       <BackButton />
 
-      {outOfEra ? (
-        <NotInEra pokemon={pokemon} />
-      ) : (
-        <>
-          <div className="bg-white p-6">
-            <div className="grid md:grid-cols-2 gap-8">
-              <PokemonArtwork pokemon={pokemon} />
+      <div className="bg-white p-6">
+        <div className="grid md:grid-cols-2 gap-8">
+          <PokemonArtwork pokemon={pokemon} />
 
-              <div>
-                <PokemonHeader pokemon={pokemon} species={species} />
-                <TypeBadges pokemon={pokemon} />
+          <div>
+            <PokemonHeader pokemon={pokemon} species={species} />
+            <TypeBadges pokemon={pokemon} />
 
-                <div className="space-y-6">
-                  <StatList stats={pokemon.stats} />
-                  <AbilityList abilities={pokemon.abilities} />
-                  <Measurements
-                    height={pokemon.height}
-                    weight={pokemon.weight}
-                  />
-                </div>
-              </div>
+            <div className="space-y-6">
+              <StatList stats={pokemon.stats} />
+              <AbilityList abilities={pokemon.abilities} />
+              <Measurements height={pokemon.height} weight={pokemon.weight} />
             </div>
           </div>
+        </div>
+      </div>
 
-          {species && (
-            <EvolutionChain
-              chainUrl={species.evolution_chain.url}
-              currentId={pokemon.id}
-            />
-          )}
-        </>
+      {species && (
+        <EvolutionChain
+          chainUrl={species.evolution_chain.url}
+          currentId={pokemon.id}
+        />
       )}
     </div>
   );

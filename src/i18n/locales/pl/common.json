@@ -12,8 +12,9 @@
     "retro": "Retro",
     "enable": "Przełącz na Pokédex z Gen I–II",
     "disable": "Wróć do pełnego Pokédeksu",
-    "notHere": "Nie ma go w tym Pokédeksie",
-    "notHereBody": "{{name}} ma numer {{id}}, a retro kończy się na {{max}} — wtedy jeszcze nie istniał.",
+    "wild": "Dziki {{name}} pojawił się!",
+    "notHereBody": "{{name}} ma numer {{id}} i pochodzi z generacji {{gen}}. Retro kończy się na {{max}}, więc wtedy jeszcze nie istniał.",
+    "notHereBodyNoGen": "{{name}} ma numer {{id}}. Retro kończy się na {{max}}, więc wtedy jeszcze nie istniał.",
     "turnOff": "Wyłącz tryb retro"
   },
   "gen": {
