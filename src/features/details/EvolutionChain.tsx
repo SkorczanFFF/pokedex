@@ -4,8 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getEvolutionChain } from "@/api/evolution";
 import {
-  buildEvolutionTree,
-  pruneToEra,
+  evolutionTreeInEra,
   treeDepth,
   type EvolutionNode,
 } from "@/domain/evolution";
@@ -44,7 +43,7 @@ export const EvolutionChain = ({ chainUrl, currentId }: EvolutionChainProps) => 
   // drops the section rather than replacing a working page with an error.
   if (error) return null;
 
-  const roots = data ? pruneToEra(buildEvolutionTree(data.chain), era) : null;
+  const roots = data ? evolutionTreeInEra(data.chain, era) : null;
 
   // Nothing of this line existed in the era, so there is no section to show.
   if (roots !== null && roots.length === 0) return null;
