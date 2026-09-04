@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { isGenSlug, type GenSlug } from "@/domain/dex";
 import { DEFAULT_PER_PAGE, isPerPage, type PerPage } from "@/domain/pagination";
@@ -142,4 +142,26 @@ export const useListParams = ({
   const clampPage = (lastPage: number) => update({ page: String(lastPage) });
 
   return { params, actions, clampPage };
+};
+
+/**
+ * Snaps a page number past the end of the list back onto the last real page —
+ * a stale link, or a filter that just narrowed the results out from under the
+ * current offset. Waits for the total, which only the data layer knows, so the
+ * wiring happens where both halves meet.
+ */
+export const useClampPage = ({
+  params,
+  totalPages,
+  clampPage,
+}: {
+  params: ListParams;
+  totalPages: number;
+  clampPage: (lastPage: number) => void;
+}) => {
+  useEffect(() => {
+    if (params.isSearchMode) return;
+    if (totalPages > 0 && params.page > totalPages) clampPage(totalPages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalPages, params.page, params.isSearchMode]);
 };
