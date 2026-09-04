@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { genRoman } from "@/domain/dex";
 import { getDescription, getGeneration, getGenus } from "@/domain/species";
+import { useEra } from "@/era/context";
 import type { Pokemon, PokemonSpecies } from "@/types/pokemon";
 import { CryButton } from "./CryButton";
 
@@ -17,10 +18,11 @@ export const PokemonHeader = ({
   species?: PokemonSpecies;
 }) => {
   const { t, i18n } = useTranslation();
+  const { era } = useEra();
 
   const locale = i18n.resolvedLanguage ?? "en";
   // PokéAPI has no Polish species text, so these always resolve to English.
-  const description = species ? getDescription(species, locale) : "";
+  const description = species ? getDescription(species, locale, era) : "";
   const genus = species ? getGenus(species, locale) : "";
   const generationSlug = species ? getGeneration(species) : null;
   const generation = generationSlug
