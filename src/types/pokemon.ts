@@ -21,6 +21,11 @@ export interface Pokemon {
         front_default: string;
       };
     };
+    /** Sprite sets by generation and game, keyed "generation-ii" / "crystal". */
+    versions?: Record<
+      string,
+      Record<string, { front_default: string | null }>
+    >;
   };
   types: PokemonTypeSlot[];
   past_types?: PokemonPastTypes[];

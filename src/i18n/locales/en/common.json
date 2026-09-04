@@ -74,7 +74,11 @@
     "weightValue": "{{value, number}} kg",
     "englishEntry": "This Pokédex entry is only available in English",
     "englishEntryShort": "EN",
-    "evolution": "Evolution"
+    "evolution": "Evolution",
+    "artwork": "Art",
+    "spriteSet": "Artwork and sprites",
+    "showArtwork": "Show the official artwork",
+    "showSprite": "Show the Gen {{roman}} sprite"
   },
   "evolution": {
     "none": "This Pokémon does not evolve.",

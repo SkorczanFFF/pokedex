@@ -82,7 +82,11 @@
     "weightValue": "{{value, number}} kg",
     "englishEntry": "Ten opis Pokédexu jest dostępny wyłącznie po angielsku",
     "englishEntryShort": "EN",
-    "evolution": "Ewolucja"
+    "evolution": "Ewolucja",
+    "artwork": "Art",
+    "spriteSet": "Grafika i sprite'y",
+    "showArtwork": "Pokaż oficjalną grafikę",
+    "showSprite": "Pokaż sprite z Gen {{roman}}"
   },
   "evolution": {
     "none": "Ten Pokémon nie ewoluuje.",

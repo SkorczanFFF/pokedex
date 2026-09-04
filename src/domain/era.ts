@@ -7,6 +7,9 @@ import { lastDexId, type GenSlug } from "./dex";
  * this table rather than another branch somewhere in the components — and every
  * component asks the era, never "is retro on".
  */
+/** The picture column shows the modern artwork or one generation of sprites. */
+export type SpriteSetId = "artwork" | GenSlug;
+
 export interface DexEra {
   /** Newest generation this era knows about. */
   maxGen: GenSlug;
@@ -16,6 +19,8 @@ export interface DexEra {
   hasAbilities: boolean;
   /** PokéAPI carries two recordings per Pokémon; the legacy one is the Game Boy's. */
   cry: "latest" | "legacy";
+  /** What the picture column opens on; the reader can still pick another. */
+  sprites: SpriteSetId;
 }
 
 export const MODERN: DexEra = {
@@ -29,6 +34,7 @@ export const MODERN: DexEra = {
   maxDexId: Infinity,
   hasAbilities: true,
   cry: "latest",
+  sprites: "artwork",
 };
 
 /**
@@ -41,6 +47,7 @@ export const RETRO: DexEra = {
   maxDexId: lastDexId("ii"),
   hasAbilities: false,
   cry: "legacy",
+  sprites: "ii",
 };
 
 export const ERA_NAMES = ["modern", "retro"] as const;
