@@ -34,3 +34,16 @@ export const typesInEra = (
 
   return earliest?.types ?? pokemon.types;
 };
+
+/**
+ * The recording to play. PokéAPI carries two per Pokémon and the legacy one is
+ * the Game Boy original, so retro reaches for that. Either falls back to the
+ * other: an era with no cry at all is worse than the wrong cry.
+ */
+export const cryFor = (pokemon: Pokemon, era: DexEra): string | null => {
+  const cries = pokemon.cries;
+  if (!cries) return null;
+  return era.cry === "legacy"
+    ? cries.legacy ?? cries.latest
+    : cries.latest ?? cries.legacy;
+};

@@ -5,9 +5,11 @@ import { useTranslation } from "react-i18next";
 import { getEvolutionChain } from "@/api/evolution";
 import {
   buildEvolutionTree,
+  pruneToEra,
   treeDepth,
   type EvolutionNode,
 } from "@/domain/evolution";
+import { useEra } from "@/era/context";
 import { officialArtwork, resourceIdFromUrl } from "@/domain/resource";
 import { useEvolutionCondition } from "@/i18n/evolutionCondition";
 import type { EvolutionDetail } from "@/types/pokemon";
@@ -28,6 +30,7 @@ interface EvolutionChainProps {
  */
 export const EvolutionChain = ({ chainUrl, currentId }: EvolutionChainProps) => {
   const { t } = useTranslation();
+  const { era } = useEra();
   const chainId = resourceIdFromUrl(chainUrl);
 
   const { data, error } = useQuery({
@@ -41,11 +44,18 @@ export const EvolutionChain = ({ chainUrl, currentId }: EvolutionChainProps) => 
   // drops the section rather than replacing a working page with an error.
   if (error) return null;
 
+  const roots = data ? pruneToEra(buildEvolutionTree(data.chain), era) : null;
+
+  // Nothing of this line existed in the era, so there is no section to show.
+  if (roots !== null && roots.length === 0) return null;
+
   return (
     <section className="bg-white p-6 mt-6">
       <h2 className="text-lg mb-6">{t("details.evolution")}</h2>
-      {data ? (
-        <Tree root={buildEvolutionTree(data.chain)} currentId={currentId} />
+      {roots ? (
+        roots.map((root) => (
+          <Tree key={root.name} root={root} currentId={currentId} />
+        ))
       ) : (
         <div className="h-64 bg-gray-100 animate-pulse" />
       )}

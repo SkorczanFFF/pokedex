@@ -1,4 +1,5 @@
 import type { EvolutionDetail, EvolutionLink } from "@/types/pokemon";
+import type { DexEra } from "./era";
 import { resourceIdFromUrl } from "./resource";
 
 export interface EvolutionNode {
@@ -42,3 +43,22 @@ export const treeDepth = (node: EvolutionNode): number =>
     (deepest, child) => Math.max(deepest, treeDepth(child)),
     0,
   );
+
+/**
+ * The line as it stood in an era: species past the era's dex are dropped, and a
+ * dropped node hands its surviving children up in its place.
+ *
+ * That promotion is the whole point. Gen IV slotted babies in front of older
+ * lines and PokéAPI roots each chain at the earliest one, so Mr. Mime's chain
+ * begins at Mime Jr. (439) and Marill's at Azurill (298). Pruning without
+ * re-rooting would take the Gen I/II Pokémon down with its Gen IV ancestor.
+ *
+ * Returns a forest: one root in every real case, none when nothing survives.
+ */
+export const pruneToEra = (
+  node: EvolutionNode,
+  era: DexEra,
+): EvolutionNode[] => {
+  const children = node.children.flatMap((child) => pruneToEra(child, era));
+  return node.id > era.maxDexId ? children : [{ ...node, children }];
+};
