@@ -11,7 +11,10 @@
   "era": {
     "retro": "Retro",
     "enable": "Przełącz na Pokédex z Gen I–II",
-    "disable": "Wróć do pełnego Pokédeksu"
+    "disable": "Wróć do pełnego Pokédeksu",
+    "notHere": "Nie ma go w tym Pokédeksie",
+    "notHereBody": "{{name}} ma numer {{id}}, a retro kończy się na {{max}} — wtedy jeszcze nie istniał.",
+    "turnOff": "Wyłącz tryb retro"
   },
   "gen": {
     "badge": "Generacja {{roman}}",
