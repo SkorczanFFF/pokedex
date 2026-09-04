@@ -1,5 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { MAX_TYPES, TYPE_NAMES, typeClass } from "@/domain/pokemonTypes";
+import {
+  MAX_TYPES,
+  typeClass,
+  typesAvailableIn,
+} from "@/domain/pokemonTypes";
+import { useEra } from "@/era/context";
 import { useTypeLabel } from "@/i18n/labels";
 
 interface TypeFilterProps {
@@ -11,6 +16,7 @@ interface TypeFilterProps {
 export const TypeFilter = ({ active, onToggle, onClear }: TypeFilterProps) => {
   const { t } = useTranslation();
   const typeLabel = useTypeLabel();
+  const { era } = useEra();
   const atLimit = active.length >= MAX_TYPES;
 
   return (
@@ -26,7 +32,7 @@ export const TypeFilter = ({ active, onToggle, onClear }: TypeFilterProps) => {
       >
         {t("filters.all")}
       </button>
-      {TYPE_NAMES.map((type) => {
+      {typesAvailableIn(era).map((type) => {
         const isActive = active.includes(type);
         // Types combine with AND, and no Pokémon has three types — so once two
         // are picked the rest are dead ends and get disabled rather than

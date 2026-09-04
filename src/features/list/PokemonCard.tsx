@@ -2,6 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { Pokemon } from "@/types/pokemon";
 import { typeClass } from "@/domain/pokemonTypes";
+import { typesInEra } from "@/domain/pokemonView";
+import { useEra } from "@/era/context";
 import { genRoman, generationFromId } from "@/domain/dex";
 import { useTypeLabel } from "@/i18n/labels";
 
@@ -20,6 +22,8 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   const target = `/pokemon/${pokemon.name}`;
   const gen = generationFromId(pokemon.id);
   const genBadge = gen ? t("gen.badge", { roman: genRoman(gen) }) : null;
+  const { era } = useEra();
+  const types = typesInEra(pokemon, era);
 
   // Manual click handler so scrollY is captured at click time.
   // Link's `state` prop is fixed at render time, which produces a stale 0.
@@ -74,7 +78,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
       <div className="mt-4">
         <h2 className="text-lg capitalize leading-relaxed">{pokemon.name}</h2>
         <div className="flex flex-wrap gap-2 mt-2">
-          {pokemon.types.map((type) => (
+          {types.map((type) => (
             <span
               key={type.type.name}
               className={`px-2 py-1 text-[10px] leading-4 ${typeClass(type.type.name)}`}

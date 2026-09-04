@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { useEra } from "@/era/context";
 import { getPokemonDetails, getPokemonList } from "@/api/pokemon";
 import type { Pokemon } from "@/types/pokemon";
 import { useDefaultPage } from "./useDefaultPage";
@@ -32,9 +33,12 @@ export const useListData = (
   { deferDetails }: { deferDetails: boolean }
 ): ListData => {
   const queryClient = useQueryClient();
-  const defaultPage = useDefaultPage(params);
-  const filtered = useFilteredPage(params, { deferDetails });
-  const search = useSearchResults(params);
+  // One read of the era for the whole list; the three sources take it as an
+  // argument, so each one declares in its own signature what it narrows.
+  const { era } = useEra();
+  const defaultPage = useDefaultPage(params, era);
+  const filtered = useFilteredPage(params, era, { deferDetails });
+  const search = useSearchResults(params, era);
 
   const pokemon = params.isSearchMode
     ? search.pokemon

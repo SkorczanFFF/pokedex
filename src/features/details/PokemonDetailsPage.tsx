@@ -7,6 +7,8 @@ import { getPokemonDetails } from "@/api/pokemon";
 import { getPokemonSpecies } from "@/api/species";
 import { getDescription, getGeneration, getGenus } from "@/domain/species";
 import { typeClass } from "@/domain/pokemonTypes";
+import { typesInEra } from "@/domain/pokemonView";
+import { useEra } from "@/era/context";
 import { genRoman } from "@/domain/dex";
 import { useAbilityLabel, useStatLabel, useTypeLabel } from "@/i18n/labels";
 import { EvolutionChain } from "./EvolutionChain";
@@ -16,6 +18,7 @@ import ErrorView from "@/components/ErrorView";
 
 export const PokemonDetailsPage = () => {
   const { name } = useParams<{ name: string }>();
+  const { era } = useEra();
   const location = useLocation();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
@@ -147,7 +150,7 @@ export const PokemonDetailsPage = () => {
             )}
 
             <div className="flex gap-2 mb-6">
-              {pokemon.types.map((type) => (
+              {typesInEra(pokemon, era).map((type) => (
                 <Link
                   key={type.type.name}
                   to={`/?type=${type.type.name}`}

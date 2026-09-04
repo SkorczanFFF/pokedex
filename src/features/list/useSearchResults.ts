@@ -1,5 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllPokemonNames, getPokemonDetails } from "@/api/pokemon";
+import type { DexEra } from "@/domain/era";
+import { resourceIdFromUrl } from "@/domain/resource";
 import type { Pokemon } from "@/types/pokemon";
 import type { ListParams } from "./useListParams";
 
@@ -9,7 +11,10 @@ import type { ListParams } from "./useListParams";
  */
 const SEARCH_LIMIT = 60;
 
-export const useSearchResults = ({ query, isSearchMode }: ListParams) => {
+export const useSearchResults = (
+  { query, isSearchMode }: ListParams,
+  era: DexEra
+) => {
   const queryClient = useQueryClient();
 
   // Fetched once and kept for the session: it is the only thing standing
@@ -22,13 +27,17 @@ export const useSearchResults = ({ query, isSearchMode }: ListParams) => {
   });
 
   const { data: pokemon = [], isLoading: isSearchLoading } = useQuery({
-    queryKey: ["search", query],
+    queryKey: ["search", query, era.maxDexId],
     queryFn: async (): Promise<Pokemon[]> => {
       const term = query.trim().toLowerCase();
       if (!term) return [];
 
       const matches = allNames
-        .filter((entry) => entry.name.includes(term))
+        .filter(
+          (entry) =>
+            entry.name.includes(term) &&
+            resourceIdFromUrl(entry.url) <= era.maxDexId
+        )
         .slice(0, SEARCH_LIMIT);
 
       return Promise.all(

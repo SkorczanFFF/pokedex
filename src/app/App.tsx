@@ -6,26 +6,29 @@ import { NotFound } from "@/features/not-found/NotFound";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import { EraProvider } from "@/era/EraProvider";
 import { queryClient } from "./queryClient";
 import "@/global.css";
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <div className="min-h-screen bg-[#eaebf2] font-press-start flex flex-col">
-          <Navbar />
-          <main className="flex-grow pt-12">
-            <Routes>
-              <Route path="/" element={<PokemonListPage />} />
-              <Route path="/pokemon/:name" element={<PokemonDetailsPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-          <ScrollToTopButton />
-          <Footer />
-        </div>
-      </BrowserRouter>
+      <EraProvider>
+        <BrowserRouter>
+          <div className="min-h-screen bg-[#eaebf2] font-press-start flex flex-col">
+            <Navbar />
+            <main className="flex-grow pt-12">
+              <Routes>
+                <Route path="/" element={<PokemonListPage />} />
+                <Route path="/pokemon/:name" element={<PokemonDetailsPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <ScrollToTopButton />
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </EraProvider>
     </QueryClientProvider>
   );
 }

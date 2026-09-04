@@ -1,3 +1,6 @@
+import { genOrder, type GenSlug } from "./dex";
+import type { DexEra } from "./era";
+
 const TYPE_STYLES: Record<string, string> = {
   normal: "bg-[#A8A77A] text-white",
   fire: "bg-[#EE8130] text-white",
@@ -65,3 +68,20 @@ export const parseTypes = (raw: string | null): PokemonType[] => {
 
 export const serializeTypes = (types: readonly string[]): string | null =>
   types.length > 0 ? types.join(",") : null;
+
+/**
+ * Types that did not exist in Gen I. Anything missing from this table has been
+ * around since the beginning, so an era only ever has to hide these three.
+ */
+const TYPE_DEBUT: Partial<Record<PokemonType, GenSlug>> = {
+  dark: "ii",
+  steel: "ii",
+  fairy: "vi",
+};
+
+/** The types that exist at all in an era — all the filter is allowed to offer. */
+export const typesAvailableIn = (era: DexEra): readonly PokemonType[] =>
+  TYPE_NAMES.filter((type) => {
+    const debut = TYPE_DEBUT[type];
+    return debut === undefined || genOrder(debut) <= genOrder(era.maxGen);
+  });

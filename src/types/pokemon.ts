@@ -1,3 +1,16 @@
+export interface PokemonTypeSlot {
+  slot: number;
+  type: {
+    name: string;
+  };
+}
+
+/** A typing the Pokemon carried up to and including `generation`. */
+export interface PokemonPastTypes {
+  generation: { name: string };
+  types: PokemonTypeSlot[];
+}
+
 export interface Pokemon {
   id: number;
   name: string;
@@ -9,12 +22,8 @@ export interface Pokemon {
       };
     };
   };
-  types: {
-    slot: number;
-    type: {
-      name: string;
-    };
-  }[];
+  types: PokemonTypeSlot[];
+  past_types?: PokemonPastTypes[];
   stats: {
     base_stat: number;
     stat: {

@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
-import { GEN_SLUGS } from "@/domain/dex";
+import { gensUpTo } from "@/domain/dex";
+import { useEra } from "@/era/context";
 import { PER_PAGE_OPTIONS } from "@/domain/pagination";
 
 interface ListOptionsProps {
@@ -20,6 +21,7 @@ export const ListOptions = ({
   stacked = false,
 }: ListOptionsProps) => {
   const { t } = useTranslation();
+  const { era } = useEra();
   const genId = useId();
   const perPageId = useId();
 
@@ -42,7 +44,7 @@ export const ListOptions = ({
           className="h-9 border-2 px-2 text-sm bg-white"
         >
           <option value="">{t("gen.any")}</option>
-          {GEN_SLUGS.map((slug) => (
+          {gensUpTo(era.maxGen).map((slug) => (
             <option key={slug} value={slug}>
               {slug.toUpperCase()}
             </option>

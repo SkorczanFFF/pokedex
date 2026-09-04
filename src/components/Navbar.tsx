@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import EraToggle from "@/era/EraToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
@@ -15,7 +16,10 @@ const Navbar = () => {
           <Link to="/">
             <span className="text-xl font-bold">Pokédex</span>
           </Link>
-          <LanguageSwitcher />
+          <div className="flex items-center gap-3">
+            <EraToggle />
+            <LanguageSwitcher />
+          </div>
         </div>
       </div>
     </nav>

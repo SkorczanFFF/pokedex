@@ -8,6 +8,11 @@
     "en": "English",
     "pl": "Polski"
   },
+  "era": {
+    "retro": "Retro",
+    "enable": "Przełącz na Pokédex z Gen I–II",
+    "disable": "Wróć do pełnego Pokédeksu"
+  },
   "gen": {
     "badge": "Generacja {{roman}}",
     "any": "dowolna"
