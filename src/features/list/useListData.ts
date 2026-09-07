@@ -55,9 +55,13 @@ export const useListData = (
     : 0;
 
   // Only the live source can be loading — the other two are gated off — so one
-  // flag is enough for the view.
+  // flag is enough for the view. The same holds for failing.
   const isLoading =
     defaultPage.isLoading || filtered.isLoading || search.isLoading;
+
+  const hasError = Boolean(
+    defaultPage.error || filtered.error || search.error
+  );
 
   /** Warms whichever slice the next page will actually come from. */
   const prefetchPage = (page: number) => {
@@ -92,10 +96,17 @@ export const useListData = (
     filteredCount: filtered.names.length,
     isSearchCapped: search.isCapped,
     isLoading,
-    noSearchMatches: params.isSearchMode && !isLoading && pokemon.length === 0,
+    // Nothing came back is a different answer from nothing could be fetched,
+    // and both used to leave these true: a dropped connection said "No Pokémon
+    // found matching …" over the top of the error view.
+    noSearchMatches:
+      params.isSearchMode && !isLoading && !hasError && pokemon.length === 0,
     noFilterMatches:
-      params.isFilterMode && !isLoading && filtered.names.length === 0,
-    hasError: Boolean(defaultPage.error || filtered.error),
+      params.isFilterMode &&
+      !isLoading &&
+      !hasError &&
+      filtered.names.length === 0,
+    hasError,
     prefetchPage,
   };
 };

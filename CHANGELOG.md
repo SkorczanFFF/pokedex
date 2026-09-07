@@ -16,6 +16,22 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `fix: a failed search said "no matches" rather than saying it failed`
+
+- **Fixed** — A search that could not run reported that nothing matched. `useSearchResults`
+  never returned its error and `useListData` never looked for one, so a dropped connection
+  produced "No Pokémon found matching …" — an answer about Pokémon to a question that had
+  not been asked of them. The filter path had the same shape and a worse symptom: its "no
+  matches" line rendered above the error view, so the page said both at once.
+- **Fixed** — Retries no longer multiply. The search hydrates its results with
+  `queryClient.fetchQuery` inside its own `queryFn`, and both layers carried the client's
+  retry policy: three attempts each, three times over. A dead connection spent the better
+  part of a minute showing skeletons before admitting anything was wrong. The inner calls
+  no longer retry — the query the reader is actually waiting on owns that decision — and
+  the same failure now surfaces in five seconds. The filtered list keeps its inner retries
+  on purpose: it settles each entry separately, so nothing above it would retry in its
+  place.
+
 ### `feat: the out-of-era notice becomes a battle screen with ??? for a sprite`
 
 - **Changed** — The notice added in the commit below was a plain bordered box. It is the

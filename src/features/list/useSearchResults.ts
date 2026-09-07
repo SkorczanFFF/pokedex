@@ -19,14 +19,22 @@ export const useSearchResults = (
 
   // Fetched once and kept for the session: it is the only thing standing
   // between a keystroke and a result.
-  const { data: allNames = [], isLoading: isAllNamesLoading } = useQuery({
+  const {
+    data: allNames = [],
+    isLoading: isAllNamesLoading,
+    error: allNamesError,
+  } = useQuery({
     queryKey: ["allPokemonNames"],
     queryFn: getAllPokemonNames,
     staleTime: Infinity,
     gcTime: Infinity,
   });
 
-  const { data: pokemon = [], isLoading: isSearchLoading } = useQuery({
+  const {
+    data: pokemon = [],
+    isLoading: isSearchLoading,
+    error: searchError,
+  } = useQuery({
     queryKey: ["search", query, era.maxDexId],
     queryFn: async (): Promise<Pokemon[]> => {
       const term = query.trim().toLowerCase();
@@ -46,6 +54,12 @@ export const useSearchResults = (
             queryKey: ["pokemon", entry.name],
             queryFn: () => getPokemonDetails(entry.name),
             staleTime: 1000 * 60 * 5,
+            // One retry policy per thing the reader is waiting on. Promise.all
+            // hands any rejection to this query, which retries on its own, so
+            // retrying underneath as well multiplies the wait: three attempts
+            // each, three times over, turned a dead connection into the better
+            // part of a minute of skeletons before the error appeared.
+            retry: false,
           })
         )
       );
@@ -56,6 +70,9 @@ export const useSearchResults = (
   return {
     pokemon,
     isLoading: isSearchMode && (isAllNamesLoading || isSearchLoading),
+    // The name index is fetched whether or not anyone is searching, so its
+    // failure is only this source's problem once it actually has a reader.
+    error: isSearchMode ? allNamesError ?? searchError : null,
     /** Results hit the cap, so the heading reads "60+" rather than "60". */
     isCapped: pokemon.length === SEARCH_LIMIT,
   };

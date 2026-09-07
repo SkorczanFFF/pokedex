@@ -9,7 +9,8 @@ import { get, request } from "./client";
  * the one caller turns a null into a NotFoundError and that renders the 404
  * page — so swallowing a 500 here told the reader their Pokémon does not
  * exist when the truth was that the API was down. A thrown error reaches the
- * error view instead, which is what an outage should look like.
+ * error view instead, and React Query retries it twice — which is what a
+ * transient failure deserves and what a genuine 404 must not get.
  */
 export const getDefaultVariety = async (
   species: string
