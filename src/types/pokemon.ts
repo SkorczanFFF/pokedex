@@ -42,7 +42,7 @@ export interface Pokemon {
       name: string;
     };
   }[];
-  species: { url: string };
+  species: { name: string; url: string };
   cries: { latest: string | null; legacy: string | null };
 }
 
@@ -105,6 +105,16 @@ export interface EvolutionDetail {
   needs_overworld_rain: boolean;
   turn_upside_down: boolean;
   relative_physical_stats: number | null;
+  /**
+   * Which forms this step runs between. A species shares one chain with its
+   * regional variants, and these are what tell them apart: Alolan Sandshrew's
+   * Ice Stone step names `sandshrew-alola`, while Kantonian Sandshrew's
+   * level-22 step names nobody at all.
+   */
+  base_form: { name: string } | null;
+  evolved_form: { name: string } | null;
+  /** Set instead of `base_form` when the parent has no variant to name. */
+  region: { name: string } | null;
 }
 
 /** A node of the evolution tree. Branches (Eevee) mean several `evolves_to`. */

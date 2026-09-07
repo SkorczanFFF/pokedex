@@ -50,13 +50,66 @@ const methodInEra = (
   return best?.detail ?? null;
 };
 
-/** Rewrites the API tree into one carrying dex ids and a single condition per step. */
-const buildTree = (link: EvolutionLink, era: DexEra): EvolutionNode => ({
+/**
+ * The steps that belong to one form.
+ *
+ * A species and its regional variants share a single chain, so Sandshrew's
+ * carries both "level 22" and "use an Ice Stone" and only `base_form` says
+ * which is which. Preferring the entries that name this form, and otherwise the
+ * entries that name no form at all, is what stops a Kantonian Ninetales from
+ * evolving with a stone that exists only for the Alolan one.
+ *
+ * `region` and `evolved_form` catch the rest of the pattern: Galarian Weezing's
+ * step names no base form, because Koffing has no variant to name, and marks
+ * the region instead. Falling back to everything keeps a step labelled rather
+ * than blank if a chain is shaped in some way this does not anticipate.
+ */
+const stepsForForm = (
+  details: EvolutionDetail[],
+  form: string,
+): EvolutionDetail[] => {
+  const own = details.filter((detail) => detail.base_form?.name === form);
+  if (own.length > 0) return own;
+
+  const anyForm = details.filter(
+    (detail) => !detail.base_form && !detail.region && !detail.evolved_form,
+  );
+  return anyForm.length > 0 ? anyForm : details;
+};
+
+/**
+ * Rewrites the API tree into one carrying dex ids and a single condition per
+ * step. `suffix` is what marks the form being read — `-alola`, `-galar`, or
+ * nothing at all — and it rides down the tree so that every step is judged
+ * against the form its own parent is in.
+ */
+const buildTree = (
+  link: EvolutionLink,
+  era: DexEra,
+  suffix: string,
+  condition: EvolutionDetail | null,
+): EvolutionNode => ({
   name: link.species.name,
   id: resourceIdFromUrl(link.species.url),
-  condition: methodInEra(link.evolution_details, era),
-  children: link.evolves_to.map((child) => buildTree(child, era)),
+  condition,
+  children: link.evolves_to.map((child) => {
+    const parentForm = `${link.species.name}${suffix}`;
+    const step = methodInEra(
+      stepsForForm(child.evolution_details, parentForm),
+      era,
+    );
+    return buildTree(child, era, suffix, step);
+  }),
 });
+
+/**
+ * `sandslash-alola` read as the species `sandslash` leaves `-alola`; a default
+ * form leaves nothing, which is exactly the marker the steps above expect.
+ */
+export const formSuffix = (pokemonName: string, speciesName: string): string =>
+  pokemonName.startsWith(`${speciesName}-`)
+    ? pokemonName.slice(speciesName.length)
+    : "";
 
 /** Longest path from the root, counted in nodes — the chain's width in stages. */
 export const treeDepth = (node: EvolutionNode): number =>
@@ -86,4 +139,5 @@ const prune = (node: EvolutionNode, era: DexEra): EvolutionNode[] => {
 export const evolutionTreeInEra = (
   link: EvolutionLink,
   era: DexEra,
-): EvolutionNode[] => prune(buildTree(link, era), era);
+  suffix = "",
+): EvolutionNode[] => prune(buildTree(link, era, suffix, null), era);

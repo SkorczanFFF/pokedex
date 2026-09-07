@@ -16,6 +16,28 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `fix: a regional form is not its species, and does not evolve like it`
+
+- **Fixed** — Every alternate form — 326 of them, the Alolans and Galarians and Megas and
+  Gmaxes — was missing its Pokédex entry, its genus, its generation badge and its whole
+  evolution section. The page asked for `/pokemon-species/{pokemon.id}`, and above 1025
+  those two numbers part company: Galarian Slowpoke is id 10164, and
+  `/pokemon-species/10164` is a 404. The request now goes by the species name each
+  `/pokemon` payload already carries, which resolves for forms and defaults alike. The
+  failure was silent — the query never resolved and the sections simply rendered nothing.
+- **Fixed** — A species shares one evolution chain with its regional variants, and the app
+  read whichever step was newest. So Kantonian Ninetales evolved with the Ice Stone that
+  belongs to the Alolan one, Slowbro with a Galarica Cuff, Electrode with a Leaf Stone
+  from Hisui, and Quilava at the level Legends: Arceus moved it to. Seven visible steps
+  across the Gen I/II chains were wrong that way; eleven more were right by accident,
+  quoting a later game that happened to agree.
+- **Added** — Steps are matched to the form being read. PokéAPI names them: the Alolan
+  Sandshrew step carries `base_form: sandshrew-alola` while the Kantonian one names
+  nobody, and Galarian Weezing marks a `region` instead, because Koffing has no variant to
+  name. The marker rides down the chain, so a two-step regional line is judged at every
+  step rather than only at the first. Vulpix and Vulpix-Alola now read from the same chain
+  and disagree correctly: Fire Stone against Ice Stone.
+
 ### `fix: a failed search said "no matches" rather than saying it failed`
 
 - **Fixed** — A search that could not run reported that nothing matched. `useSearchResults`

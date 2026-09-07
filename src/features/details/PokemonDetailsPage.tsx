@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { NotFoundError } from "@/api/client";
 import { getPokemonDetails } from "@/api/pokemon";
 import { getPokemonSpecies } from "@/api/species";
+import { formSuffix } from "@/domain/evolution";
 import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
 import { NotFound } from "@/features/not-found/NotFound";
@@ -46,9 +47,9 @@ export const PokemonDetailsPage = () => {
   // flavour text, the genus, the generation and the evolution chain. Not worth
   // a request for a Pokémon whose card will not be shown.
   const { data: species } = useQuery({
-    queryKey: ["species", pokemon?.id],
-    queryFn: () => getPokemonSpecies(pokemon!.id),
-    enabled: !!pokemon?.id && !outOfEra,
+    queryKey: ["species", pokemon?.species.name],
+    queryFn: () => getPokemonSpecies(pokemon!.species.name),
+    enabled: !!pokemon?.species.name && !outOfEra,
   });
 
   if (isLoading) return <Loader />;
@@ -81,6 +82,7 @@ export const PokemonDetailsPage = () => {
         <EvolutionChain
           chainUrl={species.evolution_chain.url}
           currentId={pokemon.id}
+          formSuffix={formSuffix(pokemon.name, pokemon.species.name)}
         />
       )}
     </div>

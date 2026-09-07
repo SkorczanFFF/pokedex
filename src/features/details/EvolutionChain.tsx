@@ -18,6 +18,8 @@ interface EvolutionChainProps {
   chainUrl: string;
   /** Dex id of the Pokémon on screen — its node is marked rather than linked. */
   currentId: number;
+  /** Which variant is being read, so each step is the one that variant uses. */
+  formSuffix: string;
 }
 
 /**
@@ -27,7 +29,11 @@ interface EvolutionChainProps {
  * no artwork, and the sprite repo is keyed by the very id sitting in those URLs
  * — so every picture here is derived, not fetched.
  */
-export const EvolutionChain = ({ chainUrl, currentId }: EvolutionChainProps) => {
+export const EvolutionChain = ({
+  chainUrl,
+  currentId,
+  formSuffix,
+}: EvolutionChainProps) => {
   const { t } = useTranslation();
   const { era } = useEra();
   const chainId = resourceIdFromUrl(chainUrl);
@@ -43,7 +49,7 @@ export const EvolutionChain = ({ chainUrl, currentId }: EvolutionChainProps) => 
   // drops the section rather than replacing a working page with an error.
   if (error) return null;
 
-  const roots = data ? evolutionTreeInEra(data.chain, era) : null;
+  const roots = data ? evolutionTreeInEra(data.chain, era, formSuffix) : null;
 
   // Nothing of this line existed in the era, so there is no section to show.
   if (roots !== null && roots.length === 0) return null;

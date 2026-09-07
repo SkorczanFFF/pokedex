@@ -24,5 +24,14 @@ export const getDefaultVariety = async (
   return data.varieties.find((v) => v.is_default)?.pokemon.name ?? null;
 };
 
-export const getPokemonSpecies = (id: number): Promise<PokemonSpecies> =>
-  get<PokemonSpecies>(`pokemon-species/${id}`, `Failed to fetch species ${id}`);
+/**
+ * Asked for by species name rather than by a Pokémon's id, because those are
+ * two different numbers above 1025: a form like `slowpoke-galar` is id 10164
+ * and `/pokemon-species/10164` does not exist. Every /pokemon payload carries
+ * the name of the species it belongs to, and that always resolves.
+ */
+export const getPokemonSpecies = (species: string): Promise<PokemonSpecies> =>
+  get<PokemonSpecies>(
+    `pokemon-species/${species}`,
+    `Failed to fetch species ${species}`
+  );
