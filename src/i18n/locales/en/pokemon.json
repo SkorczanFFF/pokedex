@@ -35,5 +35,10 @@
     "machine": "TM and HM",
     "egg": "Egg moves",
     "tutor": "Tutor"
+  },
+  "damageClasses": {
+    "physical": "Physical",
+    "special": "Special",
+    "status": "Status"
   }
 }

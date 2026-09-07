@@ -1,4 +1,4 @@
-import type { Pokemon } from "@/types/pokemon";
+import type { Move, MovePastValues, Pokemon } from "@/types/pokemon";
 import { genOrder } from "./dex";
 import type { DexEra } from "./era";
 import { generationOfVersionGroup, versionGroupRank } from "./games";
@@ -102,4 +102,71 @@ export const learnsetInEra = (pokemon: Pokemon, era: DexEra): Learnset => {
     .sort((a, b) => methodRank(a.method) - methodRank(b.method));
 
   return { game, groups };
+};
+
+export interface MoveInGame {
+  type: string;
+  damageClass: string;
+  power: number | null;
+  accuracy: number | null;
+  pp: number | null;
+  /** The game's own words, and whether they had to fall back to another game. */
+  text: string;
+  textFromGame: string | null;
+}
+
+/**
+ * A move as one game had it.
+ *
+ * `past_values` entries hold what stood *through* the version group they name,
+ * so the earliest entry that still reaches this game is the one that applies,
+ * and its null fields mean "unchanged" rather than "unknown". Reading Crystal,
+ * Thunderbolt is back to 95 power; reading Scarlet and Violet it is 90 again.
+ */
+export const moveInGame = (
+  move: Move,
+  game: string,
+  locale: string
+): MoveInGame => {
+  const played = versionGroupRank(game);
+
+  let applies: MovePastValues | null = null;
+  for (const past of move.past_values) {
+    const rank = versionGroupRank(past.version_group.name);
+    if (rank === null || played === null || rank < played) continue;
+    if (applies === null || rank < versionGroupRank(applies.version_group.name)!) {
+      applies = past;
+    }
+  }
+
+  // English is the fallback everywhere in PokéAPI, and the only language every
+  // move's text is written in.
+  const spoken = move.flavor_text_entries.filter(
+    (entry) => entry.language.name === locale
+  );
+  const entries = spoken.length > 0 ? spoken : move.flavor_text_entries.filter(
+    (entry) => entry.language.name === "en"
+  );
+
+  const exact = entries.find((entry) => entry.version_group.name === game);
+  const nearest = entries.reduce<(typeof entries)[number] | null>(
+    (best, entry) => {
+      const rank = versionGroupRank(entry.version_group.name);
+      if (rank === null || played === null || rank > played) return best;
+      const bestRank = best ? versionGroupRank(best.version_group.name) ?? -1 : -1;
+      return rank > bestRank ? entry : best;
+    },
+    null
+  );
+  const chosen = exact ?? nearest ?? entries[0] ?? null;
+
+  return {
+    type: applies?.type?.name ?? move.type.name,
+    damageClass: move.damage_class.name,
+    power: applies?.power ?? move.power,
+    accuracy: applies?.accuracy ?? move.accuracy,
+    pp: applies?.pp ?? move.pp,
+    text: chosen?.flavor_text.replace(/[\f\n\r\u00ad]/g, " ").trim() ?? "",
+    textFromGame: chosen?.version_group.name ?? null,
+  };
 };

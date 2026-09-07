@@ -87,7 +87,15 @@
     "artwork": "Art",
     "spriteSet": "Artwork and sprites",
     "showArtwork": "Show the official artwork",
-    "showSprite": "Show the Gen {{roman}} sprite"
+    "showSprite": "Show the Gen {{roman}} sprite",
+    "movePower": "Power",
+    "moveAccuracy": "Accuracy",
+    "movePp": "PP",
+    "moveNoValue": "—",
+    "moveTextFrom": "from {{game}}",
+    "movePick": "Pick a move, or a few to compare them",
+    "englishMoveText": "This move description is only available in English",
+    "moveClose": "Close"
   },
   "evolution": {
     "none": "This Pokémon does not evolve.",

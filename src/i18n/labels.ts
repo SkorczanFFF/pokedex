@@ -32,6 +32,13 @@ export const useMoveLabel = () => {
   return (slug: string) => t(slug, { defaultValue: humanize(slug) });
 };
 
+/** Display label for a move's damage class (`physical`, `special`, `status`). */
+export const useDamageClassLabel = () => {
+  const { t } = useTranslation("pokemon");
+  return (slug: string) =>
+    t(`damageClasses.${slug}`, { defaultValue: humanize(slug) });
+};
+
 /** Display label for how a move is learned (`level-up`, `machine`, `egg`). */
 export const useMoveMethodLabel = () => {
   const { t } = useTranslation("pokemon");

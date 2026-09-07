@@ -35,5 +35,10 @@
     "machine": "TM i HM",
     "egg": "Ruchy jajkowe",
     "tutor": "Nauczyciel"
+  },
+  "damageClasses": {
+    "physical": "Fizyczny",
+    "special": "Specjalny",
+    "status": "Statusowy"
   }
 }

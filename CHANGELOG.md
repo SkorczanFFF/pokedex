@@ -16,6 +16,41 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: a move opens to its numbers and the words its game printed`
+
+- **Added** — Every move row opens onto what the move actually is: its type, whether it is
+  physical, special or a status move, and its power, accuracy and PP. The list said what a
+  Pokémon learns and at what level; it said nothing about whether learning it was worth
+  the levels.
+- **Added** — The sentence the game itself printed about the move, in that game's words.
+  Crystal describes Thunderbolt as "An attack that may cause paralysis."; Scarlet and
+  Violet spend two sentences on the same move. The alternative was PokéAPI's
+  `effect_entries`, which read like a wiki rather than like a Pokédex — and whose first
+  entry is French for Thunderbolt, so any of it has to be picked by language, never by
+  index. The text is English-only, and carries the same EN badge the species entries do.
+- **Added** — Era-correct numbers, from `past_values` and read exactly the way
+  `past_types` already is: each entry holds what stood *through* the version group it
+  names. Thunderbolt is 95 power in retro and 90 in the modern dex; Thunder 120 against
+  110. All off one payload, so switching era re-derives an open panel without fetching
+  anything — at the new level, because Thunderbolt also moved from 26 to 36.
+- **Added** — On a wide screen a move opens *beside* the list rather than inside it. The
+  rows stay where they were, the numbers get the room to be read as numbers rather than as
+  one line of chips, and the panel follows the list down, because the machines run to
+  ninety rows and a move picked at the top would otherwise be scrolled away from. Below
+  `lg` there is no second column, so it opens under its own row.
+- **Added** — As many moves open at once as a reader wants, because the question a move
+  list is asked is which of two to teach. The panels stack in list order, which is what
+  makes them comparable: each puts its Power in the same place, so two of them read down a
+  column — Thunderbolt's 95 over Thunder's 120, and 100 accuracy over 70.
+- **Added** — One request per move, and only on the click that opens it. `/move/{name}` is
+  around 50 kB of JSON — half of it a list of every Pokémon that learns the move, which
+  nothing here reads — but it arrives brotli-compressed at roughly 5.5 kB, and PokéAPI has
+  no way to ask for fewer fields. A details page therefore still costs its usual three
+  requests until somebody wants a particular move, and each move that does get opened is
+  held for the session, because a move does not change between two clicks.
+- **Added** — A `damageClasses` dictionary, hand-translated like the types and abilities
+  before it: three labels, and `humanize()` behind them as everywhere else.
+
 ### `feat: the moves a Pokémon learns, as one game taught it`
 
 - **Added** — A moves section on the details page. The level-up list is open, because it is

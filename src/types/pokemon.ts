@@ -136,3 +136,35 @@ export interface EvolutionChainResponse {
   id: number;
   chain: EvolutionLink;
 }
+
+/** What a move's numbers were before they were last changed. */
+export interface MovePastValues {
+  version_group: { name: string };
+  power: number | null;
+  accuracy: number | null;
+  pp: number | null;
+  effect_chance: number | null;
+  type: { name: string } | null;
+}
+
+export interface Move {
+  id: number;
+  name: string;
+  power: number | null;
+  accuracy: number | null;
+  pp: number | null;
+  effect_chance: number | null;
+  type: { name: string };
+  damage_class: { name: string };
+  flavor_text_entries: {
+    flavor_text: string;
+    language: { name: string };
+    version_group: { name: string };
+  }[];
+  /**
+   * Read the same way as a Pokémon's `past_types`: each entry holds the values
+   * that stood through the version group it names. Thunderbolt was 95 power
+   * until X and Y, Tackle 35 with 95 accuracy until Black and White.
+   */
+  past_values: MovePastValues[];
+}

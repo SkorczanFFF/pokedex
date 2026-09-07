@@ -95,7 +95,15 @@
     "artwork": "Art",
     "spriteSet": "Grafika i sprite'y",
     "showArtwork": "Pokaż oficjalną grafikę",
-    "showSprite": "Pokaż sprite z Gen {{roman}}"
+    "showSprite": "Pokaż sprite z Gen {{roman}}",
+    "movePower": "Moc",
+    "moveAccuracy": "Celność",
+    "movePp": "PP",
+    "moveNoValue": "—",
+    "moveTextFrom": "z gry {{game}}",
+    "movePick": "Wybierz ruch albo kilka, żeby je porównać",
+    "englishMoveText": "Ten opis ruchu jest dostępny wyłącznie po angielsku",
+    "moveClose": "Zamknij"
   },
   "evolution": {
     "none": "Ten Pokémon nie ewoluuje.",
