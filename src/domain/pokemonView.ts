@@ -1,6 +1,7 @@
 import type { Pokemon, PokemonTypeSlot } from "@/types/pokemon";
 import { GEN_SLUGS, genApiName, genOrder, genSlugOf, type GenSlug } from "./dex";
 import type { DexEra, SpriteSetId } from "./era";
+import { gameSprite, officialArtwork } from "./resource";
 
 /**
  * The typing a Pokémon had in an era.
@@ -82,6 +83,19 @@ export const spriteUrl = (
     pokemon.sprites.versions?.[genApiName(set)]?.[game]?.front_default ?? null
   );
 };
+
+/**
+ * The same picture addressed by dex id, for the places that never fetched a
+ * payload to ask: an evolution chain hands back species URLs and nothing else.
+ *
+ * Unlike `spriteUrl` this cannot tell a sprite that exists from one that does
+ * not, so it is only safe where the era already bounds the ids — retro stops at
+ * 251, and all 251 have a Crystal sprite.
+ */
+export const spriteUrlById = (id: number, set: SpriteSetId): string =>
+  set === "artwork"
+    ? officialArtwork(id)
+    : gameSprite(id, `${genApiName(set)}/${GEN_SPRITE_GAME[set]}`);
 
 /**
  * The sets this Pokémon actually has, artwork first and then in dex order.

@@ -4,6 +4,10 @@ export const resourceIdFromUrl = (url: string): number => {
   return match ? Number(match[1]) : 0;
 };
 
+/** Everything the sprite repo serves hangs off one root. */
+const SPRITE_ROOT =
+  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon";
+
 /**
  * Official artwork is served straight from the sprite repo, keyed by national
  * dex id — and a species id is that same number. So endpoints that hand back
@@ -11,4 +15,8 @@ export const resourceIdFromUrl = (url: string): number => {
  * spending a request per entry on `/pokemon/{name}`.
  */
 export const officialArtwork = (id: number): string =>
-  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+  `${SPRITE_ROOT}/other/official-artwork/${id}.png`;
+
+/** The same trick for a game's sprites, which sit under `generation-ii/crystal`. */
+export const gameSprite = (id: number, path: string): string =>
+  `${SPRITE_ROOT}/versions/${path}/${id}.png`;

@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { Pokemon } from "@/types/pokemon";
 import { typeClass } from "@/domain/pokemonTypes";
-import { typesInEra } from "@/domain/pokemonView";
+import { spriteUrl, typesInEra } from "@/domain/pokemonView";
 import { useEra } from "@/era/context";
 import { genRoman, generationFromId } from "@/domain/dex";
 import { useTypeLabel } from "@/i18n/labels";
@@ -16,14 +16,19 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   const location = useLocation();
   const { t } = useTranslation();
   const typeLabel = useTypeLabel();
-  const imageUrl =
-    pokemon.sprites.other["official-artwork"].front_default ||
-    pokemon.sprites.front_default;
+  const { era } = useEra();
   const target = `/pokemon/${pokemon.name}`;
   const gen = generationFromId(pokemon.id);
   const genBadge = gen ? t("gen.badge", { roman: genRoman(gen) }) : null;
-  const { era } = useEra();
   const types = typesInEra(pokemon, era);
+
+  // The era picks the picture here the way it does on the details page. It
+  // costs no request — the sprite tree rides in the payload the grid already
+  // fetched for the types — and it saves the download: the official artwork is
+  // around 130 kB a card, the Crystal sprite half a kilobyte.
+  const isSprite = era.sprites !== "artwork";
+  const imageUrl =
+    spriteUrl(pokemon, era.sprites) ?? spriteUrl(pokemon, "artwork") ?? undefined;
 
   // Manual click handler so scrollY is captured at click time.
   // Link's `state` prop is fixed at render time, which produces a stale 0.
@@ -50,7 +55,14 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
         <img
           src={imageUrl}
           alt={pokemon.name}
-          className="w-full h-full object-contain"
+          className={`w-full h-full object-contain ${
+            // A Gen II sprite is 40 to 56 pixels square; blown up to the tile it
+            // is mush unless the browser is told to keep the edges. The inset
+            // keeps it off the id and the generation badge — the artwork leaves
+            // that corner empty on its own, a sprite fills its canvas to the
+            // edge and Charizard's wing lands under the label.
+            isSprite ? "p-6 [image-rendering:pixelated]" : ""
+          }`}
           loading="lazy"
         />
         <span className="absolute top-[1px] left-[-1px] text-white text-[10px] leading-none px-2 py-1">

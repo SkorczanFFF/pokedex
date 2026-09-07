@@ -16,6 +16,34 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the era picks the picture, on the list and in the evolution line`
+
+- **Added** — Retro shows the dex in its own sprites. The list and the evolution line were
+  still handing out modern 475-square renders of Pokémon that never looked like that; both
+  now open on the Gen II sprite, the same one the details view has been opening on.
+- **Added** — It costs no request and saves the download. The sprite tree rides in the
+  `/pokemon` payload the grid already fetches for the types, and measured over the wire the
+  official artwork averages 132.6 kB a card against the Crystal sprite's 0.5 kB — a page of
+  twenty goes from 2.65 MB to 9.3 kB.
+- **Added** — `spriteUrlById`, because an evolution chain hands back species URLs and no
+  payload to ask. Every picture in the line stays derived from the id rather than fetched,
+  whichever set the era wants. It cannot tell a missing sprite from a present one, so it is
+  only safe where the era bounds the ids: retro stops at 251, and all 251 were checked to
+  have a Crystal sprite.
+- **Fixed** — Gen I and II sprites are opaque. The white background is baked in — zero
+  transparent pixels, against 65% for the artwork — which the white list card hid and a
+  coloured evolution tile did not: a white square with a seam around it. The tiles hand the
+  sprite that white panel deliberately now, so it reads as a screen rather than as a bug.
+- **Changed** — In retro the current node in the line is a red dashed frame carrying the
+  battle screen's `>` cursor, rather than a yellow fill. Behind an opaque sprite the fill
+  had nothing left to fill and survived only as a rim, so the rim became the mark. Hovering
+  a link dashes it black for the same reason, instead of flooding it yellow.
+- **Fixed** — A tile lifted ten pixels on hover and lost its top edge. The chain scrolls
+  sideways, and a box that scrolls on one axis clips the other; it now carries the room to
+  lift into, put back where it was drawn with a matching negative margin.
+- **Fixed** — On the list the sprite is inset. Artwork leaves its corners empty and a sprite
+  fills its canvas to the edge, so Charizard's wing was landing under the generation badge.
+
 ### `feat: a move opens to its numbers and the words its game printed`
 
 - **Added** — Every move row opens onto what the move actually is: its type, whether it is

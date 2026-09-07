@@ -9,7 +9,8 @@ import {
   type EvolutionNode,
 } from "@/domain/evolution";
 import { useEra } from "@/era/context";
-import { officialArtwork, resourceIdFromUrl } from "@/domain/resource";
+import { spriteUrlById } from "@/domain/pokemonView";
+import { resourceIdFromUrl } from "@/domain/resource";
 import { useEvolutionCondition } from "@/i18n/evolutionCondition";
 import type { EvolutionDetail } from "@/types/pokemon";
 
@@ -26,8 +27,9 @@ interface EvolutionChainProps {
  * The evolution line of the Pokémon being viewed.
  *
  * Costs a single request: `/evolution-chain` carries species names and URLs but
- * no artwork, and the sprite repo is keyed by the very id sitting in those URLs
- * — so every picture here is derived, not fetched.
+ * no pictures, and the sprite repo is keyed by the very id sitting in those URLs
+ * — so every picture here is derived, not fetched, whichever set the era asks
+ * for.
  */
 export const EvolutionChain = ({
   chainUrl,
@@ -116,7 +118,10 @@ const Tree = ({
   }
 
   return (
-    <div style={style} className="@container overflow-x-auto">
+    // A box that scrolls on one axis clips the other, so the 10px a tile lifts
+    // on hover was being cut off at the top edge. The padding is the room to
+    // lift into; the negative margin puts the row back where it was drawn.
+    <div style={style} className="@container -mt-3 overflow-x-auto pt-3">
       {/* `w-fit` + auto margins centre the chain while it fits, and collapse to
           a left-aligned scroll if a deeper chain than the games ship ever
           bottoms out the clamp. */}
@@ -178,8 +183,12 @@ const Step = ({ condition }: { condition: EvolutionDetail | null }) => {
   );
 };
 
-/** Shared between the linked tiles and the un-clickable current one. */
-const TILE = "w-48 shrink-0 p-3 text-center md:w-[var(--evo-tile)]";
+/**
+ * Shared between the linked tiles and the un-clickable current one. The border
+ * slot is always there, transparent when nothing is using it, so switching era
+ * or hovering never moves a tile by two pixels.
+ */
+const TILE = "w-48 shrink-0 border-2 p-3 text-center md:w-[var(--evo-tile)]";
 
 const NodeCard = ({
   node,
@@ -189,20 +198,47 @@ const NodeCard = ({
   currentId: number;
 }) => {
   const location = useLocation();
+  const { era } = useEra();
   const isCurrent = node.id === currentId;
+  const isSprite = era.sprites !== "artwork";
+
+  // Retro marks the line the way a Game Boy menu did, because the yellow fill
+  // has nothing left to fill: the sprite brings its own opaque white panel and
+  // the colour survives only as a rim around it. So the rim becomes the mark —
+  // dashed, in the app's red — and the name takes the menu cursor. Hovering a
+  // link dashes it in black instead of flooding it yellow, which would fight
+  // the white panel the same way.
+  const currentTile = isSprite
+    ? "border-dashed border-[#E12025] bg-[#EAEBF2]"
+    : "border-transparent bg-[#FECB09]";
+  const linkTile = isSprite
+    ? "border-dashed border-transparent bg-[#EAEBF2] hover:border-black/50"
+    : "border-transparent bg-[#EAEBF2] hover:bg-[#FECB09]";
 
   const body = (
     <>
-      {/* Fixed aspect box reserves the space before the artwork lands. */}
-      <div className="aspect-square">
+      {/* Fixed aspect box reserves the space before the picture lands. Gen I and
+          II sprites are opaque — white background baked in, no alpha at all —
+          so on a coloured tile they would show as a white square with a seam.
+          Giving them the white panel outright turns that into a screen. */}
+      <div className={`aspect-square ${isSprite ? "bg-white p-2" : ""}`}>
         <img
-          src={officialArtwork(node.id)}
+          src={spriteUrlById(node.id, era.sprites)}
           alt={node.name}
           loading="lazy"
-          className="h-full w-full object-contain"
+          className={`h-full w-full object-contain ${
+            isSprite ? "[image-rendering:pixelated]" : ""
+          }`}
         />
       </div>
       <p className="mt-2 text-xs capitalize leading-relaxed break-words md:text-[length:var(--evo-name)]">
+        {/* The same `>` the battle screen's menu uses — `aria-current` already
+            says this to a screen reader, so it is decoration. */}
+        {isSprite && isCurrent && (
+          <span aria-hidden="true" className="mr-1 text-[#E12025]">
+            {">"}
+          </span>
+        )}
         {node.name}
       </p>
     </>
@@ -210,7 +246,7 @@ const NodeCard = ({
 
   if (isCurrent) {
     return (
-      <div aria-current="page" className={`${TILE} bg-[#FECB09]`}>
+      <div aria-current="page" className={`${TILE} ${currentTile}`}>
         {body}
       </div>
     );
@@ -222,7 +258,7 @@ const NodeCard = ({
       // Carries the list origin forward, so "Back to list" still lands on the
       // page and scroll position the user actually came from.
       state={location.state}
-      className={`${TILE} bg-[#EAEBF2] hover:translate-y-[-10px] hover:bg-[#FECB09]`}
+      className={`${TILE} ${linkTile} hover:translate-y-[-10px]`}
     >
       {body}
     </Link>
