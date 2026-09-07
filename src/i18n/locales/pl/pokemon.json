@@ -29,5 +29,11 @@
     "accuracy": "Celność",
     "evasion": "Uniki",
     "special": "Specjalny"
+  },
+  "moveMethods": {
+    "level-up": "Przez poziom",
+    "machine": "TM i HM",
+    "egg": "Ruchy jajkowe",
+    "tutor": "Nauczyciel"
   }
 }

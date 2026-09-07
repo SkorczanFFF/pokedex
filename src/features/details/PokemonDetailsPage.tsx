@@ -13,6 +13,7 @@ import { AbilityList } from "./AbilityList";
 import { BackButton } from "./BackButton";
 import { EvolutionChain } from "./EvolutionChain";
 import { Measurements } from "./Measurements";
+import { MoveList } from "./MoveList";
 import { NotInEra } from "./NotInEra";
 import { PokemonArtwork } from "./PokemonArtwork";
 import { PokemonHeader } from "./PokemonHeader";
@@ -77,6 +78,8 @@ export const PokemonDetailsPage = () => {
           </div>
         </div>
       </div>
+
+      <MoveList pokemon={pokemon} />
 
       {species && (
         <EvolutionChain

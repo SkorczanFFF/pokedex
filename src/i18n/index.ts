@@ -7,6 +7,7 @@ import enPokemon from "./locales/en/pokemon.json";
 import plCommon from "./locales/pl/common.json";
 import plPokemon from "./locales/pl/pokemon.json";
 import plAbilities from "./locales/pl/abilities.json";
+import plMoves from "./locales/pl/moves.json";
 
 export const SUPPORTED_LANGUAGES = ["en", "pl"] as const;
 
@@ -24,10 +25,15 @@ i18n
     // Resources are bundled rather than fetched: two locales on a small app, so
     // this costs less than a backend plugin and needs no Suspense boundary.
     resources: {
-      en: { common: enCommon, pokemon: enPokemon, abilities: {} },
-      pl: { common: plCommon, pokemon: plPokemon, abilities: plAbilities },
+      en: { common: enCommon, pokemon: enPokemon, abilities: {}, moves: {} },
+      pl: {
+        common: plCommon,
+        pokemon: plPokemon,
+        abilities: plAbilities,
+        moves: plMoves,
+      },
     },
-    ns: ["common", "pokemon", "abilities"],
+    ns: ["common", "pokemon", "abilities", "moves"],
     defaultNS: "common",
     fallbackLng: "en",
     supportedLngs: SUPPORTED_LANGUAGES,

@@ -11,8 +11,10 @@ declare module "i18next" {
       pokemon: {
         types: Record<string, string>;
         stats: Record<string, string>;
+        moveMethods: Record<string, string>;
       };
       abilities: Record<string, string>;
+      moves: Record<string, string>;
     };
   }
 }

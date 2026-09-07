@@ -117,3 +117,17 @@ const GEN_OF_GROUP = new Map<string, GenSlug>(
 /** The generation a version group belongs to, or null for one we do not know. */
 export const generationOfVersionGroup = (group: string): GenSlug | null =>
   GEN_OF_GROUP.get(group) ?? null;
+
+/**
+ * Where a version group sits in the run of games, counting from Red and Blue.
+ * The generation alone cannot order Gold/Silver against Crystal, and a learnset
+ * has to name one game rather than a pair of them.
+ */
+const GROUP_RANK = new Map<string, number>(
+  GEN_SLUGS.flatMap((gen) => GROUPS_BY_GEN[gen]).map(
+    (group, index) => [group, index] as const
+  )
+);
+
+export const versionGroupRank = (group: string): number | null =>
+  GROUP_RANK.get(group) ?? null;

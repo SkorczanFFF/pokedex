@@ -26,6 +26,19 @@ export const useStatLabel = () => {
   return (slug: string) => t(`stats.${slug}`, { defaultValue: humanize(slug) });
 };
 
+/** Display label for a move slug. The slug stays the key everywhere else. */
+export const useMoveLabel = () => {
+  const { t } = useTranslation("moves");
+  return (slug: string) => t(slug, { defaultValue: humanize(slug) });
+};
+
+/** Display label for how a move is learned (`level-up`, `machine`, `egg`). */
+export const useMoveMethodLabel = () => {
+  const { t } = useTranslation("pokemon");
+  return (slug: string) =>
+    t(`moveMethods.${slug}`, { defaultValue: humanize(slug) });
+};
+
 /**
  * Display label for an ability slug. PokéAPI has no Polish and there are 373
  * abilities, so the Polish dictionary is filled in progressively — anything

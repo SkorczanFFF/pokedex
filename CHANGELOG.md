@@ -16,6 +16,30 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the moves a Pokémon learns, as one game taught it`
+
+- **Added** — A moves section on the details page. The level-up list is open, because it is
+  what the games' own Pokédex shows and it runs to eight or twenty rows; the machines and
+  egg moves wait behind a count, because Mewtwo knows ninety-one TMs in Scarlet and Violet
+  and they would bury everything else. It costs no requests at all: `/pokemon` already
+  carries the level, the method and the game for every move, and only a move's own type
+  and power would need fetching.
+- **Added** — One game per era rather than a union of all of them. A learnset is per game
+  and the same Pokémon can learn a move at level 12 in one and 15 in the next, so listing
+  every version group at once produces a table that contradicts itself. Retro reads
+  Crystal — Typhlosion at levels 1, 6, 12, 21, 31, 45 and 60, exactly as Gold and Silver
+  printed it — and the modern dex reads the newest game that Pokémon appears in.
+- **Fixed before it shipped** — "Newest" cannot mean newest outright. Pokémon Champions is
+  the most recent thing Typhlosion appears in and teaches nothing by levelling: all 63 of
+  its entries use a `train` method, so the section came out empty with a game nobody
+  recognised on top. It now prefers the newest game that teaches by level, which needs no
+  list of titles to ignore.
+- **Added** — `versionGroupRank`, because a generation cannot order Gold/Silver against
+  Crystal and a learnset has to name one game rather than a pair.
+- **Added** — A `moves` i18n namespace, empty and wired the way `abilities` is: names fall
+  through `humanize()` until a dictionary is filled in, so translations can arrive in
+  batches instead of all at once.
+
 ### `fix: a regional form is not its species, and does not evolve like it`
 
 - **Fixed** — Every alternate form — 326 of them, the Alolans and Galarians and Megas and

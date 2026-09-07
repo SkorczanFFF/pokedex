@@ -43,6 +43,14 @@ export interface Pokemon {
     };
   }[];
   species: { name: string; url: string };
+  moves: {
+    move: { name: string; url: string };
+    version_group_details: {
+      level_learned_at: number;
+      version_group: { name: string };
+      move_learn_method: { name: string };
+    }[];
+  }[];
   cries: { latest: string | null; legacy: string | null };
 }
 

@@ -29,5 +29,11 @@
     "accuracy": "Accuracy",
     "evasion": "Evasion",
     "special": "Special"
+  },
+  "moveMethods": {
+    "level-up": "By level",
+    "machine": "TM and HM",
+    "egg": "Egg moves",
+    "tutor": "Tutor"
   }
 }
