@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { getMove } from "@/api/moves";
-import { moveInGame } from "@/domain/moves";
+import { moveInGame, moveMethodAccent } from "@/domain/moves";
 import { typeClass } from "@/domain/pokemonTypes";
 import { humanize, useDamageClassLabel, useTypeLabel } from "@/i18n/labels";
 
@@ -10,14 +10,24 @@ import { humanize, useDamageClassLabel, useTypeLabel } from "@/i18n/labels";
  *
  * The body only: whoever opens it owns the frame around it, because the same
  * markup is the panel beside the list on a wide screen and the drawer under a
- * row on a narrow one.
+ * row on a narrow one. It is told the source anyway — not to draw that frame,
+ * but because the rule down the side of the quote is a second line parallel to
+ * the frame's own, and two lines that close on a move want the same colour.
  *
  * Mounted only when a row is opened, which is the whole fetching strategy: a
  * move payload is about 5.5 kB over the wire and a Pokémon knows dozens, so
  * nothing is asked for until somebody wants it. Held forever once it arrives —
  * a move does not change between two clicks.
  */
-export const MoveDetails = ({ name, game }: { name: string; game: string }) => {
+export const MoveDetails = ({
+  name,
+  game,
+  method,
+}: {
+  name: string;
+  game: string;
+  method: string;
+}) => {
   const { t, i18n } = useTranslation();
   const typeLabel = useTypeLabel();
   const damageClassLabel = useDamageClassLabel();
@@ -56,7 +66,14 @@ export const MoveDetails = ({ name, game }: { name: string; game: string }) => {
       </dl>
 
       {move.text && (
-        <p className="border-l-2 border-gray-300 pl-3 text-[10px] leading-relaxed">
+        // Half the width of the frame's bar, which is the hierarchy: the bar
+        // says which section the move came from, this only says the sentence
+        // is the game's own.
+        <p
+          className={`border-l-4 ${
+            moveMethodAccent(method).bar
+          } pl-3 text-[10px] leading-relaxed`}
+        >
           {move.text}
           {/* PokéAPI carries a move's text in fourteen languages and Polish is
               not one of them, the same as the species entries above. */}

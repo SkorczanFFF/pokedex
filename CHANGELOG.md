@@ -16,6 +16,50 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: a move's source keeps one colour, in the list and in the panel`
+
+- **Added** — Where a move comes from is now a colour, and the same colour in both columns.
+  Five open panels were five identical boxes distinguished by ten grey pixels under the
+  name, and five picked rows were five identical blue bars, so neither column said which
+  section a move belonged to. A source owns a colour and spends it on the square beside its
+  heading, the wash a row takes under the pointer, the fill it takes once open, and — across
+  the gutter — the bar and wash of the panel that row opened. Picking between an egg move
+  and a machine no longer means reading either.
+- **Added** — The palette is the machine's own. Crystal ran on a Game Boy Color, which mixes
+  five bits to a channel — thirty-two steps, not two hundred and fifty-six — so every value
+  lands on that grid and is written in `moves.ts` with the RGB555 triple it came from. A Gen
+  II Pokémon is drawn from four colours of which two are black and white, leaving it two of
+  its own, and each source is dressed the same way: `RGB 6, 18, 31` over `RGB 2, 9, 22` for
+  levelling, `5, 25, 4` over `2, 12, 2` for eggs, `31, 12, 0` over `19, 6, 0` for the
+  machines, `22, 8, 31` over `13, 0, 20` for tutors.
+- **Added** — The two shades split by job rather than by place. The bright one is every
+  graphic — square, open row, bar, both washes — and the dark one is text and nothing else,
+  which is the only reason it exists: ten pixels of `#29CE21` on a wash of itself is 1.9:1
+  and unreadable, against 6.8:1 for its dark partner. A bar has no such floor, because what
+  it says is said in words on the line below it, so it takes the bright shade and eight
+  pixels of width to carry the weight a dark four was carrying.
+- **Added** — A heading over the level-up group, which never had one. It is the list the
+  section is about, but every heading now carries the square that teaches its colour, and
+  without one the blue would be the single colour the page never names.
+- **Changed** — A picked row wears its own group's colour instead of the one `#356DB2` every
+  section shared. The blue that meant "chosen" here now means levelling, and lives on beside
+  it in the stat bars, the HP bar and the sprite picker, where nothing has changed.
+- **Changed** — An open row carries black text rather than white. These are a Game Boy
+  Color's brights and white sits at 2.1:1 on the green; black is 5.2 to 9.9:1 across the
+  four, which is the same reason the yellow buttons and the Electric badge already carry it.
+- **Changed** — An opened move sits on a twelve-percent wash of its source's colour rather
+  than on `bg-gray-50`, and never on a filled chip of it: that is what a *type* looks like
+  two lines below, and a second one would be read as another type.
+- **Changed** — The rule down the side of the sentence a game printed takes the source's
+  colour as well, four pixels against the frame's eight — the bar says which section a move
+  came from, the rule only says the words are the game's own. It was `border-gray-300`,
+  which left a grey hairline as the one uncoloured line inside a panel with a bright one
+  down its edge. `MoveDetails` is told the source for this and nothing else; it still does
+  not draw the frame around itself.
+- **Added** — Grey for anything outside the four. PokéAPI carries a dozen more methods —
+  `train` for Pokémon Champions, the Stadium and XD oddities — and they keep the grey they
+  had rather than borrow a colour whose meaning no heading on the page teaches.
+
 ### `feat: the era picks the picture, on the list and in the evolution line`
 
 - **Added** — Retro shows the dex in its own sprites. The list and the evolution line were

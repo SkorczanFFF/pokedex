@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { learnsetInEra, type LearnedMove } from "@/domain/moves";
+import {
+  learnsetInEra,
+  moveMethodAccent,
+  type LearnedMove,
+} from "@/domain/moves";
 import { useEra } from "@/era/context";
 import { humanize, useMoveLabel, useMoveMethodLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
@@ -88,14 +92,17 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
       <div className="lg:grid lg:grid-cols-2 lg:gap-8">
         <div>
           {byLevel && (
-            <MoveRows
-              moves={byLevel.moves}
-              method={byLevel.method}
-              game={game}
-              openKeys={openKeys}
-              onToggle={toggle}
-              withLevel
-            />
+            <>
+              <MethodHeading method={byLevel.method} />
+              <MoveRows
+                moves={byLevel.moves}
+                method={byLevel.method}
+                game={game}
+                openKeys={openKeys}
+                onToggle={toggle}
+                withLevel
+              />
+            </>
           )}
 
           {restCount > 0 && (
@@ -115,9 +122,7 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
                 <div className="mt-6 space-y-6">
                   {rest.map((group) => (
                     <div key={group.method}>
-                      <h3 className="text-sm mb-3">
-                        {methodLabel(group.method)}
-                      </h3>
+                      <MethodHeading method={group.method} />
                       <MoveRows
                         moves={group.moves}
                         method={group.method}
@@ -143,31 +148,40 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
                 {t("details.movePick")}
               </p>
             ) : (
-              open.map((row) => (
-                <div key={keyOf(row)} className="bg-gray-50 p-5">
-                  <div className="flex items-start justify-between gap-4 mb-5">
-                    <div>
-                      <h3 className="text-sm">{moveLabel(row.name)}</h3>
-                      <p className="mt-2 text-[10px] text-gray-500">
-                        {row.level > 0
-                          ? t("details.moveLevel", { level: row.level })
-                          : methodLabel(row.method)}
-                      </p>
+              open.map((row) => {
+                const accent = moveMethodAccent(row.method);
+
+                return (
+                  <div
+                    key={keyOf(row)}
+                    className={`border-l-8 ${accent.bar} ${accent.panel} p-5`}
+                  >
+                    <div className="flex items-start justify-between gap-4 mb-5">
+                      <div>
+                        <h3 className="text-sm">{moveLabel(row.name)}</h3>
+                        {/* A level is only ever a level-up move, so the number
+                            says the source as plainly as the word would. */}
+                        <p className={`mt-2 text-[10px] ${accent.label}`}>
+                          {row.level > 0
+                            ? t("details.moveLevel", { level: row.level })
+                            : methodLabel(row.method)}
+                        </p>
+                      </div>
+                      {/* The row toggles too, but it can be ninety rows away by
+                          the time a reader is done with the panel. */}
+                      <button
+                        type="button"
+                        onClick={() => toggle(row)}
+                        aria-label={t("details.moveClose")}
+                        className="shrink-0 px-1 text-xs text-gray-400 cursor-pointer hover:text-[#E12025]"
+                      >
+                        X
+                      </button>
                     </div>
-                    {/* The row toggles too, but it can be ninety rows away by
-                        the time a reader is done with the panel. */}
-                    <button
-                      type="button"
-                      onClick={() => toggle(row)}
-                      aria-label={t("details.moveClose")}
-                      className="shrink-0 px-1 text-xs text-gray-400 cursor-pointer hover:text-[#E12025]"
-                    >
-                      X
-                    </button>
+                    <MoveDetails name={row.name} game={game} method={row.method} />
                   </div>
-                  <MoveDetails name={row.name} game={game} />
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </aside>
@@ -220,17 +234,20 @@ const MoveRow = ({
 }) => {
   const { t } = useTranslation();
   const moveLabel = useMoveLabel();
+  const accent = moveMethodAccent(move.method);
 
   return (
     <li>
-      {/* The sprite picker above already spells "chosen" as the blue tile, and
-          a yellow row would sit under a yellow Electric badge. */}
+      {/* A row takes its own group's colour rather than one "chosen" blue, so
+          that a picked row and the panel it opened read as the same thing in
+          two columns. Black on the fill, not white: these are a Game Boy
+          Color's brights, the same reason the yellow buttons carry black. */}
       <button
         type="button"
         onClick={() => onToggle(move)}
         aria-expanded={isOpen}
         className={`flex w-full items-baseline gap-4 px-2 py-2 text-left text-xs cursor-pointer ${
-          isOpen ? "bg-[#356DB2] text-white" : "hover:bg-[#EAEBF2]"
+          isOpen ? `${accent.fill} text-black` : accent.hover
         }`}
       >
         {withLevel && (
@@ -238,7 +255,7 @@ const MoveRow = ({
           // games print as a blank rather than as a number.
           <span
             className={`w-24 shrink-0 whitespace-nowrap text-right ${
-              isOpen ? "text-white" : "text-gray-500"
+              isOpen ? "text-black" : "text-gray-500"
             }`}
           >
             {move.level > 0
@@ -253,10 +270,37 @@ const MoveRow = ({
           same query key, so the one that is displayed and the one that is not
           share a single request. */}
       {isOpen && (
-        <div className="lg:hidden mt-2 mb-4 bg-gray-50 p-3">
-          <MoveDetails name={move.name} game={game} />
+        <div
+          className={`lg:hidden mt-2 mb-4 border-l-8 ${accent.bar} ${accent.panel} p-3`}
+        >
+          <MoveDetails
+            name={move.name}
+            game={game}
+            method={move.method}
+          />
         </div>
       )}
     </li>
+  );
+};
+
+/**
+ * A group's name, with the square that teaches its colour.
+ *
+ * The level-up group had no heading — it is the list the section is about — but
+ * without one its blue would be the one colour the page never names, so it has
+ * one now like the rest.
+ */
+const MethodHeading = ({ method }: { method: string }) => {
+  const methodLabel = useMoveMethodLabel();
+
+  return (
+    <h3 className="flex items-center gap-2 text-sm mb-3">
+      <span
+        aria-hidden="true"
+        className={`h-3 w-3 shrink-0 ${moveMethodAccent(method).fill}`}
+      />
+      {methodLabel(method)}
+    </h3>
   );
 };
