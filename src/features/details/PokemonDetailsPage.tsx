@@ -11,6 +11,7 @@ import { NotFound } from "@/features/not-found/NotFound";
 import { useEra } from "@/era/context";
 import { AbilityList } from "./AbilityList";
 import { BackButton } from "./BackButton";
+import { DexNeighbours } from "./DexNeighbours";
 import { EvolutionChain } from "./EvolutionChain";
 import { Measurements } from "./Measurements";
 import { MoveList } from "./MoveList";
@@ -60,7 +61,17 @@ export const PokemonDetailsPage = () => {
 
   return (
     <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
-      <BackButton />
+      {/* Narrow, the row stacks and the steps centre under the button. A
+          column rather than a wrapped row, because `justify-content` applies to
+          a whole flex line and a wrapped row cannot start its first line and
+          centre its second. From `md` both fit on one line, where the button
+          keeps the left and the steps the right. */}
+      <div className="mb-8 flex flex-col items-start gap-4 md:flex-row md:flex-wrap md:items-center md:justify-between">
+        <BackButton />
+        <div className="self-center">
+          <DexNeighbours id={pokemon.id} />
+        </div>
+      </div>
 
       <div className="bg-white p-6">
         <div className="grid md:grid-cols-2 gap-8">
@@ -88,6 +99,15 @@ export const PokemonDetailsPage = () => {
           formSuffix={formSuffix(pokemon.name, pokemon.species.name)}
         />
       )}
+
+      {/* The same two steps again, because the entry runs long: by the time the
+          evolution line is on screen the row at the top is a scroll away, and a
+          reader who reached the bottom is the one who is done and moving on.
+          Centred rather than pushed right, there being no back button down here
+          holding the other side of the row. */}
+      <div className="mt-8 flex justify-center">
+        <DexNeighbours id={pokemon.id} />
+      </div>
     </div>
   );
 };

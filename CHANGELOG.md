@@ -16,6 +16,50 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the details page steps to the Pokémon either side of it`
+
+- **Added** — Previous and next, beside the button back to the list. Reading the dex in
+  order meant returning to the grid and finding the following card; the two steps are on
+  the entry itself now.
+- **Added** — And the route stays written in names. A details payload knows its own id but
+  nothing about what surrounds it, so the neighbours have to be asked for — `/pokemon` is
+  ordered by id and its offsets are that order, so `?limit=3&offset={id - 2}` hands back the
+  entry before, the entry itself and the entry after, names and all. It is 142 bytes over
+  the wire against the 11.5 kB of the whole catalogue that search keeps under
+  `allPokemonNames`, which was the alternative: a hundredth of the cost, on a page most
+  readers never step away from.
+- **Added** — The era decides where the dex ends. `lastDexId(era.maxGen)` is the ceiling, so
+  retro stops at Celebi instead of walking on into Treecko, while the modern dex runs to
+  Pecharunt. One bound does both that job and the next one.
+- **Changed** — Form variants get no steps. PokéAPI orders `deoxys-attack` after
+  `pecharunt` because it numbers it 10001, not because anything follows the national dex, so
+  a form is a place you can arrive at and not a place you can step through. Their ids are
+  above every era's ceiling, so the same comparison that stops retro at Celebi excludes them
+  — and nothing is requested for them, nor drawn: two boxes that will never do anything are
+  worse than no row.
+- **Added** — The window is read back by id, pulled out of each entry's URL, rather than by
+  position. If that ordering ever shifts, a button goes missing; it never points at the
+  wrong Pokémon.
+- **Added** — Whether a step exists is known from the id before any name arrives, so the row
+  is drawn at its final size immediately and only the words land late. One dead end is a
+  dimmed box rather than nothing, the way the list's pagination already disables rather than
+  hides: an absent button at Bulbasaur would slide "next" under a pointer aimed at it.
+- **Added** — `dexPrev` and `dexNext`, in both locales. A step shows a chevron and a name,
+  which a screen reader would read out as "< ivysaur" — neither a direction nor a reason for
+  the name to be there. The chevron is hidden from the accessibility tree and the link
+  carries "Previous: Ivysaur" instead, hand-translated like every other label here.
+- **Added** — The same two steps again at the foot of the entry, above the footer. An entry
+  runs long — the move list alone is ninety rows for Mewtwo — so by the time the evolution
+  line is on screen the row at the top is a scroll away, and a reader who reached the bottom
+  is the one who is done and moving on. It is centred rather than pushed right, there being
+  no back button down there holding the other side of the row. Both copies ask the same
+  query key, so the second one costs no request: two observers on one key resolve to a
+  single fetch and a single cache entry.
+- **Changed** — The back button gives up its bottom margin to the row that now holds it.
+  Narrow, that row stacks and the steps centre under the button — a column rather than a
+  wrapped row, because `justify-content` applies to a whole flex line and a wrapped row
+  cannot start its first line and centre its second. From `md` both fit on one line, the
+  button keeping the left and the steps the right.
 ### `feat: a move's source keeps one colour, in the list and in the panel`
 
 - **Added** — Where a move comes from is now a colour, and the same colour in both columns.

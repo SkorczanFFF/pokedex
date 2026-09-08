@@ -103,7 +103,9 @@
     "moveTextFrom": "z gry {{game}}",
     "movePick": "Wybierz ruch albo kilka, żeby je porównać",
     "englishMoveText": "Ten opis ruchu jest dostępny wyłącznie po angielsku",
-    "moveClose": "Zamknij"
+    "moveClose": "Zamknij",
+    "dexPrev": "Poprzedni: {{name}}",
+    "dexNext": "Następny: {{name}}"
   },
   "evolution": {
     "none": "Ten Pokémon nie ewoluuje.",
