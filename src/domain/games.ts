@@ -131,3 +131,16 @@ const GROUP_RANK = new Map<string, number>(
 
 export const versionGroupRank = (group: string): number | null =>
   GROUP_RANK.get(group) ?? null;
+
+/**
+ * Where a single game sits in the run of them, so Red comes before Gold and
+ * Gold before Crystal. Encounters are keyed by version rather than by group.
+ */
+const VERSION_RANK = new Map<string, number>(
+  GEN_SLUGS.flatMap((gen) => VERSIONS_BY_GEN[gen]).map(
+    (version, index) => [version, index] as const
+  )
+);
+
+export const versionRank = (version: string): number | null =>
+  VERSION_RANK.get(version) ?? null;

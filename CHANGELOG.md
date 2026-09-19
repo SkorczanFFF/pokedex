@@ -16,6 +16,41 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: where a Pokémon is met, as the era's games have it`
+
+- **Added** — A page at `/pokemon/:name/encounters`, which is PokéAPI's own shape for the
+  same question. In retro it answers the way the games did: Pikachu in Viridian Forest at
+  5% in Red and Blue, in the Power Plant at 25%, handed over in Pallet Town in Yellow, on
+  Route 2 in Gold and Silver by morning, day or night, and sold at the Celadon prize
+  corner for 2222 coins in Crystal — or 620 in the Japanese Blue.
+- **Added** — A game picker over it. "Which game" is the question a reader arrives with, so
+  the chips list every title in the era this Pokémon is met in and the rows collapse the
+  ones that agree: Red, Blue and both Japanese releases share a line wherever they share
+  the numbers.
+- **Added** — A link in the details header, shown only when the era has somewhere to show.
+  About a third of the Gen I/II dex is never met in the wild — the evolved halves of
+  lines, Crobat and Ampharos and Typhlosion — and a link onto an empty page is worse than
+  no link, so the details page pays for the request and the page it leads to finds it
+  cached. Typically two to four kilobytes; Magikarp, the worst in the dex, is 9.4 kB.
+- **Fixed before it shipped** — `max_chance` cannot be displayed. It adds up slots across
+  conditions that exclude one another, so Zubat's Dark Cave reads 132% in Crystal and
+  Pikachu's Route 2 reads 15% where a player meets him 5% of the time. Rates are summed
+  inside one set of conditions instead, which is the only sum that means anything, and
+  the conditions that share a rate become one line: "5%, morning · day · night".
+- **Added** — Places run oldest game first rather than in PokéAPI's order, which for
+  Magikarp opens in Sinnoh. Within a game the API's own order is the map's, so Route 29
+  still comes before Route 30.
+- **Added** — Dictionaries for how a Pokémon is met and what it takes — walking, the three
+  rods, headbutting a tree, a swarm, the radio off, the Bug-Catching Contest. Two of these
+  carry a value rather than a name: `coins-2222` and `trade-pikachu` are read as the price
+  and the trade they are, instead of humanizing into "Coins 2222".
+- **Added** — Polish plural forms, because "62 miejsc" is wrong where "62 miejsca" is right
+  and the language has three plurals rather than one.
+- **Known limit** — Location names are derived from the slug:
+  `kanto-route-2-south-towards-viridian-city` becomes "Route 2 South Towards Viridian
+  City" with a Kanto badge. PokéAPI does spell it properly, at one request per area — and
+  Magikarp is found in seventy-four of them in the Gen II games alone, so the slug it is.
+
 ### `feat: the details page steps to the Pokémon either side of it`
 
 - **Added** — Previous and next, beside the button back to the list. Reading the dex in
@@ -60,6 +95,7 @@ This file starts here. Everything before it lives in `git log` and has not been 
   wrapped row, because `justify-content` applies to a whole flex line and a wrapped row
   cannot start its first line and centre its second. From `md` both fit on one line, the
   button keeping the left and the steps the right.
+
 ### `feat: a move's source keeps one colour, in the list and in the panel`
 
 - **Added** — Where a move comes from is now a colour, and the same colour in both columns.
@@ -92,7 +128,7 @@ This file starts here. Everything before it lives in `git log` and has not been 
   Color's brights and white sits at 2.1:1 on the green; black is 5.2 to 9.9:1 across the
   four, which is the same reason the yellow buttons and the Electric badge already carry it.
 - **Changed** — An opened move sits on a twelve-percent wash of its source's colour rather
-  than on `bg-gray-50`, and never on a filled chip of it: that is what a *type* looks like
+  than on `bg-gray-50`, and never on a filled chip of it: that is what a _type_ looks like
   two lines below, and a second one would be read as another type.
 - **Changed** — The rule down the side of the sentence a game printed takes the source's
   colour as well, four pixels against the frame's eight — the bar says which section a move
@@ -145,11 +181,11 @@ This file starts here. Everything before it lives in `git log` and has not been 
   entry is French for Thunderbolt, so any of it has to be picked by language, never by
   index. The text is English-only, and carries the same EN badge the species entries do.
 - **Added** — Era-correct numbers, from `past_values` and read exactly the way
-  `past_types` already is: each entry holds what stood *through* the version group it
+  `past_types` already is: each entry holds what stood _through_ the version group it
   names. Thunderbolt is 95 power in retro and 90 in the modern dex; Thunder 120 against
   110. All off one payload, so switching era re-derives an open panel without fetching
   anything — at the new level, because Thunderbolt also moved from 26 to 36.
-- **Added** — On a wide screen a move opens *beside* the list rather than inside it. The
+- **Added** — On a wide screen a move opens _beside_ the list rather than inside it. The
   rows stay where they were, the numbers get the room to be read as numbers rather than as
   one line of chips, and the panel follows the list down, because the machines run to
   ninety rows and a move picked at the top would otherwise be scrolled away from. Below
@@ -268,7 +304,7 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 - **Fixed** — Evolution methods were read from the newest game that recorded one, which in
   retro explained Gen I and II evolutions with rules invented decades later — and very
-  often with the rules of a *regional form* sharing the chain. Ninetales evolved with an
+  often with the rules of a _regional form_ sharing the chain. Ninetales evolved with an
   Ice Stone (that is Alolan), Slowbro with a Galarica Cuff (Galarian), Electrode with a
   Leaf Stone (Hisuian), and Quilava at level 17 rather than 14. Nineteen visible steps
   across the Gen I/II chains now read correctly.

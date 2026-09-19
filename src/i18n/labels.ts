@@ -39,6 +39,34 @@ export const useDamageClassLabel = () => {
     t(`damageClasses.${slug}`, { defaultValue: humanize(slug) });
 };
 
+/** Display label for how a Pokémon is met (`walk`, `surf`, `super-rod`). */
+export const useEncounterMethodLabel = () => {
+  const { t } = useTranslation("pokemon");
+  return (slug: string) =>
+    t(`encounterMethods.${slug}`, { defaultValue: humanize(slug) });
+};
+
+/**
+ * Display label for what an encounter takes: a time of day, a swarm, a radio
+ * station. Two of these carry a value in the slug rather than naming a fixed
+ * thing — `coins-2222` is the Celadon prize corner's price and `trade-pikachu`
+ * is what an NPC wants — so they are read before the dictionary is consulted.
+ */
+export const useEncounterConditionLabel = () => {
+  const { t } = useTranslation("pokemon");
+  const { t: common } = useTranslation();
+
+  return (slug: string) => {
+    const coins = slug.match(/^coins-(\d+)$/);
+    if (coins) return common("encounters.coins", { count: Number(coins[1]) });
+
+    const trade = slug.match(/^trade-(.+)$/);
+    if (trade) return common("encounters.trade", { name: humanize(trade[1]) });
+
+    return t(`encounterConditions.${slug}`, { defaultValue: humanize(slug) });
+  };
+};
+
 /** Display label for how a move is learned (`level-up`, `machine`, `egg`). */
 export const useMoveMethodLabel = () => {
   const { t } = useTranslation("pokemon");

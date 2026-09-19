@@ -4,6 +4,7 @@ import { getDescription, getGeneration, getGenus } from "@/domain/species";
 import { useEra } from "@/era/context";
 import type { Pokemon, PokemonSpecies } from "@/types/pokemon";
 import { CryButton } from "./CryButton";
+import { EncountersLink } from "./EncountersLink";
 
 /**
  * Name, dex number and the species text under them. The species payload arrives
@@ -36,6 +37,7 @@ export const PokemonHeader = ({
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <h1 className="text-2xl capitalize">{pokemon.name}</h1>
         <CryButton pokemon={pokemon} />
+        <EncountersLink pokemon={pokemon} />
         <span className="text-gray-500">[{pokemon.id}]</span>
       </div>
 

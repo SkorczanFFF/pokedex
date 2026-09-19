@@ -2,6 +2,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PokemonListPage } from "@/features/list/PokemonListPage";
 import { PokemonDetailsPage } from "@/features/details/PokemonDetailsPage";
+import { EncountersPage } from "@/features/details/EncountersPage";
 import { NotFound } from "@/features/not-found/NotFound";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -21,6 +22,12 @@ function App() {
               <Routes>
                 <Route path="/" element={<PokemonListPage />} />
                 <Route path="/pokemon/:name" element={<PokemonDetailsPage />} />
+                {/* PokéAPI's own shape for the same question, and a page of its
+                    own because the answer runs to dozens of places. */}
+                <Route
+                  path="/pokemon/:name/encounters"
+                  element={<EncountersPage />}
+                />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

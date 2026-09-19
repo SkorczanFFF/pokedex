@@ -13,6 +13,8 @@ declare module "i18next" {
         stats: Record<string, string>;
         moveMethods: Record<string, string>;
         damageClasses: Record<string, string>;
+        encounterMethods: Record<string, string>;
+        encounterConditions: Record<string, string>;
       };
       abilities: Record<string, string>;
       moves: Record<string, string>;

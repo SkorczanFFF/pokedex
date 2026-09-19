@@ -141,5 +141,26 @@
     "pokedex": "POKéDEX",
     "run": "UCIEKAJ"
   },
-  "scrollTop": "Przewiń do góry"
+  "scrollTop": "Przewiń do góry",
+  "encounters": {
+    "title": "Gdzie go spotkać",
+    "none": "W tej erze nikt nie spotyka go na wolności.",
+    "noneHint": "Dostaje się go z wymiany, z ewolucji albo w prezencie.",
+    "allGames": "Wszystkie gry",
+    "level": "poz. {{level}}",
+    "levelRange": "poz. {{min}}-{{max}}",
+    "chance": "{{chance}}%",
+    "coins": "za {{count}} żetonów",
+    "trade": "wymiana za {{name}}",
+    "back": "Wróć do: {{name}}",
+    "showMore": "Pokaż jeszcze {{count}} miejsc",
+    "showLess": "Zwiń resztę",
+    "places": "miejsc: {{count}}",
+    "showMore_one": "Pokaż jeszcze jedno miejsce",
+    "showMore_few": "Pokaż jeszcze {{count}} miejsca",
+    "showMore_many": "Pokaż jeszcze {{count}} miejsc",
+    "coins_one": "za {{count}} żeton",
+    "coins_few": "za {{count}} żetony",
+    "coins_many": "za {{count}} żetonów"
+  }
 }

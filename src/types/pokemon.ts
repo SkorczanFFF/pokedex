@@ -168,3 +168,28 @@ export interface Move {
    */
   past_values: MovePastValues[];
 }
+
+/** One slot in one area in one game: a level band, a rate and what it takes. */
+export interface EncounterDetail {
+  min_level: number;
+  max_level: number;
+  chance: number;
+  method: { name: string };
+  condition_values: { name: string }[];
+}
+
+export interface VersionEncounter {
+  version: { name: string };
+  /**
+   * The sum of every slot's chance, which double-counts conditions that exclude
+   * each other — Zubat's Dark Cave reads 132 in Crystal because day, morning
+   * and night are counted one after another. Never display it.
+   */
+  max_chance: number;
+  encounter_details: EncounterDetail[];
+}
+
+export interface LocationEncounter {
+  location_area: { name: string };
+  version_details: VersionEncounter[];
+}

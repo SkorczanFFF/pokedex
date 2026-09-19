@@ -133,5 +133,26 @@
     "pokedex": "POKéDEX",
     "run": "RUN"
   },
-  "scrollTop": "Scroll to top"
+  "scrollTop": "Scroll to top",
+  "encounters": {
+    "title": "Where to find it",
+    "none": "Nothing in this era meets it in the wild.",
+    "noneHint": "It is traded, evolved or handed over instead.",
+    "allGames": "Every game",
+    "level": "Lvl. {{level}}",
+    "levelRange": "Lvl. {{min}}-{{max}}",
+    "chance": "{{chance}}%",
+    "coins": "for {{count}} coins",
+    "trade": "trade a {{name}}",
+    "back": "Back to {{name}}",
+    "showMore": "Show {{count}} more places",
+    "showLess": "Hide the rest",
+    "places": "{{count}} places",
+    "showMore_one": "Show one more place",
+    "showMore_other": "Show {{count}} more places",
+    "places_one": "one place",
+    "places_other": "{{count}} places",
+    "coins_one": "for one coin",
+    "coins_other": "for {{count}} coins"
+  }
 }
