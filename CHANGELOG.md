@@ -16,6 +16,28 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the stat bars carry the era's own numbers`
+
+- **Fixed** — The bars were the last place the app still printed today's numbers in a retro
+  frame. Pikachu defended at 30 and took special hits at 40 until Gen VI raised both; retro
+  showed the raised ones. It was written down as a limit — PokéAPI exposed one `stats`
+  array and the note said to accept it or drop the bars rather than pretend — and the API
+  has since grown `past_stats`, in the payload the page already fetches.
+- **Added** — `statsInEra`, which reads the way `typesInEra` does with one difference that
+  decides its shape: a `past_stats` entry lists only the stats that changed, so several can
+  cover one era at once and every stat has to find its own earliest covering entry. Pikachu
+  at era I takes its Special from the Gen I entry and its Defence from the Gen V one,
+  because 30 Defence stood from the beginning until Gen VI.
+- **Added** — Gen I's single Special, given by the API rather than approximated. The old
+  note here said it would have to be guessed from Sp. Atk and labelled as such; the
+  `generation-i` entries carry a `special` stat outright — Pikachu 50, Alakazam 135,
+  Magikarp 20 — and it replaces the split pair where Gen I printed it, after Defence and
+  before Speed. Five bars rather than six. Era I is not a choice in the navbar yet, so this
+  was verified against a third era added temporarily and taken back out.
+- **Checked** — Twenty of thirty-two Gen I/II Pokémon sampled carry an entry. Alakazam
+  holds 85 Special Defence in retro against today's 95; Bulbasaur reads the same in both
+  eras, because its only entry is Gen I's Special and era II does not reach back that far.
+
 ### `feat: where a Pokémon is met, as the era's games have it`
 
 - **Added** — A page at `/pokemon/:name/encounters`, which is PokéAPI's own shape for the

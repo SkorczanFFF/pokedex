@@ -36,6 +36,68 @@ export const typesInEra = (
   return earliest?.types ?? pokemon.types;
 };
 
+/** A stat as an era had it. The name is a slug, and at era I it can be `special`. */
+export interface StatInEra {
+  name: string;
+  value: number;
+}
+
+/** Gen I kept one Special. The split into two arrived with Gen II. */
+const SPECIAL = "special";
+
+/**
+ * The base stats an era actually played with.
+ *
+ * `past_stats` reads the way `past_types` does — each entry holds what stood
+ * *through* the generation it names — with one difference that decides the
+ * shape of this function: an entry lists only the stats that changed, so
+ * several can cover one era at once and every stat has to find its own earliest
+ * covering entry. Pikachu at era I takes its Special from the Gen I entry and
+ * its Defence from the Gen V one, because 30 Defence stood from the beginning
+ * until Gen VI took it to 40.
+ *
+ * Where the era has a single Special it replaces the split pair in place, which
+ * is also where Gen I printed it: after Defence, before Speed.
+ */
+export const statsInEra = (pokemon: Pokemon, era: DexEra): StatInEra[] => {
+  const eraOrder = genOrder(era.maxGen);
+  const applied = new Map<string, { order: number; value: number }>();
+
+  for (const past of pokemon.past_stats ?? []) {
+    const slug = genSlugOf(past.generation.name);
+    if (slug === null) continue;
+
+    const order = genOrder(slug);
+    if (order < eraOrder) continue;
+
+    for (const entry of past.stats) {
+      const seen = applied.get(entry.stat.name);
+      if (seen === undefined || order < seen.order) {
+        applied.set(entry.stat.name, { order, value: entry.base_stat });
+      }
+    }
+  }
+
+  const special = applied.get(SPECIAL);
+  const stats: StatInEra[] = [];
+
+  for (const stat of pokemon.stats) {
+    const name = stat.stat.name;
+
+    if (special !== undefined) {
+      if (name === "special-attack") {
+        stats.push({ name: SPECIAL, value: special.value });
+        continue;
+      }
+      if (name === "special-defense") continue;
+    }
+
+    stats.push({ name, value: applied.get(name)?.value ?? stat.base_stat });
+  }
+
+  return stats;
+};
+
 /**
  * The recording to play. PokéAPI carries two per Pokémon and the legacy one is
  * the Game Boy original, so retro reaches for that. Either falls back to the

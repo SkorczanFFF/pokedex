@@ -35,6 +35,18 @@ export interface Pokemon {
       name: string;
     };
   }[];
+  /**
+   * Read like `past_types` — each entry holds what stood *through* the
+   * generation it names — with one difference: an entry carries only the stats
+   * that changed, so several of them can apply to one era at once.
+   */
+  past_stats?: {
+    generation: { name: string };
+    stats: {
+      base_stat: number;
+      stat: { name: string };
+    }[];
+  }[];
   height: number;
   weight: number;
   abilities: {

@@ -82,7 +82,7 @@ export const PokemonDetailsPage = () => {
             <TypeBadges pokemon={pokemon} />
 
             <div className="space-y-6">
-              <StatList stats={pokemon.stats} />
+              <StatList pokemon={pokemon} />
               <AbilityList abilities={pokemon.abilities} />
               <Measurements height={pokemon.height} weight={pokemon.weight} />
             </div>

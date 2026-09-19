@@ -1,4 +1,6 @@
 import { useTranslation } from "react-i18next";
+import { statsInEra } from "@/domain/pokemonView";
+import { useEra } from "@/era/context";
 import { useStatLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 
@@ -8,24 +10,30 @@ import type { Pokemon } from "@/types/pokemon";
  */
 const SCALE_MAX = 160;
 
-export const StatList = ({ stats }: { stats: Pokemon["stats"] }) => {
+export const StatList = ({ pokemon }: { pokemon: Pokemon }) => {
   const { t } = useTranslation();
   const statLabel = useStatLabel();
+  const { era } = useEra();
+
+  // The numbers are the era's own, not today's dressed in a retro frame:
+  // Pikachu defended at 30 rather than 40 until Gen VI, and at era I the six
+  // bars become five, because Special had not been split yet.
+  const stats = statsInEra(pokemon, era);
 
   return (
     <div>
       <h2 className="text-lg mb-3">{t("details.stats")}</h2>
       <div className="space-y-3">
         {stats.map((stat) => {
-          const filled = Math.min((stat.base_stat / SCALE_MAX) * 100, 100);
+          const filled = Math.min((stat.value / SCALE_MAX) * 100, 100);
 
           return (
             <div
-              key={stat.stat.name}
+              key={stat.name}
               className="flex items-center gap-2 flex-col md:flex-row"
             >
               <span className="w-full md:w-32 text-xs">
-                {statLabel(stat.stat.name)}:
+                {statLabel(stat.name)}:
               </span>
               <div className="relative flex w-full h-5 overflow-hidden bg-[#EAEBF2]">
                 <div
@@ -41,14 +49,14 @@ export const StatList = ({ stats }: { stats: Pokemon["stats"] }) => {
                   className="absolute inset-0 flex items-center justify-center text-[10px] leading-none text-white"
                   style={{ clipPath: `inset(0 ${100 - filled}% 0 0)` }}
                 >
-                  {stat.base_stat}
+                  {stat.value}
                 </span>
                 <span
                   aria-hidden="true"
                   className="absolute inset-0 flex items-center justify-center text-[10px] leading-none text-black"
                   style={{ clipPath: `inset(0 0 0 ${filled}%)` }}
                 >
-                  {stat.base_stat}
+                  {stat.value}
                 </span>
               </div>
             </div>
