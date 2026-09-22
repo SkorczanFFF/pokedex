@@ -23,16 +23,17 @@ export const StatList = ({ pokemon }: { pokemon: Pokemon }) => {
   return (
     <div>
       <h2 className="text-lg mb-3">{t("details.stats")}</h2>
-      <div className="space-y-3">
+      {/* One shared grid on desktop, so all bars start at the same edge. */}
+      <div className="flex flex-col gap-3 md:grid md:grid-cols-[fit-content(8rem)_1fr] md:items-center md:gap-x-2">
         {stats.map((stat) => {
           const filled = Math.min((stat.value / SCALE_MAX) * 100, 100);
 
           return (
             <div
               key={stat.name}
-              className="flex items-center gap-2 flex-col md:flex-row"
+              className="flex flex-col items-center gap-2 md:contents"
             >
-              <span className="w-full md:w-32 text-xs">
+              <span className="w-full md:w-auto text-xs">
                 {statLabel(stat.name)}:
               </span>
               <div className="relative flex w-full h-5 overflow-hidden bg-[#EAEBF2]">
