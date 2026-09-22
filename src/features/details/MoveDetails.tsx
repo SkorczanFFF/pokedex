@@ -4,6 +4,7 @@ import { getMove } from "@/api/moves";
 import { moveInGame, moveMethodAccent } from "@/domain/moves";
 import { typeClass } from "@/domain/pokemonTypes";
 import { humanize, useDamageClassLabel, useTypeLabel } from "@/i18n/labels";
+import { useTranslatedMoveText } from "@/i18n/translated";
 
 /**
  * One move's numbers and the sentence its game printed about it.
@@ -31,6 +32,7 @@ export const MoveDetails = ({
   const { t, i18n } = useTranslation();
   const typeLabel = useTypeLabel();
   const damageClassLabel = useDamageClassLabel();
+  const translatedText = useTranslatedMoveText();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["move", name],
@@ -44,7 +46,7 @@ export const MoveDetails = ({
   if (error || !data) return null;
 
   const locale = i18n.resolvedLanguage ?? "en";
-  const move = moveInGame(data, game, locale);
+  const move = moveInGame(data, game, locale, translatedText(name));
 
   return (
     <div className="space-y-4">
@@ -75,9 +77,10 @@ export const MoveDetails = ({
           } pl-3 text-[10px] leading-relaxed`}
         >
           {move.text}
-          {/* PokéAPI carries a move's text in fourteen languages and Polish is
-              not one of them, the same as the species entries above. */}
-          {locale !== "en" && (
+          {/* Said only when the sentence is not in the reading language, which
+              now means the translation had no entry reaching back this far
+              rather than that none exists at all. */}
+          {move.textLanguage !== locale && (
             <span
               title={t("details.englishMoveText")}
               className="ml-2 align-middle bg-gray-200 text-gray-600 text-[10px] px-1 py-[2px]"

@@ -216,7 +216,50 @@ export interface MoveInGame {
   /** The game's own words, and whether they had to fall back to another game. */
   text: string;
   textFromGame: string | null;
+  /** The language those words are in, which is not always the one asked for. */
+  textLanguage: string;
 }
+
+/**
+ * Flavour text for a language PokéAPI does not carry, one sentence per run of
+ * games.
+ *
+ * Shaped the way the source prints it — `[["gold-silver", "crystal"], "…"]` —
+ * because a run of games sharing one sentence is the source's own unit, and
+ * flattening it would store that sentence once per game.
+ */
+export type TranslatedMoveText = readonly (readonly [
+  readonly string[],
+  string,
+])[];
+
+/** A sentence and the version group that printed it. */
+interface Printed {
+  text: string;
+  game: string;
+}
+
+/**
+ * The sentence the named game printed, or the nearest one before it.
+ *
+ * A move's wording is rewritten every few generations and not every game gets
+ * its own entry, so reading Crystal falls back to Gold and Silver rather than
+ * to whatever the newest game happens to say.
+ */
+const printedIn = (entries: Printed[], game: string): Printed | null => {
+  const played = versionGroupRank(game);
+  const exact = entries.find((entry) => entry.game === game);
+  if (exact) return exact;
+
+  const nearest = entries.reduce<Printed | null>((best, entry) => {
+    const rank = versionGroupRank(entry.game);
+    if (rank === null || played === null || rank > played) return best;
+    const bestRank = best ? (versionGroupRank(best.game) ?? -1) : -1;
+    return rank > bestRank ? entry : best;
+  }, null);
+
+  return nearest ?? entries[0] ?? null;
+};
 
 /**
  * A move as one game had it.
@@ -229,7 +272,8 @@ export interface MoveInGame {
 export const moveInGame = (
   move: Move,
   game: string,
-  locale: string
+  locale: string,
+  translated: TranslatedMoveText | null = null
 ): MoveInGame => {
   const played = versionGroupRank(game);
 
@@ -242,26 +286,26 @@ export const moveInGame = (
     }
   }
 
-  // English is the fallback everywhere in PokéAPI, and the only language every
-  // move's text is written in.
-  const spoken = move.flavor_text_entries.filter(
-    (entry) => entry.language.name === locale
-  );
-  const entries = spoken.length > 0 ? spoken : move.flavor_text_entries.filter(
-    (entry) => entry.language.name === "en"
-  );
+  const spokenIn = (language: string): Printed[] =>
+    move.flavor_text_entries
+      .filter((entry) => entry.language.name === language)
+      .map((entry) => ({
+        text: entry.flavor_text.replace(/[\f\n\r\u00ad]/g, " ").trim(),
+        game: entry.version_group.name,
+      }));
 
-  const exact = entries.find((entry) => entry.version_group.name === game);
-  const nearest = entries.reduce<(typeof entries)[number] | null>(
-    (best, entry) => {
-      const rank = versionGroupRank(entry.version_group.name);
-      if (rank === null || played === null || rank > played) return best;
-      const bestRank = best ? versionGroupRank(best.version_group.name) ?? -1 : -1;
-      return rank > bestRank ? entry : best;
-    },
-    null
+  // PokéAPI writes a move's sentence in fourteen languages; `translated`
+  // carries one it does not. English is the last resort either way, and the
+  // only language every move is written in.
+  const own = printedIn(
+    translated
+      ? translated.flatMap(([games, text]) =>
+          games.map((printedBy) => ({ text, game: printedBy }))
+        )
+      : spokenIn(locale),
+    game
   );
-  const chosen = exact ?? nearest ?? entries[0] ?? null;
+  const chosen = own ?? printedIn(spokenIn("en"), game);
 
   return {
     type: applies?.type?.name ?? move.type.name,
@@ -269,7 +313,8 @@ export const moveInGame = (
     power: applies?.power ?? move.power,
     accuracy: applies?.accuracy ?? move.accuracy,
     pp: applies?.pp ?? move.pp,
-    text: chosen?.flavor_text.replace(/[\f\n\r\u00ad]/g, " ").trim() ?? "",
-    textFromGame: chosen?.version_group.name ?? null,
+    text: chosen?.text ?? "",
+    textFromGame: chosen?.game ?? null,
+    textLanguage: own ? locale : "en",
   };
 };

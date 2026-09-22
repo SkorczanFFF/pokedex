@@ -8,10 +8,30 @@ import { generationOfVersion } from "./games";
 // show from it is a display decision, so it lives here.
 
 /**
+ * A species' text for a language PokéAPI does not carry.
+ *
+ * The dex entries keep the source's own shape — one sentence against the games
+ * that printed it — so they read through the same era rule the English entries
+ * do. Only the newest entry of each generation is kept, because that is all an
+ * era can ever ask for.
+ */
+export interface TranslatedSpeciesText {
+  genus?: string;
+  dex: readonly (readonly [readonly string[], string])[];
+}
+
+/** A sentence and the language it turned out to be in. */
+export interface SpeciesDescription {
+  text: string;
+  language: string;
+}
+
+/**
  * Every entry in the best available language.
  *
  * PokéAPI serves no Polish — its /language list has no `pl` — so a Polish UI
- * always falls through to English here. That is permanent, not a gap to fill.
+ * always falls through to English here, and anything better has to be passed
+ * in from outside.
  */
 const inLanguage = <T>(
   entries: T[],
@@ -68,8 +88,15 @@ const newestInEra = <T>(
 export const getDescription = (
   species: PokemonSpecies,
   locale: string,
-  era: DexEra
-): string => {
+  era: DexEra,
+  translated: TranslatedSpeciesText | null = null
+): SpeciesDescription => {
+  const carried = (translated?.dex ?? []).flatMap(([versions, text]) =>
+    versions.map((version) => ({ version, text }))
+  );
+  const own = newestInEra(carried, (entry) => entry.version, era) ?? carried[0];
+  if (own) return { text: own.text, language: locale };
+
   const entries = inLanguage(
     species.flavor_text_entries,
     (entry) => entry.language.name,
@@ -78,13 +105,23 @@ export const getDescription = (
   const entry =
     newestInEra(entries, (e) => e.version.name, era) ?? entries[0];
 
-  return entry?.flavor_text.replace(/[\f\n\r\u00ad]/g, " ").trim() ?? "";
+  return {
+    text:
+      entry?.flavor_text.replace(/[\f\n\r\u00ad]/g, " ").trim() ?? "",
+    // `inLanguage` answers in `locale` when it can and in English otherwise.
+    language: entry?.language.name ?? "en",
+  };
 };
 
 /** The "Seed Pokémon" line. Genera carry no version, so the era has no say. */
-export const getGenus = (species: PokemonSpecies, locale = "en"): string =>
-  inLanguage(species.genera, (entry) => entry.language.name, locale)[0]
-    ?.genus ?? "";
+export const getGenus = (
+  species: PokemonSpecies,
+  locale = "en",
+  translated: TranslatedSpeciesText | null = null
+): string =>
+  translated?.genus ||
+  inLanguage(species.genera, (entry) => entry.language.name, locale)[0]?.genus ||
+  "";
 
 /** Raw generation slug (e.g. `generation-i`), or null. Display formatting is the UI's job. */
 export const getGeneration = (species: PokemonSpecies): string | null => {

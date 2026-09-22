@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { genRoman } from "@/domain/dex";
 import { getDescription, getGeneration, getGenus } from "@/domain/species";
 import { useEra } from "@/era/context";
+import { useTranslatedSpeciesText } from "@/i18n/translated";
 import type { Pokemon, PokemonSpecies } from "@/types/pokemon";
 import { CryButton } from "./CryButton";
 import { EncountersLink } from "./EncountersLink";
@@ -22,15 +23,21 @@ export const PokemonHeader = ({
   const { era } = useEra();
 
   const locale = i18n.resolvedLanguage ?? "en";
-  // PokéAPI has no Polish species text, so these always resolve to English.
-  const description = species ? getDescription(species, locale, era) : "";
-  const genus = species ? getGenus(species, locale) : "";
+  // PokéAPI has no Polish species text; `translated` is where it comes from
+  // instead, and is null for every language PokéAPI does answer for.
+  const translated = useTranslatedSpeciesText()(pokemon.species.name);
+  const description = species
+    ? getDescription(species, locale, era, translated)
+    : null;
+  const genus = species ? getGenus(species, locale, translated) : "";
   const generationSlug = species ? getGeneration(species) : null;
   const generation = generationSlug
     ? t("gen.badge", { roman: genRoman(generationSlug) })
     : "";
   const meta = [generation, genus].filter(Boolean).join(" · ");
-  const showEnglishMarker = locale !== "en";
+  // Said only when the entry is not in the reading language, which now means
+  // the translation had nothing for this Pokémon rather than that none exists.
+  const showEnglishMarker = !!description && description.language !== locale;
 
   return (
     <>
@@ -42,9 +49,9 @@ export const PokemonHeader = ({
       </div>
 
       {meta && <p className="text-xs text-gray-500 mb-3">{meta}</p>}
-      {description && (
+      {description?.text && (
         <p className="text-xs leading-relaxed mb-6">
-          {description}
+          {description.text}
           {showEnglishMarker && (
             <span
               title={t("details.englishEntry")}

@@ -16,6 +16,59 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the Polish dex reads in Polish, down to the games' own words`
+
+- **Added** — Polish move names, 937 of them, filling `pl/moves.json` — the one namespace
+  that was still an empty object, so every move had been rendering as humanized English.
+  Taken from Pokémon Wiki PL's move list, which stores each as an English/Polish pair and
+  so machine-reads cleanly. Two aliases close the gap to PokéAPI's own slugs: it spells
+  `vice-grip` where the wiki spells `vise-grip`, and it suffixes Z-moves `--physical` /
+  `--special` where the wiki names the move once. Coverage is total, 937 of 937.
+- **Changed** — Those names are written sentence case, not the Title Case the wiki prints.
+  `pl/abilities.json` was already sentence case and Polish orthography wants it, so
+  `Cios Karate` lands as `Cios karate`. Proper nouns are held back by name — Aloli,
+  Veevee, Dynamax, Axel — as are the six names the wiki never translated, which stay
+  English because that is what they are: Smog, Memento, Embargo, Poltergeist, Zing Zap,
+  Matcha Gotcha.
+- **Added** — Polish move descriptions for 919 moves, and Polish dex entries and genus for
+  1024 species. Both sources print their text the way PokéAPI does — a move's per run of
+  games, a species' per game — which is why neither needed a second code path: they feed
+  the same `printedIn` and `newestInEra` lookups the English entries go through. Reading
+  Flamethrower in Crystal gives Crystal's Polish sentence; reading Sketch in Red and Blue
+  falls back to Gold and Silver's, and says so, exactly as the English text does.
+- **Changed** — The `EN` badge stopped meaning "the interface is not English" and started
+  meaning what a reader would assume it means: this particular sentence is not. Drowzee and
+  five others have a Polish genus but no Polish dex entries, so they show the English entry
+  and the badge; everything else with a translation now shows neither.
+- **Added** — `TranslatedMoveText` and `TranslatedSpeciesText`, the shape the sources
+  already had, kept rather than flattened: a run of games sharing one sentence is the
+  source's own unit and flattening it would store that sentence once per game.
+- **Changed** — Only the species table is trimmed, to the newest entry of each generation.
+  The page shows one entry — the newest the era reaches — so a generation is the finest
+  grain an era boundary can ask about, and keeping more was storing 2 MB to render the same
+  sentence. 718 kB after, and behaviour is identical for any era that ends on a generation.
+- **Added** — Both tables load on demand rather than in the bundle. Together they are
+  larger than every other resource in the app put together, and `src/i18n/index.ts` bundles
+  its resources on the reasoning that two locales on a small app cost less than a backend
+  plugin — which stops being true at this size. An English reader downloads neither; a
+  Polish one downloads each once, when they first open a move or a Pokémon.
+- **Changed** — The Fairy type reads `Baśniowy` rather than `Wróżkowy`, and `fairy-aura`
+  follows it to `Baśniowa aura`, because the two sat side by side on one page. `pixilate`
+  keeps `Wróżkowanie`, which names no type. Of the eighteen type names the repo already
+  had, this was the only one the wiki disagreed with.
+- **Fixed** — 121 zero-width characters that rode along in the wiki's text and would have
+  rendered as invisible breaks mid-sentence.
+- **Checked** — Every version and version-group identifier in both tables was cross-read
+  against `domain/games.ts`; an unknown one dates to nothing and would have been dropped
+  silently at read time. None were unknown. The lookups were then run against live PokéAPI
+  payloads: Bulbasaur in retro gives Crystal's Polish entry and in modern gives Legends:
+  Z-A's, which reuses Red and Blue's wording and is not the bug it looks like.
+- **Checked** — Against the source the translations were asked for. A second-hand table
+  circulating alongside it rendered Extreme Speed as `Szybki Zwrot`, which means something
+  else; the wiki says `Megaszybkość`, and the wiki is what was used. The same table's
+  correction of the Ghost type to `Duch` was not taken up: the wiki writes `duchowy` thirty-
+  five times, which is what the repo already had.
+
 ### `feat: the stat bars carry the era's own numbers`
 
 - **Fixed** — The bars were the last place the app still printed today's numbers in a retro
