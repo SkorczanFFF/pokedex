@@ -16,6 +16,20 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `fix: the Polish dex and move texts read to the end`
+
+- **Fixed** — 124 dex entries and 7 move descriptions that the wiki extraction cut short
+  or holed. It split the wiki's templates at every `|`, including the one inside a piped
+  link, so Kakuna's Crystal entry stopped at `[[ewolucja`, and it dropped inline templates,
+  so `{{p|Graveler}}a` left a bare `a`. Each was re-derived from the wiki and replaced only
+  where the damaged text is exactly what that fault makes of one wiki entry.
+- **Fixed** — Gen II's two-line move texts (Razor Wind, Fly, Hyper Beam and three more)
+  had lost their second line at the `<br>`.
+- **Fixed** — Three move descriptions carrying `�` where a Polish letter was split by the
+  original fetch.
+- **Fixed** — Ten genus names spelled `Pokemon`, as the wiki had them, now read `Pokémon`
+  like the other 1014.
+
 ### `feat: the Polish dex reads in Polish, down to the games' own words`
 
 - **Added** — Polish move names, 937 of them, filling `pl/moves.json` — the one namespace
