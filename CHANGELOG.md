@@ -18,7 +18,7 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ### `feat: the dex reads its entry aloud, in a robot's voice`
 
-- **Added** — A Read button after the entry's last sentence speaks the name, genus and entry through eSpeak,
+- **Added** — A Read button after the entry's last sentence speaks the entry through eSpeak,
   in Polish or English after the entry's language. The engine (~700 kB gzipped) loads on
   the first press, not with the page.
 - **Added** — The voice passes through a small speaker's band and a metallic comb; the

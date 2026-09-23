@@ -39,12 +39,6 @@ export const PokemonHeader = ({
   // Said only when the entry is not in the reading language, which now means
   // the translation had nothing for this Pokémon rather than that none exists.
   const showEnglishMarker = !!description && description.language !== locale;
-  // Name, genus, entry, as the anime's dex reads it; a genus in another language is left out.
-  const spoken = description?.text
-    ? [pokemon.name.replace(/-/g, " "), showEnglishMarker ? "" : genus, description.text]
-        .filter(Boolean)
-        .join(". ")
-    : "";
 
   return (
     <>
@@ -61,7 +55,7 @@ export const PokemonHeader = ({
           {description.text}
           <ReadButton
             name={pokemon.name}
-            text={spoken}
+            text={description.text}
             lang={description.language}
           />
           {showEnglishMarker && (
