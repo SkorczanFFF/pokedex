@@ -21,6 +21,8 @@ export interface DexEra {
   cry: "latest" | "legacy";
   /** What the picture column opens on; the reader can still pick another. */
   sprites: SpriteSetId;
+  /** How the dex reads its entry aloud; the Game Boy's speaker is crushed to a few bits. */
+  voice: "clean" | "8-bit";
 }
 
 export const MODERN: DexEra = {
@@ -35,6 +37,7 @@ export const MODERN: DexEra = {
   hasAbilities: true,
   cry: "latest",
   sprites: "artwork",
+  voice: "clean",
 };
 
 /**
@@ -48,6 +51,7 @@ export const RETRO: DexEra = {
   hasAbilities: false,
   cry: "legacy",
   sprites: "ii",
+  voice: "8-bit",
 };
 
 export const ERA_NAMES = ["modern", "retro"] as const;

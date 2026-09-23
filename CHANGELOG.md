@@ -16,6 +16,14 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the dex reads its entry aloud, in a robot's voice`
+
+- **Added** — A Read button after the entry's last sentence speaks the name, genus and entry through eSpeak,
+  in Polish or English after the entry's language. The engine (~700 kB gzipped) loads on
+  the first press, not with the page.
+- **Added** — The voice passes through a small speaker's band and a metallic comb; the
+  retro era also crushes it to 8 kHz and 5 bits.
+
 ### `fix: the Polish dex and move texts read to the end`
 
 - **Fixed** — 124 dex entries and 7 move descriptions that the wiki extraction cut short

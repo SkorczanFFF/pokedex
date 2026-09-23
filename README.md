@@ -24,6 +24,10 @@ Pokédex entries in `src/i18n/locales/pl` were taken from
 [Pokémon Wiki PL](https://pokemon.fandom.com/pl), which publishes under
 [CC BY-SA](https://www.fandom.com/licensing).
 
+The read-aloud voice is [eSpeak](https://espeak.sourceforge.net/) running in the browser
+through [meSpeak](https://www.masswerk.at/mespeak/) (npm `mespeak`), both under the
+[GNU GPL](https://www.gnu.org/licenses/gpl-3.0.html).
+
 ## Deployments
 
 - Dockerized on VPS: [https://pokedex.skoftware.pl/](https://pokedex.skoftware.pl/)
