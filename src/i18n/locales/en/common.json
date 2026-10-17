@@ -2,7 +2,9 @@
   "nav": {
     "main": "Main navigation",
     "language": "Language",
-    "switchTo": "Switch language to {{language}}"
+    "switchTo": "Switch language to {{language}}",
+    "menu": "Menu",
+    "versus": "Versus"
   },
   "types": {
     "title": "Type chart",

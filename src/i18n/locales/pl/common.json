@@ -2,7 +2,9 @@
   "nav": {
     "main": "Nawigacja główna",
     "language": "Język",
-    "switchTo": "Zmień język na {{language}}"
+    "switchTo": "Zmień język na {{language}}",
+    "menu": "Menu",
+    "versus": "Versus"
   },
   "types": {
     "title": "Tabela efektywności typów",

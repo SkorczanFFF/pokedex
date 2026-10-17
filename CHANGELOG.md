@@ -16,6 +16,20 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the navbar carries the era, the language and the two pages, folded into a menu on a phone`
+
+- **Added** — From `md` up, everything but the logo sits on the right in one order: Retro,
+  EN | PL, the type chart, Versus. The page you are on is underlined.
+- **Added** — Under `md` the right side is one MENU button. It drops a Gen I pause menu — a
+  white box in a black frame, a cursor on every line — with the same four lines in the same
+  order: Retro reads `:ON` / `:OFF` like the OPTIONS screen, the language is a name with
+  EN and PL beside it, the two pages are lines that go somewhere. It closes on a pick, on
+  Escape, and on the button again.
+- **Changed** — The chart is no longer linked from the type badges alone: the navbar has it
+  too, as of the four features that arrived since that decision. The chips stay where they
+  were, because the one in the details header opens Versus with that Pokémon already
+  picked.
+
 ### `feat: two Pokémon on the battle screen, and what each one's types do to the other`
 
 - **Added** — `/compare`: the Game Boy's battle screen with two real Pokémon in it, yours
