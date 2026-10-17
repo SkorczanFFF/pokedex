@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-function ErrorView({ errorType }: { errorType: "list" | "details" }) {
+function ErrorView({ errorType }: { errorType: "list" | "details" | "types" }) {
   const { t } = useTranslation();
 
   return (

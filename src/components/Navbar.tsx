@@ -13,9 +13,17 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-12">
-          <Link to="/">
-            <span className="text-xl font-bold">Pokédex</span>
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link to="/">
+              <span className="text-xl font-bold">Pokédex</span>
+            </Link>
+            <Link
+              to="/types"
+              className="px-2 py-1 text-xs hover:bg-[#c11a1e] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              {t("nav.types")}
+            </Link>
+          </div>
           <div className="flex items-center gap-3">
             <EraToggle />
             <LanguageSwitcher />

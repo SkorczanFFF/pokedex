@@ -79,9 +79,13 @@ const TYPE_DEBUT: Partial<Record<PokemonType, GenSlug>> = {
   fairy: "vi",
 };
 
-/** The types that exist at all in an era — all the filter is allowed to offer. */
-export const typesAvailableIn = (era: DexEra): readonly PokemonType[] =>
+/** The types that existed by a generation, in dex order. */
+export const typesUpTo = (gen: GenSlug): readonly PokemonType[] =>
   TYPE_NAMES.filter((type) => {
     const debut = TYPE_DEBUT[type];
-    return debut === undefined || genOrder(debut) <= genOrder(era.maxGen);
+    return debut === undefined || genOrder(debut) <= genOrder(gen);
   });
+
+/** The types that exist at all in an era — all the filter is allowed to offer. */
+export const typesAvailableIn = (era: DexEra): readonly PokemonType[] =>
+  typesUpTo(era.maxGen);

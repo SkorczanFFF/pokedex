@@ -16,6 +16,24 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: a type chart page, as of the era`
+
+- **Added** — `/types`, linked from the navbar: what an attack of each type does to a
+  Pokémon of each other, as of the era's last generation. Retro shows Gen II's seventeen
+  types, modern today's eighteen. Column names stand on end so no three-letter codes are
+  needed in either language. The cell under the pointer keeps lit the two lines a reader
+  traces to it — along its row from the attacker, down its column from the defender — and
+  greys out everything else, so a cell in the middle of eighteen reads without counting.
+- **Added** — Under the chart, every cell that read differently in an earlier generation,
+  with the generation it changed: Gen I's four quirks — Ice did nothing special to Fire,
+  Bug and Poison hit each other for double, and Psychic took nothing from Ghost, a bug in
+  the game — and, in modern, Steel ceasing to resist Ghost and Dark after Gen V.
+- **Checked** — Nothing in the chart is typed in. It is read from PokéAPI's dated damage
+  relations, eighteen requests the session keeps, so the retro chart and the footnotes
+  come out of the same walk as the modern one. A hand-written table offered alongside was
+  checked against that walk before being set aside: it had Flying doing ×1 to Electric
+  where the games do ×½, and its Gen I notes missed Ice against Fire.
+
 ### `fix: the Ghost type reads Duch`
 
 - **Changed** — The Polish Ghost type is `Duch`, not `Duchowy`, on the badge, in the type
