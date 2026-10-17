@@ -17,8 +17,11 @@ import { useTypeLabel } from "@/i18n/labels";
 /** How a multiplier is printed: the way the games' guides print it. */
 const printed = (value: Multiplier): string => (value === 0.5 ? "½" : `${value}`);
 
-/** The cell's colour says what the number says, so the chart reads at a glance. */
-const cellClass = (value: Multiplier): string => {
+/**
+ * The cell's colour says what the number says, so the chart reads at a glance.
+ * A neutral 1 on the hover trace goes black, to stand out from the grey ones.
+ */
+const cellClass = (value: Multiplier, traced = false): string => {
   switch (value) {
     case 2:
       return "bg-[#7AC74C] text-white";
@@ -27,7 +30,7 @@ const cellClass = (value: Multiplier): string => {
     case 0:
       return "bg-black text-white";
     default:
-      return "bg-white text-gray-300";
+      return traced ? "bg-white text-black" : "bg-white text-gray-300";
   }
 };
 
@@ -106,21 +109,46 @@ export const TypeChartPage = () => {
         <div className="overflow-x-auto">
           {/* An arrow, not a text cursor: the cells are read, not selected. */}
           <table
-            className="border-collapse text-[10px] cursor-default"
+            className="border-collapse border-2 border-gray-300 text-[10px] cursor-default"
             onMouseLeave={() => setHover(null)}
           >
             <caption className="sr-only">{t("types.title")}</caption>
             <thead>
               <tr>
-                {/* Two lines, not one: this corner sets the width of the whole
-                    attacker column, and on one line it is wider than any type
-                    name — so the names sat in a column twice their length. */}
+                {/* A square cut corner to corner: the defender above the cut
+                    points at the columns, the attacker below it at the rows.
+                    Its side matches the column headers' height, and fits the
+                    longest type name (Polish "Elektryczny") either way. */}
                 <th
                   scope="col"
-                  className={`text-left align-bottom p-1 text-gray-500 font-normal ${lit(false)}`}
+                  className={`p-0 border border-gray-300 text-gray-500 font-normal transition-[opacity,filter] ${lit(false)}`}
                 >
-                  <span className="block">{t("types.attack")} ↓</span>
-                  <span className="block">{t("types.defender")} →</span>
+                  <span className="relative block h-32 w-32">
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 1 1"
+                      preserveAspectRatio="none"
+                      className="absolute inset-0 h-full w-full text-gray-300"
+                    >
+                      <line
+                        x1="0"
+                        y1="0"
+                        x2="1"
+                        y2="1"
+                        stroke="currentColor"
+                        vectorEffect="non-scaling-stroke"
+                      />
+                    </svg>
+                    <span className="absolute top-1.5 right-1.5 whitespace-nowrap">
+                      {/* The down arrow turned, not "→": the fallback font's
+                          right arrow is a hairline beside its bold down one. */}
+                      {t("types.defender")}{" "}
+                      <span className="inline-block -rotate-90">↓</span>
+                    </span>
+                    <span className="absolute bottom-1.5 left-1.5 whitespace-nowrap">
+                      {t("types.attack")} ↓
+                    </span>
+                  </span>
                 </th>
                 {chart.types.map((defender) => (
                   <th
@@ -131,9 +159,13 @@ export const TypeChartPage = () => {
                     )}`}
                   >
                     {/* Full names, stood on end — three-letter codes would
-                        need a legend of their own in every language. */}
+                        need a legend of their own in every language. Aligned
+                        to the start, which the turn puts at the cells, so
+                        every first letter sits in the same place. Padded as
+                        the attackers are: px/py are logical, so they turn
+                        with the text. */}
                     <span
-                      className={`block h-28 w-7 py-1 [writing-mode:vertical-rl] rotate-180 whitespace-nowrap ${typeClass(defender)}`}
+                      className={`block h-32 w-7 px-2 py-1 [writing-mode:vertical-rl] rotate-180 text-start whitespace-nowrap ${typeClass(defender)}`}
                     >
                       {typeLabel(defender)}
                     </span>
@@ -175,6 +207,7 @@ export const TypeChartPage = () => {
                         onMouseEnter={() => setHover({ attacker, defender })}
                         className={`h-7 w-7 text-center border border-gray-300 transition-[opacity,filter] ${cellClass(
                           value,
+                          onTrace,
                         )} ${lit(onTrace)} ${
                           isHovered
                             ? "outline-2 -outline-offset-2 outline-black"
