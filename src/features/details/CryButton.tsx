@@ -1,31 +1,29 @@
 import { useTranslation } from "react-i18next";
-import { cryFor } from "@/domain/pokemonView";
-import { useEra } from "@/era/context";
+import { cryForSet } from "@/domain/pokemonView";
+import type { SpriteSetId } from "@/domain/sprites";
+import { playCry } from "./cry";
 import type { Pokemon } from "@/types/pokemon";
 
 /**
- * Plays the Pokémon's cry — the era's recording, so retro gets the Game Boy's
- * buzz rather than the remastered one. Renders nothing when there is no
- * recording at all.
+ * Plays the Pokémon's cry — the recording that goes with the picture showing,
+ * so a Game Boy sprite gets the Game Boy's buzz and the artwork the remastered
+ * one. Renders nothing when there is no recording at all.
  */
-export const CryButton = ({ pokemon }: { pokemon: Pokemon }) => {
+export const CryButton = ({
+  pokemon,
+  set,
+}: {
+  pokemon: Pokemon;
+  set: SpriteSetId;
+}) => {
   const { t } = useTranslation();
-  const { era } = useEra();
-  const cry = cryFor(pokemon, era);
+  const cry = cryForSet(pokemon, set);
 
   if (!cry) return null;
 
-  const play = () => {
-    const audio = new Audio(cry);
-    audio.volume = 0.3;
-    audio.play().catch(() => {
-      /* user-gesture missing or autoplay blocked */
-    });
-  };
-
   return (
     <button
-      onClick={play}
+      onClick={() => playCry(cry)}
       aria-label={t("details.playCry", { name: pokemon.name })}
       className="text-xs px-2 py-1 bg-[#FECB09] hover:bg-[#E12025] hover:text-white cursor-pointer"
     >

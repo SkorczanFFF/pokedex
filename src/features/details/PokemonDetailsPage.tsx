@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { NotFoundError } from "@/api/client";
 import { getPokemonDetails } from "@/api/pokemon";
 import { getPokemonSpecies } from "@/api/species";
 import { formSuffix } from "@/domain/evolution";
+import { activeSpriteSet, type SpriteSetId } from "@/domain/sprites";
 import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
 import { NotFound } from "@/features/not-found/NotFound";
@@ -24,6 +25,11 @@ import { TypeBadges } from "./TypeBadges";
 export const PokemonDetailsPage = () => {
   const { name } = useParams<{ name: string }>();
   const { era } = useEra();
+  // Which picture is up: the reader's pick, or the era's opening shot. Held
+  // here rather than in the column because the cry follows it too, and the
+  // Cry button sits in the header. Local state all the same — a look at this
+  // one Pokémon, not a preference to carry around.
+  const [pickedSet, setPickedSet] = useState<SpriteSetId | null>(null);
 
   // Evolution links stay on this route with a different param, so the component
   // is reused rather than remounted — the reset has to follow the name.
@@ -59,6 +65,8 @@ export const PokemonDetailsPage = () => {
   if (error || !pokemon) return <ErrorView errorType="details" />;
   if (outOfEra) return <NotInEra pokemon={pokemon} />;
 
+  const spriteSet = activeSpriteSet(pokemon, era, pickedSet);
+
   return (
     <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
       {/* Narrow, the row stacks and the steps centre under the button. A
@@ -75,10 +83,18 @@ export const PokemonDetailsPage = () => {
 
       <div className="bg-white p-6">
         <div className="grid md:grid-cols-2 gap-8">
-          <PokemonArtwork pokemon={pokemon} />
+          <PokemonArtwork
+            pokemon={pokemon}
+            set={spriteSet}
+            onPick={setPickedSet}
+          />
 
           <div>
-            <PokemonHeader pokemon={pokemon} species={species} />
+            <PokemonHeader
+              pokemon={pokemon}
+              species={species}
+              spriteSet={spriteSet}
+            />
             <TypeBadges pokemon={pokemon} />
 
             <div className="space-y-6">

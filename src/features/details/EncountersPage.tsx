@@ -14,7 +14,7 @@ import {
   type EncounterPlace,
   type EncounterRow,
 } from "@/domain/encounters";
-import { spriteUrl } from "@/domain/pokemonView";
+import { spriteUrl } from "@/domain/sprites";
 import { useEra } from "@/era/context";
 import { NotFound } from "@/features/not-found/NotFound";
 import {

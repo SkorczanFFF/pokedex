@@ -16,6 +16,53 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `fix: the Ghost type reads Duch`
+
+- **Changed** — The Polish Ghost type is `Duch`, not `Duchowy`, on the badge, in the type
+  filter and in the fourteen move texts that name the type — Curse, Foresight, Odor
+  Sleuth, Miracle Eye, Trick-or-Treat, Max Phantasm — which now read `typu Duch` the way
+  the badge does. This takes up the correction an earlier note declined in favour of the
+  wiki's `duchowy`; the wiki's count was never the point, the dex's own voice is. Greavard
+  and Houndstone stay `Pokémon Duchowy Pies`: that is their genus, not their type.
+
+### `feat: every Gen I and II sprite sheet, picture by picture`
+
+- **Added** — The picture column offers each Gen I and II game on its own — Red / Blue,
+  Yellow, Red / Green (JP); Gold, Silver, Crystal — where it used to stand in Crystal for
+  all of Gen II and Red / Blue for all of Gen I. PokéAPI carries all three Gen II sheets
+  and they are three different drawings, not one with three palettes. Later generations
+  still show one representative sheet; adding a game is one entry in a table.
+- **Added** — Normal, Shiny, Back normal and Back shiny under the game, each where the
+  sheet drew it: Gen I has no shiny, so it offers Normal and Back normal. In Polish they
+  read Zwykły, Lśniący, Tył zwykły and Tył lśniący — `lśniący` as Pokémon Wiki PL has it,
+  the source the rest of the Polish text follows — while the games keep their names. The
+  transparent cut is shown wherever the game has one. The plain Game Boy greys and
+  Yellow's Game Boy Color palette are held back for now, in one place. All of it is
+  already in the `/pokemon` payload, so no request is spent on any of it.
+- **Changed** — The Cry button plays the recording that goes with the sprite showing,
+  not the era's. PokéAPI carries two: the one the games have used since X and Y
+  re-recorded them all, and the legacy one from before, the cry a Game Boy or a DS
+  played. A sheet from Gen I through V brings the legacy recording, the artwork or a
+  later sheet the current one. The era had named a recording of its own; that field is
+  gone, since the era's opening picture already says which. The pick lives on the details
+  page rather than in the picture column, because the header's button has to see it.
+- **Added** — Crystal drew its Pokémon in motion. The sheet opens on the still; a click
+  on the picture runs the animation through once, with the cry under it, the way the game
+  played the two together. One pass and not a loop: the GIFs loop without end, so the
+  length of a pass is read out of the file's own frame delays and the still goes back in
+  at that moment.
+- **Changed** — The transparent sheets pad the sprite onto a larger canvas, and not
+  always in the same place or at the same scale: a front sits bottom centre on 56 px, a
+  Gen II back bottom right, a Gen I back is drawn twice over on 96 px. Shown as they come
+  they would draw Pikachu at two thirds the size the opaque cut gave it. So the drawn
+  pixels are measured in the browser and the picture cropped to them, rounded up to the
+  Game Boy's 8 px tile so a 40-box Bulbasaur still comes out smaller than a 56-box
+  Charizard; it shows at the same 240 px as before. For Crystal the crop also takes in
+  every frame of the animation, read from the GIF's frame table, so the animation takes
+  the still's place without the Pokémon shifting or changing size.
+- **Changed** — A sprite set is named by game, `ii/crystal` rather than `ii`, in the era
+  and everywhere a set is addressed; the retro era still opens on Crystal.
+
 ### `feat: the dex reads its entry aloud, in a robot's voice`
 
 - **Added** — A Read button after the entry's last sentence speaks the entry through eSpeak,

@@ -1,4 +1,5 @@
 import { lastDexId, type GenSlug } from "./dex";
+import type { SpriteSetId } from "./sprites";
 
 /**
  * The dex rendered as of a generation rather than as of today.
@@ -7,9 +8,6 @@ import { lastDexId, type GenSlug } from "./dex";
  * this table rather than another branch somewhere in the components — and every
  * component asks the era, never "is retro on".
  */
-/** The picture column shows the modern artwork or one generation of sprites. */
-export type SpriteSetId = "artwork" | GenSlug;
-
 export interface DexEra {
   /** Newest generation this era knows about. */
   maxGen: GenSlug;
@@ -17,8 +15,6 @@ export interface DexEra {
   maxDexId: number;
   /** Abilities arrived in Gen III. */
   hasAbilities: boolean;
-  /** PokéAPI carries two recordings per Pokémon; the legacy one is the Game Boy's. */
-  cry: "latest" | "legacy";
   /** What the picture column opens on; the reader can still pick another. */
   sprites: SpriteSetId;
   /** How the dex reads its entry aloud; the Game Boy's speaker is crushed to a few bits. */
@@ -35,7 +31,6 @@ export const MODERN: DexEra = {
    */
   maxDexId: Infinity,
   hasAbilities: true,
-  cry: "latest",
   sprites: "artwork",
   voice: "clean",
 };
@@ -49,8 +44,7 @@ export const RETRO: DexEra = {
   maxGen: "ii",
   maxDexId: lastDexId("ii"),
   hasAbilities: false,
-  cry: "legacy",
-  sprites: "ii",
+  sprites: "ii/crystal",
   voice: "8-bit",
 };
 

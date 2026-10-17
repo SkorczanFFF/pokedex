@@ -9,7 +9,7 @@ import {
   type EvolutionNode,
 } from "@/domain/evolution";
 import { useEra } from "@/era/context";
-import { spriteUrlById } from "@/domain/pokemonView";
+import { spriteUrlById } from "@/domain/sprites";
 import { resourceIdFromUrl } from "@/domain/resource";
 import { useEvolutionCondition } from "@/i18n/evolutionCondition";
 import type { EvolutionDetail } from "@/types/pokemon";

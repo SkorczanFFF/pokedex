@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { genRoman } from "@/domain/dex";
 import { getDescription, getGeneration, getGenus } from "@/domain/species";
+import type { SpriteSetId } from "@/domain/sprites";
 import { useEra } from "@/era/context";
 import { useTranslatedSpeciesText } from "@/i18n/translated";
 import type { Pokemon, PokemonSpecies } from "@/types/pokemon";
@@ -16,9 +17,12 @@ import { ReadButton } from "./ReadButton";
 export const PokemonHeader = ({
   pokemon,
   species,
+  spriteSet,
 }: {
   pokemon: Pokemon;
   species?: PokemonSpecies;
+  /** The picture up in the column beside, which the cry follows. */
+  spriteSet: SpriteSetId;
 }) => {
   const { t, i18n } = useTranslation();
   const { era } = useEra();
@@ -44,7 +48,7 @@ export const PokemonHeader = ({
     <>
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <h1 className="text-2xl capitalize">{pokemon.name}</h1>
-        <CryButton pokemon={pokemon} />
+        <CryButton pokemon={pokemon} set={spriteSet} />
         <EncountersLink pokemon={pokemon} />
         <span className="text-gray-500">[{pokemon.id}]</span>
       </div>

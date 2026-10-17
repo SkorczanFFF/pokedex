@@ -11,6 +11,14 @@ export interface PokemonPastTypes {
   types: PokemonTypeSlot[];
 }
 
+/**
+ * One game's pictures of a Pokémon, keyed the way PokéAPI keys them —
+ * `front_default`, `back_shiny_transparent` — and, under `animated`, the same
+ * keys again for the games that drew them in motion. Null where the game never
+ * drew this Pokémon.
+ */
+export type SpriteSheet = { [key: string]: string | null | SpriteSheet };
+
 export interface Pokemon {
   id: number;
   name: string;
@@ -21,11 +29,8 @@ export interface Pokemon {
         front_default: string;
       };
     };
-    /** Sprite sets by generation and game, keyed "generation-ii" / "crystal". */
-    versions?: Record<
-      string,
-      Record<string, { front_default: string | null }>
-    >;
+    /** Sprite sheets by generation and game, keyed "generation-ii" / "crystal". */
+    versions?: Record<string, Record<string, SpriteSheet>>;
   };
   types: PokemonTypeSlot[];
   past_types?: PokemonPastTypes[];

@@ -1,7 +1,7 @@
 import type { Pokemon, PokemonTypeSlot } from "@/types/pokemon";
-import { GEN_SLUGS, genApiName, genOrder, genSlugOf, type GenSlug } from "./dex";
-import type { DexEra, SpriteSetId } from "./era";
-import { gameSprite, officialArtwork } from "./resource";
+import { genOrder, genSlugOf } from "./dex";
+import type { DexEra } from "./era";
+import { setGame, type SpriteSetId } from "./sprites";
 
 /**
  * The typing a Pokémon had in an era.
@@ -99,74 +99,21 @@ export const statsInEra = (pokemon: Pokemon, era: DexEra): StatInEra[] => {
 };
 
 /**
- * The recording to play. PokéAPI carries two per Pokémon and the legacy one is
- * the Game Boy original, so retro reaches for that. Either falls back to the
- * other: an era with no cry at all is worse than the wrong cry.
+ * The recording to play under a picture.
+ *
+ * PokéAPI carries two per Pokémon: the one the games have used since X and Y
+ * re-recorded them all, and the legacy one from before — the cry a Game Boy
+ * or a DS played. So a sprite from Gen I through V comes with the legacy
+ * recording, and the artwork or a later sheet with the current one; the Cry
+ * button follows whichever picture is up. Either falls back to the other: no
+ * cry at all is worse than the wrong cry.
  */
-export const cryFor = (pokemon: Pokemon, era: DexEra): string | null => {
+export const cryForSet = (pokemon: Pokemon, set: SpriteSetId): string | null => {
   const cries = pokemon.cries;
   if (!cries) return null;
-  return era.cry === "legacy"
-    ? cries.legacy ?? cries.latest
-    : cries.latest ?? cries.legacy;
+  const gen = setGame(set)?.gen ?? null;
+  const legacy = gen !== null && genOrder(gen) <= genOrder("v");
+  return legacy
+    ? (cries.legacy ?? cries.latest)
+    : (cries.latest ?? cries.legacy);
 };
-
-/**
- * Which game stands in for each generation. Every generation ships two or three
- * and they are near-identical within one, so this picks the one that reads best:
- * the originals for Gen I, and the last and most refined set for the rest.
- */
-const GEN_SPRITE_GAME: Record<GenSlug, string> = {
-  i: "red-blue",
-  ii: "crystal",
-  iii: "emerald",
-  iv: "platinum",
-  v: "black-white",
-  vi: "x-y",
-  vii: "ultra-sun-ultra-moon",
-  viii: "brilliant-diamond-shining-pearl",
-  ix: "scarlet-violet",
-};
-
-/** URL for one sprite set, or null when this Pokémon has none there. */
-export const spriteUrl = (
-  pokemon: Pokemon,
-  set: SpriteSetId,
-): string | null => {
-  if (set === "artwork") {
-    return (
-      pokemon.sprites.other["official-artwork"].front_default ||
-      pokemon.sprites.front_default ||
-      null
-    );
-  }
-  const game = GEN_SPRITE_GAME[set];
-  return (
-    pokemon.sprites.versions?.[genApiName(set)]?.[game]?.front_default ?? null
-  );
-};
-
-/**
- * The same picture addressed by dex id, for the places that never fetched a
- * payload to ask: an evolution chain hands back species URLs and nothing else.
- *
- * Unlike `spriteUrl` this cannot tell a sprite that exists from one that does
- * not, so it is only safe where the era already bounds the ids — retro stops at
- * 251, and all 251 have a Crystal sprite.
- */
-export const spriteUrlById = (id: number, set: SpriteSetId): string =>
-  set === "artwork"
-    ? officialArtwork(id)
-    : gameSprite(id, `${genApiName(set)}/${GEN_SPRITE_GAME[set]}`);
-
-/**
- * The sets this Pokémon actually has, artwork first and then in dex order.
- *
- * Costs nothing: the sprite tree rides along in the /pokemon response we already
- * fetched, so a Pokémon's whole visual history is one render away rather than
- * one request per generation.
- */
-export const spriteSets = (pokemon: Pokemon): SpriteSetId[] =>
-  (["artwork", ...GEN_SLUGS] as SpriteSetId[]).filter(
-    (set) => spriteUrl(pokemon, set) !== null,
-  );
