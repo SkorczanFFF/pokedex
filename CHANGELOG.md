@@ -18,8 +18,10 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ### `feat: a type chart page, as of the era`
 
-- **Added** — `/types`, linked from the navbar: what an attack of each type does to a
-  Pokémon of each other, as of the era's last generation. Retro shows Gen II's seventeen
+- **Added** — `/types`: what an attack of each type does to a Pokémon of each other, as
+  of the era's last generation. Linked from one place, a chip beside a Pokémon's type
+  badges, where a reader wonders what the badges mean; the navbar has no room for it on
+  a phone, and nothing else needed it. Retro shows Gen II's seventeen
   types, modern today's eighteen. Column names stand on end so no three-letter codes are
   needed in either language. The cell under the pointer keeps lit the two lines a reader
   traces to it — along its row from the attacker, down its column from the defender — and

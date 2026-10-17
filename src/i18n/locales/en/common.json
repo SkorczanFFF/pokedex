@@ -2,11 +2,11 @@
   "nav": {
     "main": "Main navigation",
     "language": "Language",
-    "switchTo": "Switch language to {{language}}",
-    "types": "Types"
+    "switchTo": "Switch language to {{language}}"
   },
   "types": {
     "title": "Type chart",
+    "link": "Type chart",
     "intro": "How much an attack of the row's type does to a Pokémon of the column's type, as of Gen {{roman}}. A Pokémon of two types takes both multiplied together.",
     "attack": "Attack",
     "defender": "Defender",
@@ -16,8 +16,7 @@
     "noEffect": "no effect",
     "neutral": "normal damage",
     "changes": "What read differently before",
-    "change": "{{attack}} → {{defender}}: ×{{from}} through Gen {{through}}, ×{{to}} from Gen {{since}}",
-    "source": "Read from PokéAPI's dated damage relations, not written from memory."
+    "change": "{{attack}} → {{defender}}: ×{{from}} through Gen {{through}}, ×{{to}} from Gen {{since}}"
   },
   "language": {
     "en": "English",

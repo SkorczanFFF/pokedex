@@ -2,11 +2,11 @@
   "nav": {
     "main": "Nawigacja główna",
     "language": "Język",
-    "switchTo": "Zmień język na {{language}}",
-    "types": "Typy"
+    "switchTo": "Zmień język na {{language}}"
   },
   "types": {
     "title": "Tabela efektywności typów",
+    "link": "Tabela typów",
     "intro": "Ile obrażeń zadaje atak typu z wiersza Pokémonowi typu z kolumny, według stanu na Gen {{roman}}. Pokémon o dwóch typach bierze iloczyn obu mnożników.",
     "attack": "Atak",
     "defender": "Obrońca",
@@ -16,8 +16,7 @@
     "noEffect": "bez efektu",
     "neutral": "zwykłe obrażenia",
     "changes": "Co wcześniej było inaczej",
-    "change": "{{attack}} → {{defender}}: ×{{from}} do Gen {{through}}, ×{{to}} od Gen {{since}}",
-    "source": "Odczytane z datowanych relacji obrażeń w PokéAPI, nie spisane z pamięci."
+    "change": "{{attack}} → {{defender}}: ×{{from}} do Gen {{through}}, ×{{to}} od Gen {{since}}"
   },
   "language": {
     "en": "English",

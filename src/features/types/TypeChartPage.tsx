@@ -212,8 +212,6 @@ export const TypeChartPage = () => {
             </ul>
           </section>
         )}
-
-        <p className="mt-8 text-[10px] text-gray-500">{t("types.source")}</p>
       </section>
     </div>
   );

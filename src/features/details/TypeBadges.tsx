@@ -13,7 +13,7 @@ export const TypeBadges = ({ pokemon }: { pokemon: Pokemon }) => {
   const { era } = useEra();
 
   return (
-    <div className="flex gap-2 mb-6">
+    <div className="flex flex-wrap items-center gap-2 mb-6">
       {typesInEra(pokemon, era).map((type) => (
         <Link
           key={type.type.name}
@@ -28,6 +28,15 @@ export const TypeBadges = ({ pokemon }: { pokemon: Pokemon }) => {
           {typeLabel(type.type.name)}
         </Link>
       ))}
+      {/* The chart, a step from the types it is about — the one place it is
+          linked from, so it sits where a reader wonders what the badges mean.
+          A grey chip, not a coloured one: the colours are the types. */}
+      <Link
+        to="/types"
+        className="ml-2 px-3 py-1 text-xs bg-gray-200 text-black hover:bg-[#FECB09] cursor-pointer"
+      >
+        {t("types.link")}
+      </Link>
     </div>
   );
 };
