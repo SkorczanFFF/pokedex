@@ -3,6 +3,7 @@ import { genRoman } from "@/domain/dex";
 import { getDescription, getGeneration, getGenus } from "@/domain/species";
 import type { SpriteSetId } from "@/domain/sprites";
 import { useEra } from "@/era/context";
+import { CompareLink } from "@/features/compare/CompareLink";
 import { useTranslatedSpeciesText } from "@/i18n/translated";
 import type { Pokemon, PokemonSpecies } from "@/types/pokemon";
 import { CryButton } from "./CryButton";
@@ -50,6 +51,7 @@ export const PokemonHeader = ({
         <h1 className="text-2xl capitalize">{pokemon.name}</h1>
         <CryButton pokemon={pokemon} set={spriteSet} />
         <EncountersLink pokemon={pokemon} />
+        <CompareLink pokemon={pokemon} />
         <span className="text-gray-500">[{pokemon.id}]</span>
       </div>
 

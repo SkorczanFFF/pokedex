@@ -18,6 +18,28 @@
     "changes": "Co wcześniej było inaczej",
     "change": "{{attack}} → {{defender}}: ×{{from}} do Gen {{through}}, ×{{to}} od Gen {{since}}"
   },
+  "compare": {
+    "title": "Pokémon kontra Pokémon",
+    "link": "Porównaj",
+    "intro": "Wybierz dwa Pokémony, żeby zobaczyć, co typy każdego z nich robią drugiemu, według stanu na Gen {{roman}}. Jeden sam pokazuje, co robi mu każdy typ.",
+    "yours": "Twój Pokémon",
+    "foe": "Przeciwnik",
+    "pickPlaceholder": "np. Charizard",
+    "noMatches": "Nie ma Pokémona o takiej nazwie",
+    "clear": "Usuń",
+    "swap": "Zamień strony",
+    "attacks": "{{name}} atakuje",
+    "profile": "Typy przeciw {{name}}",
+    "super": "Bardzo skuteczny!",
+    "notVery": "Mało skuteczny...",
+    "noEffect": "Nie działa na {{name}}...",
+    "neutral": "Zwykłe obrażenia.",
+    "tabTypes": "Typy",
+    "tabStats": "Statystyki",
+    "empty": "Wybierz wyżej dwa Pokémony, albo jednego, żeby zobaczyć jego słabości.",
+    "notFound": "Nie ma Pokémona o nazwie {{name}}.",
+    "abilitiesNote": "Tylko typy. Umiejętności zmieniające starcie — Levitate, Flash Fire, Wonder Guard — nie są liczone."
+  },
   "language": {
     "en": "English",
     "pl": "Polski"

@@ -24,6 +24,8 @@ export interface Pokemon {
   name: string;
   sprites: {
     front_default: string;
+    /** The trainer's view, null where no game drew one. */
+    back_default: string | null;
     other: {
       "official-artwork": {
         front_default: string;

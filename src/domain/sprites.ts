@@ -289,3 +289,23 @@ export const spriteVariants = (
     }),
   );
 };
+
+/**
+ * The picture a battle screen puts in a slot: the set's own front or back, else
+ * the default sheet's, else the front turned round — a back nobody drew is
+ * still better shown than left empty.
+ */
+export const battleSprite = (
+  pokemon: Pokemon,
+  set: SpriteSetId,
+  view: SpriteView,
+): { url: string; mirrored: boolean } | null => {
+  const own = spriteVariants(pokemon, set).find(
+    (v) => v.view === view && v.palette === "default",
+  );
+  if (own) return { url: own.url, mirrored: false };
+  const { front_default: front, back_default: back } = pokemon.sprites;
+  if (view === "back" && back) return { url: back, mirrored: false };
+  const fallback = front || spriteUrl(pokemon, "artwork");
+  return fallback ? { url: fallback, mirrored: view === "back" } : null;
+};

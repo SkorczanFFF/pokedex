@@ -18,6 +18,28 @@
     "changes": "What read differently before",
     "change": "{{attack}} → {{defender}}: ×{{from}} through Gen {{through}}, ×{{to}} from Gen {{since}}"
   },
+  "compare": {
+    "title": "Pokémon vs Pokémon",
+    "link": "Compare",
+    "intro": "Pick two Pokémon to see what each one's types do to the other, as of Gen {{roman}}. One alone shows what every type does to it.",
+    "yours": "Your Pokémon",
+    "foe": "Opponent",
+    "pickPlaceholder": "e.g. Charizard",
+    "noMatches": "No Pokémon by that name",
+    "clear": "Remove",
+    "swap": "Swap sides",
+    "attacks": "{{name}} attacks",
+    "profile": "Types against {{name}}",
+    "super": "It's super effective!",
+    "notVery": "It's not very effective...",
+    "noEffect": "It doesn't affect {{name}}...",
+    "neutral": "Normal damage.",
+    "tabTypes": "Types",
+    "tabStats": "Stats",
+    "empty": "Pick two Pokémon above, or one to see its weaknesses.",
+    "notFound": "There is no Pokémon named {{name}}.",
+    "abilitiesNote": "Types only. Abilities that change a matchup — Levitate, Flash Fire, Wonder Guard — are not counted."
+  },
   "language": {
     "en": "English",
     "pl": "Polski"

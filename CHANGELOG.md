@@ -16,6 +16,30 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: two Pokémon on the battle screen, and what each one's types do to the other`
+
+- **Added** — `/compare`: the Game Boy's battle screen with two real Pokémon in it, yours
+  bottom left seen from behind, the opponent top right, each with its dex number, base HP
+  on the bar and its typing in the panel. The text box under it says what each of one
+  Pokémon's types does to the other, in the games' own words — "It's super effective!" —
+  with the product over the defender's two types, so ×4 and ×¼ appear here where the
+  chart only ever shows ×2 and ×½. Both directions at once; a button swaps the sides.
+  Linked from a chip in the details header, beside the encounters, and from under the
+  chart's intro, whose sentence about two types is the reason this page exists.
+- **Added** — One Pokémon alone shows what every type of the era does to it, grouped by
+  the multiplier, neutral left out: the weaknesses-and-resistances view.
+- **Added** — A second tab lays the two base stat sets back to back, yours in blue growing
+  left and the opponent's in red growing right, on the stat bars' own scale.
+- **Added** — Both slots live in the URL (`?a=…&b=…`), so a matchup is a link. The pickers
+  read the name index the search already keeps, bounded by the era, eight matches at a
+  time with the forms of one Pokémon told apart.
+- **Changed** — The chart's printing and colours moved to one module both pages share,
+  with two deeper shades for ×4 and ×¼.
+- **Checked** — Types only: abilities that change a matchup — Levitate, Flash Fire, Wonder
+  Guard — are not counted, and the page says so in modern. Retro has none to leave out.
+  Everything comes off the same eighteen type requests the chart keeps, plus the two
+  Pokémon.
+
 ### `feat: a type chart page, as of the era`
 
 - **Added** — `/types`: what an attack of each type does to a Pokémon of each other, as

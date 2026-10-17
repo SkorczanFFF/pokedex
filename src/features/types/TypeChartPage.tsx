@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { getType } from "@/api/types";
 import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
@@ -13,26 +14,7 @@ import {
 import { chartChanges, typeChart, type Multiplier } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
 import { useTypeLabel } from "@/i18n/labels";
-
-/** How a multiplier is printed: the way the games' guides print it. */
-const printed = (value: Multiplier): string => (value === 0.5 ? "½" : `${value}`);
-
-/**
- * The cell's colour says what the number says, so the chart reads at a glance.
- * A neutral 1 on the hover trace goes black, to stand out from the grey ones.
- */
-const cellClass = (value: Multiplier, traced = false): string => {
-  switch (value) {
-    case 2:
-      return "bg-[#7AC74C] text-white";
-    case 0.5:
-      return "bg-[#EE8130] text-white";
-    case 0:
-      return "bg-black text-white";
-    default:
-      return traced ? "bg-white text-black" : "bg-white text-gray-300";
-  }
-};
+import { effectClass, printed } from "./effectiveness";
 
 /**
  * The type chart as of the era: what an attack of each type does to a Pokémon
@@ -86,16 +68,22 @@ export const TypeChartPage = () => {
     <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
       <section className="bg-white p-6">
         <h1 className="text-2xl mb-4">{t("types.title")}</h1>
-        <p className="text-xs leading-relaxed mb-6">
+        <p className="text-xs leading-relaxed mb-3">
           {t("types.intro", { roman: genRoman(gen) })}
         </p>
+        <Link
+          to="/compare"
+          className="inline-block mb-6 px-3 py-1 text-xs bg-gray-200 text-black hover:bg-[#FECB09] cursor-pointer"
+        >
+          {t("compare.link")}
+        </Link>
 
         <ul className="flex flex-wrap gap-x-6 gap-y-2 mb-6 text-[10px]">
           {legend.map(({ value, label }) => (
             <li key={value} className="flex items-center gap-2">
               <span
                 aria-hidden="true"
-                className={`inline-flex h-6 w-6 items-center justify-center border border-gray-300 ${cellClass(value)}`}
+                className={`inline-flex h-6 w-6 items-center justify-center border border-gray-300 ${effectClass(value)}`}
               >
                 {printed(value)}
               </span>
@@ -205,7 +193,7 @@ export const TypeChartPage = () => {
                           value: printed(value),
                         })}
                         onMouseEnter={() => setHover({ attacker, defender })}
-                        className={`h-7 w-7 text-center border border-gray-300 transition-[opacity,filter] ${cellClass(
+                        className={`h-7 w-7 text-center border border-gray-300 transition-[opacity,filter] ${effectClass(
                           value,
                           onTrace,
                         )} ${lit(onTrace)} ${

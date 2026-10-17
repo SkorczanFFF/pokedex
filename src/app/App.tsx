@@ -5,6 +5,7 @@ import { PokemonDetailsPage } from "@/features/details/PokemonDetailsPage";
 import { EncountersPage } from "@/features/details/EncountersPage";
 import { NotFound } from "@/features/not-found/NotFound";
 import { TypeChartPage } from "@/features/types/TypeChartPage";
+import { ComparePage } from "@/features/compare/ComparePage";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
@@ -30,6 +31,7 @@ function App() {
                   element={<EncountersPage />}
                 />
                 <Route path="/types" element={<TypeChartPage />} />
+                <Route path="/compare" element={<ComparePage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

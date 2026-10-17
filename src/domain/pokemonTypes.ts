@@ -48,7 +48,7 @@ export const TYPE_NAMES = [
 
 export type PokemonType = (typeof TYPE_NAMES)[number];
 
-const isPokemonType = (s: string | null): s is PokemonType =>
+export const isPokemonType = (s: string | null): s is PokemonType =>
   s !== null && (TYPE_NAMES as readonly string[]).includes(s);
 
 /** A Pokémon has at most two types, so an AND filter beyond two is always empty. */

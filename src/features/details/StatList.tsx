@@ -8,7 +8,7 @@ import type { Pokemon } from "@/types/pokemon";
  * Top of the bar's scale. Blissey's 255 HP would otherwise run past the track,
  * so the fill is clamped rather than the track widened for one outlier.
  */
-const SCALE_MAX = 160;
+export const SCALE_MAX = 160;
 
 export const StatList = ({ pokemon }: { pokemon: Pokemon }) => {
   const { t } = useTranslation();
