@@ -1,35 +1,41 @@
 import type { Effectiveness } from "@/domain/matchup";
 
-/** How a multiplier is printed: the way the games' guides print it. */
+/**
+ * How a multiplier is printed: the way the games' guides print it, with the
+ * values an ability leaves between — 1.5, 1.25, 0.75 — as plain decimals.
+ */
 export const printed = (value: Effectiveness): string => {
-  switch (value) {
-    case 0.5:
-      return "½";
-    case 0.25:
-      return "¼";
-    default:
-      return `${value}`;
-  }
+  if (value === 0.5) return "½";
+  if (value === 0.25) return "¼";
+  if (Number.isInteger(value)) return `${value}`;
+  return value.toFixed(2).replace(/0$/, "");
+};
+
+type PhraseKey =
+  | "versus.super"
+  | "versus.notVery"
+  | "versus.noEffect"
+  | "versus.neutral";
+
+/** The games' own line for a hit; ×4 and ×¼ get the same words as ×2 and ×½. */
+export const phraseKey = (value: Effectiveness): PhraseKey => {
+  if (value > 1) return "versus.super";
+  if (value === 0) return "versus.noEffect";
+  if (value < 1) return "versus.notVery";
+  return "versus.neutral";
 };
 
 /**
- * The colour says what the number says. A neutral 1 is grey unless `traced`,
- * which the chart uses for the cells on a hover trace and the Versus page for
- * every chip.
+ * The colour says what the number says, by range rather than by value, since
+ * an ability can leave any fraction. A neutral 1 is grey unless `traced`, which
+ * the chart uses for the cells on a hover trace and the Versus page for every
+ * chip.
  */
 export const effectClass = (value: Effectiveness, traced = false): string => {
-  switch (value) {
-    case 4:
-      return "bg-[#4E8A2E] text-white";
-    case 2:
-      return "bg-[#7AC74C] text-white";
-    case 0.5:
-      return "bg-[#EE8130] text-white";
-    case 0.25:
-      return "bg-[#B9521C] text-white";
-    case 0:
-      return "bg-black text-white";
-    default:
-      return traced ? "bg-white text-black" : "bg-white text-gray-300";
-  }
+  if (value >= 4) return "bg-[#4E8A2E] text-white";
+  if (value > 1) return "bg-[#7AC74C] text-white";
+  if (value === 0) return "bg-black text-white";
+  if (value < 0.5) return "bg-[#B9521C] text-white";
+  if (value < 1) return "bg-[#EE8130] text-white";
+  return traced ? "bg-white text-black" : "bg-white text-gray-300";
 };

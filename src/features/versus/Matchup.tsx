@@ -4,12 +4,13 @@ import {
   matchup,
   typingOf,
   type Effectiveness,
+  type MatchupAbilities,
 } from "@/domain/matchup";
 import { typeClass, type PokemonType } from "@/domain/pokemonTypes";
 import { typesInEra } from "@/domain/pokemonView";
 import type { TypeChart } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
-import { effectClass, printed } from "@/features/types/effectiveness";
+import { effectClass, phraseKey, printed } from "@/features/types/effectiveness";
 import { humanize, useTypeLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 
@@ -33,29 +34,17 @@ export const EffectChip = ({ value }: { value: Effectiveness }) => (
   </span>
 );
 
-type PhraseKey =
-  | "versus.super"
-  | "versus.notVery"
-  | "versus.noEffect"
-  | "versus.neutral";
-
-/** The games' own line for a hit; ×4 and ×¼ get the same words as ×2 and ×½. */
-const phraseKey = (value: Effectiveness): PhraseKey => {
-  if (value >= 2) return "versus.super";
-  if (value === 0) return "versus.noEffect";
-  if (value < 1) return "versus.notVery";
-  return "versus.neutral";
-};
-
 /** What each of the attacker's types does to the defender. */
 export const Attacks = ({
   chart,
   attacker,
   defender,
+  abilities,
 }: {
   chart: TypeChart;
   attacker: Pokemon;
   defender: Pokemon;
+  abilities?: MatchupAbilities;
 }) => {
   const { t } = useTranslation();
   const { era } = useEra();
@@ -63,6 +52,7 @@ export const Attacks = ({
     chart,
     typingOf(typesInEra(attacker, era)),
     typingOf(typesInEra(defender, era)),
+    abilities,
   );
   const name = humanize(defender.name);
 
@@ -93,13 +83,19 @@ export const Attacks = ({
 export const Profile = ({
   chart,
   pokemon,
+  abilities,
 }: {
   chart: TypeChart;
   pokemon: Pokemon;
+  abilities?: MatchupAbilities;
 }) => {
   const { t } = useTranslation();
   const { era } = useEra();
-  const groups = defensiveProfile(chart, typingOf(typesInEra(pokemon, era)));
+  const groups = defensiveProfile(
+    chart,
+    typingOf(typesInEra(pokemon, era)),
+    abilities,
+  );
 
   return (
     <section>

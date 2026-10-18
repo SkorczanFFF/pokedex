@@ -19,6 +19,10 @@ export interface DexEra {
   sprites: SpriteSetId;
   /** How the dex reads its entry aloud; the Game Boy's speaker is crushed to a few bits. */
   voice: "clean" | "8-bit";
+  /** How a stat grows from its base: DVs and stat experience through Gen II, IVs and EVs since. */
+  statFormula: "dv" | "iv";
+  /** Through Gen III a move was physical or special by its type, not by the move. */
+  damageClassByType: boolean;
 }
 
 export const MODERN: DexEra = {
@@ -33,6 +37,8 @@ export const MODERN: DexEra = {
   hasAbilities: true,
   sprites: "artwork",
   voice: "clean",
+  statFormula: "iv",
+  damageClassByType: false,
 };
 
 /**
@@ -46,6 +52,8 @@ export const RETRO: DexEra = {
   hasAbilities: false,
   sprites: "ii/crystal",
   voice: "8-bit",
+  statFormula: "dv",
+  damageClassByType: true,
 };
 
 export const ERA_NAMES = ["modern", "retro"] as const;

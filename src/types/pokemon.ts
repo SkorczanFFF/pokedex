@@ -65,6 +65,10 @@ export interface Pokemon {
     ability: {
       name: string;
     };
+    /** The third, rarer ability a Pokémon can carry since Gen V. */
+    is_hidden: boolean;
+    /** 1 and 2 are the regular abilities, 3 the hidden one. */
+    slot: number;
   }[];
   species: { name: string; url: string };
   moves: {

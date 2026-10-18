@@ -30,8 +30,10 @@ export const TypeBadges = ({ pokemon }: { pokemon: Pokemon }) => {
         </Link>
       ))}
       {/* The chart, a step from the types it is about, where a reader wonders
-          what the badges mean. Framed, not coloured: the colours are the types. */}
-      <Link to="/types" className={`ml-2 ${PAGE_LINK}`}>
+          what the badges mean. Framed, not coloured: the colours are the types.
+          Spaced by the row's gap alone: a margin of its own indented it once
+          it wrapped onto a line of its own. */}
+      <Link to="/types" className={PAGE_LINK}>
         {t("types.link")}
       </Link>
     </div>

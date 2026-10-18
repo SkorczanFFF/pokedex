@@ -16,6 +16,58 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: Versus calculates a hit, and reads the abilities that change a matchup`
+
+- **Added** — A third tab on Versus, Moves: a calculator, not a simulation. Each side picks
+  a move from its own learnset of the era, in a dropdown grouped the way the details page
+  groups them; the level (50 to start), the stats grown from the era's base stats, and the
+  move's power are all open to be typed over, which is also how a move PokéAPI gives no
+  power for — Seismic Toss, Low Kick — gets one. The text box answers in the games' words,
+  with chips for the type, the class and STAB, then the damage at the two ends of the roll,
+  the share of the defender's HP, and how many such hits take it down, guaranteed and best
+  case. Under both, who moves first by Speed. The move, the ability and the level of each
+  side live in the URL beside the two names, so a calculation is a link; the typed-over
+  numbers do not, and are forgotten when the Pokémon, the level or the era they were typed
+  over changes.
+- **Added** — Abilities, the ones that change a type multiplier. Chips under each picker
+  offer the Pokémon's abilities, the hidden one marked, the first regular one assumed.
+  Levitate takes Ground to ×0, Thick Fat halves Fire and Ice, Wonder Guard lets only a
+  super-effective hit land, Filter and Solid Rock trim a ×2 to 1.5, Scrappy puts Normal and
+  Fighting through a Ghost, Tinted Lens doubles a weak hit, Mold Breaker reads through the
+  defender's ability except Prism Armor. The picked ability applies in the Types tab too,
+  and the note that said "types only" now says which abilities are counted and which —
+  Huge Power, Adaptability, Technician — are not yet. Retro has none to offer.
+- **Added** — `domain/damage.ts` and `domain/abilities.ts`. The formula is the one every
+  generation has shared — a base from the level, the power and the attack over the
+  defence, then the roll, STAB and the type multiplier, floored at each step — and two new
+  era fields decide the rest: `statFormula` grows a stat from DVs through Gen II and IVs
+  since, and `damageClassByType` makes a move physical or special by its type through Gen
+  III, which PokéAPI's single `damage_class` cannot say. Gen I's one Special serves both
+  sides where `statsInEra` names it.
+- **Changed** — An effectiveness is a number now, not one of six: abilities leave 1.5, 1.25
+  and 0.75 between the chart's values. The chips print and colour by range, the games'
+  phrase is picked by range, and the defensive profile groups whatever values turn up.
+- **Checked** — The ability table is the first table in the project PokéAPI could not
+  supply: `/ability` describes an effect in prose only. Twenty-six entries, each read
+  against Bulbapedia under Gen IX rules, every slug confirmed against `/ability`. Fluffy
+  carries only its Fire half, the contact half wanting move flags; Lightning Rod and Storm
+  Drain grant the immunity they have had since Gen V, which is all the modern era asks.
+  Run against the chart: Weezing's Levitate under Earthquake ×0, and ×1 once the attacker
+  has Mold Breaker; Snorlax's Thick Fat under Flamethrower ×1 where Ice would take ×2;
+  Shedinja's Wonder Guard, Normal ×0 and Fire ×2; Filter leaving a ×2 at 1.5 and Prism
+  Armor still doing so under Mold Breaker; Dry Skin, Water ×0 and Fire ×1.25.
+- **Checked** — The formula against the Showdown calculator at level 50, full IVs, no EVs,
+  neutral nature: Pikachu's Thunderbolt into Gyarados — 70 Special Attack against 120
+  Special Defence and 170 HP, STAB, ×4 — comes to 124–148, 72.9–87.1%, the guaranteed two
+  hits the calculator gives. In retro the same stats grow from DVs to the same numbers,
+  Thunderbolt is Crystal's 95 power, and the hit is 132–156. Bite reads special there and
+  Gust physical, as Gen II had them.
+- **Changed** — The open tab in the text box is pressed yellow, the way the language pair
+  and the Retro toggle show which is on; the cursor alone was easy to miss.
+- **Fixed** — The chart chip beside a Pokémon's type badges carried a margin of its own on
+  top of the row's gap, which indented it once it wrapped onto a line of its own on a
+  phone. The gap alone spaces it now.
+
 ### `feat: an About page says what is here, where it comes from and what is left out`
 
 - **Added** — `/about`, in both languages: what the app is, what it reads from PokéAPI and

@@ -1,11 +1,12 @@
 /** What a row of chips chooses between. */
-export type ChipKind = "gen" | "game" | "picture";
+export type ChipKind = "gen" | "game" | "picture" | "ability";
 
 /**
  * Each row of a picker owns a colour, so three rows under a sprite read as
  * three questions rather than one: the app's blue for the generation, the Game
  * Boy's green for the game, purple for the picture. Pressed is the full colour,
  * unpressed a wash of it, so the row is told apart before anything is pressed.
+ * An ability, which is neither a date nor a picture, is black on grey.
  */
 const ACCENTS: Record<ChipKind, { on: string; off: string }> = {
   gen: {
@@ -19,6 +20,10 @@ const ACCENTS: Record<ChipKind, { on: string; off: string }> = {
   picture: {
     on: "bg-[#7D3C98] text-white",
     off: "bg-[#7D3C98]/15 text-black hover:bg-[#7D3C98]/35",
+  },
+  ability: {
+    on: "bg-black text-white",
+    off: "bg-gray-200 text-black hover:bg-gray-300",
   },
 };
 
