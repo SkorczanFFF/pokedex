@@ -16,6 +16,22 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: an About page says what is here, where it comes from and what is left out`
+
+- **Added** — `/about`, in both languages: what the app is, what it reads from PokéAPI and
+  from the sprite repository, where the Polish comes from and how far it reaches — the
+  wiki's dex entries, genera, move names and descriptions, with the counts, against the
+  names and labels translated for the app — what Retro changes, rule by rule, what each
+  page lets a reader do, what is left out on purpose, how it is built, and the sources with
+  their licences and the trademark line. Linked from the footer, beside GitHub; the navbar
+  keeps its two pages.
+- **Removed** — The footer's PokéAPI link. The About page credits PokéAPI with every other
+  source, so the footer keeps the author, the page about the app and the repository.
+- **Added** — The counts are read from the code where the code has them — the dex ceiling,
+  Retro's, Gen II's type count, the bundled Polish move names and abilities — and written
+  down only for the two Polish tables that load on demand, since counting those would
+  download them.
+
 ### `feat: the compare pickers open on the whole dex, from Bulbasaur`
 
 - **Changed** — A picker on the compare page drops the whole dex of the era the moment it

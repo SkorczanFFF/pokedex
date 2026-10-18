@@ -208,5 +208,100 @@
     "places_other": "{{count}} places",
     "coins_one": "for one coin",
     "coins_other": "for {{count}} coins"
+  },
+  "about": {
+    "link": "About",
+    "title": "About this Pokédex",
+    "intro": "What is here, where it comes from, and what is left out on purpose.",
+    "what": {
+      "heading": "What this is",
+      "body": "A Pokédex read in the browser: {{species}} species across nine generations and {{forms}} alternate forms — Megas, Gigantamax, regional variants — in English and in Polish. There is no database and no server behind it. Every number, sprite and entry is fetched from PokéAPI the moment you open it and kept in the tab's memory until you close it."
+    },
+    "data": {
+      "heading": "Where the data comes from",
+      "lead": "Everything with a number or a name comes from <api>PokéAPI</api>, an open API that describes the games in fourteen languages:",
+      "items": [
+        "names, dex numbers, types, base stats, height and weight, abilities;",
+        "moves: what a game teaches and at which level, with each move's power, accuracy, PP and the sentence that game printed about it;",
+        "Pokédex entries and the genus (“Seed Pokémon”), one per game since 1996;",
+        "evolution chains with their conditions — a level, a stone, a trade, friendship, the time of day;",
+        "where a Pokémon is met: the place, the game, the levels, the chance and the conditions;",
+        "the type chart, with every change between generations dated;",
+        "past values: the types, stats and move numbers as earlier generations had them."
+      ],
+      "sprites": "The pictures — the official artwork, every game's sprites, Crystal's animations — and the cries come from <sprites>PokéAPI's sprite repository</sprites>. The one exception is the trainer's back on the battle screen: Red's original 32×32 sprite from the Pokémon Red disassembly."
+    },
+    "polish": {
+      "heading": "Polish",
+      "gap": "PokéAPI has no Polish — its language list has no “pl”, because the games were never officially translated into Polish. The Polish text had to come from somewhere else.",
+      "source": "The Pokédex entries, genera, move names and move descriptions come from <wiki>Pokémon Wiki PL</wiki>, a fan encyclopedia published under <cc>CC BY-SA</cc>. The wiki prints them the way PokéAPI does — an entry per game, a move description per run of games — so the Polish text goes through the same rules as the English: retro reads Crystal's sentence, modern the newest game's.",
+      "counts": {
+        "dex": "Pokédex entries",
+        "dexValue": "{{plDex}} of {{species}} species",
+        "genus": "Genera",
+        "genusValue": "{{plGenus}} of {{species}}",
+        "moveNames": "Move names",
+        "moveNamesValue": "{{plMoveNames}}, all of them",
+        "moveTexts": "Move descriptions",
+        "moveTextsValue": "{{plMoveTexts}} of {{plMoveNames}}",
+        "abilities": "Abilities",
+        "abilitiesValue": "{{plAbilities}}, all of them"
+      },
+      "ours": "The names of types, abilities, stats, learn methods and evolution conditions, and the whole interface, were translated for this app, with the wiki's vocabulary as the reference.",
+      "fallback": "Where there is no Polish text — a few species without an entry, a dozen moves without a description, every location name — the English original is shown with an EN badge. Pokémon and game names stay English, because that is what they are.",
+      "lazy": "Both Polish tables are large — together they weigh more than the rest of the app — so they are not in the opening bundle. An English reader never downloads them; a Polish one downloads each once, on the first Pokémon and the first move they open."
+    },
+    "retro": {
+      "heading": "Retro",
+      "lead": "The Retro switch in the navbar shows the world as it stood after the second generation — not today's dex in old clothes, but that one:",
+      "items": [
+        "the dex ends at {{retroSpecies}} — in the list, the search and the filters; a Pokémon beyond it lands on a “???” screen;",
+        "typings from before the retcons: Clefairy and Togepi without Fairy, Magnemite with Steel — because Steel was already there;",
+        "those games' stats: Gen I's single Special, Pikachu's Defence at 30 rather than 40;",
+        "no abilities, because they arrived in Gen III;",
+        "the Pokédex entry, the evolution method and the move list from Gold, Silver and Crystal — not from the newest game;",
+        "Crystal's sprites instead of the artwork, the Game Boy's cry instead of today's recording;",
+        "a type chart of Gen II's {{retroTypes}} types, with Gen I's four quirks footnoted;",
+        "encounters from Red, Blue, Yellow, Gold, Silver and Crystal;",
+        "the robot that reads the entry crushed to 8 kHz and 5 bits."
+      ],
+      "note": "Every one of these rules is a field on one table in the code, so a Gen I era would cost one more entry."
+    },
+    "can": {
+      "heading": "What you can do",
+      "list": "Browse the dex at 20, 40 or 60 a page, search by part of a name, filter by generation and by up to two types at once (both must match). All of it lives in the address, so a filter is a link and the browser's Back undoes it.",
+      "details": "See the artwork and every sprite — Gen I and II game by game, front, back, shiny, Crystal in motion — play the cry, have the dex read the entry aloud, read the stats, abilities, evolution chain and the moves as one game taught them; a move opens to its power, accuracy, PP and the game's sentence. Arrows step to the neighbours in the dex.",
+      "encounters": "Places, levels and chances, game by game; a chance is summed within one set of conditions, because PokéAPI's own total sometimes passes 100%.",
+      "types": "What an attack of each type does to a Pokémon of each other, as of the era, with the cells that once read differently listed underneath.",
+      "versus": "Two Pokémon on the battle screen: what each one's types do to the other — the product over two types, so ×4 and ×¼ — and base stats back to back. One alone shows its weaknesses. The pair lives in the address, so a matchup is a link.",
+      "settings": "The language and the era are settings, not views: remembered in the browser, not in the address."
+    },
+    "not": {
+      "heading": "What is left out",
+      "items": [
+        "Versus counts types only. Abilities that change a matchup — Levitate, Flash Fire, Wonder Guard — are not counted, and the page says so.",
+        "Location names are read off the slug (“Route 2 South Towards Viridian City”): PokéAPI spells them properly at one request per location, and Magikarp has 74.",
+        "Search shows at most 60 hits and matches part of a name, not a number or a type.",
+        "From Gen III on the picture column shows one sheet per generation; only Gen I and II come game by game.",
+        "There are two eras, today's and Gen II. Gen I as an era of its own, not yet.",
+        "The Game Boy's cry exists only for Gen I–V Pokémon; newer ones play today's recording in retro too.",
+        "Nothing is stored outside the browser: no accounts, no favourites, no teams."
+      ]
+    },
+    "how": {
+      "heading": "How it is built",
+      "body": "React 19, Vite and Tailwind 4. TanStack Query holds the data, so every resource — a Pokémon, a type, a move, a chain — is fetched once and read by every page that needs it. Routing is React Router, translation is i18next. The code is open on <gh>GitHub</gh>, and every change is written up in its <log>changelog</log>."
+    },
+    "credits": {
+      "heading": "Sources and licences",
+      "items": {
+        "api": "data and sprites",
+        "wiki": "Polish entries, genera, move names and descriptions — CC BY-SA",
+        "espeak": "the voice that reads the entry, running in the browser through meSpeak — GNU GPL",
+        "font": "the typeface — SIL Open Font License",
+        "pokered": "the trainer's back sprite"
+      },
+      "trademark": "Pokémon and Pokémon character names are trademarks of Nintendo, Game Freak and The Pokémon Company. This is a fan project, non-commercial and unaffiliated with any of them."
+    }
   }
 }

@@ -12,6 +12,7 @@ import { EncountersPage } from "@/features/details/EncountersPage";
 import { NotFound } from "@/features/not-found/NotFound";
 import { TypeChartPage } from "@/features/types/TypeChartPage";
 import { VersusPage } from "@/features/versus/VersusPage";
+import { AboutPage } from "@/features/about/AboutPage";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
@@ -45,6 +46,7 @@ function App() {
                 <Route path="/types" element={<TypeChartPage />} />
                 <Route path="/versus" element={<VersusPage />} />
                 <Route path="/compare" element={<FormerVersusAddress />} />
+                <Route path="/about" element={<AboutPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

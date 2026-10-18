@@ -216,5 +216,100 @@
     "coins_one": "za {{count}} żeton",
     "coins_few": "za {{count}} żetony",
     "coins_many": "za {{count}} żetonów"
+  },
+  "about": {
+    "link": "O aplikacji",
+    "title": "O tym Pokédeksie",
+    "intro": "Co tu jest, skąd się wzięło i czego celowo nie ma.",
+    "what": {
+      "heading": "Co to jest",
+      "body": "Pokédex czytany w przeglądarce: {{species}} gatunków z dziewięciu generacji i {{forms}} form — Megi, Gigantamaxy, odmiany regionalne — po angielsku i po polsku. Nie stoi za tym żadna baza ani serwer. Każda liczba, sprite i wpis jest pobierany z PokéAPI w chwili, gdy go otwierasz, i trzymany w pamięci karty, dopóki jej nie zamkniesz."
+    },
+    "data": {
+      "heading": "Skąd dane",
+      "lead": "Wszystko, co ma liczbę albo nazwę, pochodzi z <api>PokéAPI</api> — otwartego API, które opisuje gry w czternastu językach:",
+      "items": [
+        "nazwy, numery, typy, statystyki bazowe, wzrost i wagę, umiejętności;",
+        "ruchy: czego i na jakim poziomie uczy dana gra, a dla każdego ruchu moc, celność, PP i zdanie, które o nim wydrukowała ta gra;",
+        "wpisy Pokédeksu i rodzaj („Pokémon Nasiono”), osobno dla każdej gry od 1996 roku;",
+        "łańcuchy ewolucji z warunkami — poziom, kamień, wymiana, przyjaźń, pora dnia;",
+        "miejsca spotkań: lokacja, gra, poziomy, szansa i warunki;",
+        "tabelę efektywności typów, z datą każdej zmiany między generacjami;",
+        "dawne wartości: typy, statystyki i liczby ruchów takie, jakie miały wcześniejsze generacje."
+      ],
+      "sprites": "Obrazki — oficjalny artwork, sprite'y z każdej gry, animacje z Crystal — oraz głosy pochodzą z <sprites>repozytorium sprite'ów PokéAPI</sprites>. Jedyny wyjątek to plecy trenera na ekranie walki: oryginalny sprite Reda, 32×32 piksele, z dekompilacji Pokémon Red."
+    },
+    "polish": {
+      "heading": "Polski",
+      "gap": "PokéAPI nie ma polskiego — na jego liście języków nie ma „pl”, bo gry nigdy nie zostały oficjalnie przełożone na polski. Polski tekst trzeba było wziąć skądinąd.",
+      "source": "Wpisy Pokédeksu, rodzaje, nazwy i opisy ruchów pochodzą z <wiki>Pokémon Wiki PL</wiki>, fanowskiej encyklopedii na licencji <cc>CC BY-SA</cc>. Wiki drukuje je tak jak PokéAPI — wpis osobno dla każdej gry, opis ruchu dla każdej serii gier — więc polski tekst przechodzi przez te same reguły co angielski: w retro czytasz zdanie z Crystal, w nowoczesnym z najnowszej gry.",
+      "counts": {
+        "dex": "Wpisy Pokédeksu",
+        "dexValue": "{{plDex}} z {{species}} gatunków",
+        "genus": "Rodzaje",
+        "genusValue": "{{plGenus}} z {{species}}",
+        "moveNames": "Nazwy ruchów",
+        "moveNamesValue": "{{plMoveNames}}, wszystkie",
+        "moveTexts": "Opisy ruchów",
+        "moveTextsValue": "{{plMoveTexts}} z {{plMoveNames}}",
+        "abilities": "Umiejętności",
+        "abilitiesValue": "{{plAbilities}}, wszystkie"
+      },
+      "ours": "Nazwy typów, umiejętności, statystyk, metod nauki i warunków ewolucji oraz cały interfejs zostały przełożone na potrzeby tej aplikacji, ze słownictwem wiki jako punktem odniesienia.",
+      "fallback": "Tam, gdzie polskiego tekstu nie ma — kilka gatunków bez wpisu, kilkanaście ruchów bez opisu, każda nazwa lokacji — pokazujemy angielski oryginał z plakietką EN. Nazwy Pokémonów i gier zostają angielskie, bo takie są.",
+      "lazy": "Obie polskie tabele są duże — razem ważą więcej niż cała reszta aplikacji — więc nie ma ich w paczce startowej. Czytelnik angielski nie pobiera ich nigdy, polski raz: przy pierwszym otwartym Pokémonie i przy pierwszym otwartym ruchu."
+    },
+    "retro": {
+      "heading": "Retro",
+      "lead": "Przełącznik Retro w pasku nawigacji pokazuje świat taki, jaki był po drugiej generacji — nie dzisiejszy dex w starej szacie, tylko tamten:",
+      "items": [
+        "dex kończy się na {{retroSpecies}} — w liście, w wyszukiwarce i w filtrach; Pokémon spoza niego trafia na ekran „???”;",
+        "typy sprzed retconów: Clefairy i Togepi bez Baśniowego, Magnemite ze Stalowym — bo Stal już była;",
+        "statystyki z tamtych gier: pojedyncza Specjalna z Gen I, obrona Pikachu 30 zamiast 40;",
+        "brak umiejętności, bo pojawiły się dopiero w Gen III;",
+        "wpis Pokédeksu, metoda ewolucji i lista ruchów z Gold, Silver i Crystal — nie z najnowszej gry;",
+        "sprite'y z Crystal zamiast artworku, głos z Game Boya zamiast dzisiejszego nagrania;",
+        "tabela typów na {{retroTypes}} typów z Gen II, z przypisem o czterech dziwactwach Gen I;",
+        "miejsca spotkań z Red, Blue, Yellow, Gold, Silver i Crystal;",
+        "robot czytający wpis zgnieciony do 8 kHz i 5 bitów."
+      ],
+      "note": "Każda z tych reguł to jedno pole w jednej tabeli w kodzie, więc era Gen I kosztowałaby jeden wpis więcej."
+    },
+    "can": {
+      "heading": "Co można zrobić",
+      "list": "Przeglądać dex po 20, 40 albo 60 na stronę, szukać po fragmencie nazwy, filtrować po generacji i po najwyżej dwóch typach naraz (oba muszą pasować). Wszystko siedzi w adresie, więc filtr jest linkiem, a Wstecz w przeglądarce go cofa.",
+      "details": "Obejrzeć artwork i każdy sprite — Gen I i II gra po grze, przód, tył, lśniący, Crystal w ruchu — odtworzyć głos, kazać dexowi przeczytać wpis, przejrzeć statystyki, umiejętności, łańcuch ewolucji i ruchy tak, jak uczyła ich jedna gra; kliknięty ruch otwiera moc, celność, PP i zdanie z gry. Strzałki prowadzą do sąsiadów w dexie.",
+      "encounters": "Lokacje, poziomy i szanse, gra po grze; szansa jest sumowana w obrębie jednego zestawu warunków, bo własna suma PokéAPI przekracza czasem 100%.",
+      "types": "Co atak każdego typu robi Pokémonowi każdego innego, według ery, z listą komórek, które kiedyś czytały się inaczej.",
+      "versus": "Dwa Pokémony na ekranie walki: co typy jednego robią drugiemu — z iloczynem po dwóch typach, więc ×4 i ×¼ — i statystyki bazowe plecami do siebie. Jeden sam pokazuje swoje słabości. Para siedzi w adresie, więc starcie jest linkiem.",
+      "settings": "Język i era to ustawienia, nie widoki: zapamiętane w przeglądarce, nie w adresie."
+    },
+    "not": {
+      "heading": "Czego tu nie ma",
+      "items": [
+        "Versus liczy same typy. Umiejętności zmieniające starcie — Levitate, Flash Fire, Wonder Guard — nie są brane pod uwagę, i strona o tym mówi.",
+        "Nazwy lokacji są odczytane ze sluga („Route 2 South Towards Viridian City”): PokéAPI podaje właściwą nazwę po jednym zapytaniu na lokację, a Magikarp ma ich 74.",
+        "Wyszukiwarka pokazuje najwyżej 60 trafień i szuka po fragmencie nazwy, nie po numerze ani typie.",
+        "Od Gen III wzwyż kolumna obrazków pokazuje jeden arkusz na generację; gra po grze są tylko Gen I i II.",
+        "Są dwie ery: dzisiejsza i Gen II. Gen I jako osobna era — jeszcze nie.",
+        "Głos z Game Boya istnieje tylko dla Pokémonów z Gen I–V; nowsze grają dzisiejsze nagranie także w retro.",
+        "Nic nie jest zapisywane poza przeglądarką: nie ma kont, ulubionych ani drużyn."
+      ]
+    },
+    "how": {
+      "heading": "Jak to działa",
+      "body": "React 19, Vite i Tailwind 4. Dane trzyma TanStack Query, więc każdy zasób — Pokémon, typ, ruch, łańcuch — jest pobierany raz i czytany przez każdą stronę, która go potrzebuje. Routing to React Router, przekład to i18next. Kod jest otwarty na <gh>GitHubie</gh>, a każda zmiana jest opisana w jego <log>changelogu</log>."
+    },
+    "credits": {
+      "heading": "Źródła i licencje",
+      "items": {
+        "api": "dane i sprite'y",
+        "wiki": "polskie wpisy, rodzaje, nazwy i opisy ruchów — CC BY-SA",
+        "espeak": "głos czytający wpis, w przeglądarce przez meSpeak — GNU GPL",
+        "font": "czcionka — SIL Open Font License",
+        "pokered": "sprite pleców trenera"
+      },
+      "trademark": "Pokémon i nazwy Pokémonów są znakami towarowymi Nintendo, Game Freak i The Pokémon Company. To projekt fanowski, niekomercyjny i niezwiązany z żadną z tych firm."
+    }
   }
 }
