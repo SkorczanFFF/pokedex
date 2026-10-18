@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { NotFoundError } from "@/api/client";
-import { getEncounters } from "@/api/encounters";
-import { getPokemonDetails } from "@/api/pokemon";
+import { encountersQuery, pokemonQuery } from "@/api/queries";
+import { Chip } from "@/components/Chip";
 import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
 import {
@@ -58,18 +58,11 @@ export const EncountersPage = () => {
     data: pokemon,
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["pokemon", name],
-    queryFn: () => getPokemonDetails(name!),
-    enabled: !!name,
-  });
+  } = useQuery(pokemonQuery(name));
 
-  const { data: encounters, isLoading: loadingPlaces } = useQuery({
-    queryKey: ["encounters", name],
-    queryFn: () => getEncounters(name!),
-    enabled: !!name,
-    staleTime: Infinity,
-  });
+  const { data: encounters, isLoading: loadingPlaces } = useQuery(
+    encountersQuery(name),
+  );
 
   if (isLoading || loadingPlaces) return <Loader />;
   if (error instanceof NotFoundError) return <NotFound />;
@@ -174,37 +167,24 @@ const GamePicker = ({
 }) => {
   const { t } = useTranslation();
 
-  const chip = (isActive: boolean) =>
-    `px-2 py-1 text-[10px] leading-none cursor-pointer ${
-      isActive
-        ? "bg-[#356DB2] text-white"
-        : "bg-gray-200 text-black hover:bg-[#FECB09]"
-    }`;
-
   return (
     <div
       role="group"
       aria-label={t("encounters.title")}
       className="mb-6 flex flex-wrap gap-1"
     >
-      <button
-        type="button"
-        onClick={() => onPick(null)}
-        aria-pressed={picked === null}
-        className={chip(picked === null)}
-      >
+      <Chip kind="game" active={picked === null} onClick={() => onPick(null)}>
         {t("encounters.allGames")}
-      </button>
+      </Chip>
       {games.map((game) => (
-        <button
+        <Chip
           key={game}
-          type="button"
+          kind="game"
+          active={picked === game}
           onClick={() => onPick(game)}
-          aria-pressed={picked === game}
-          className={chip(picked === game)}
         >
           {gameLabel(game)}
-        </button>
+        </Chip>
       ))}
     </div>
   );

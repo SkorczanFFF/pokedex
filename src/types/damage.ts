@@ -11,6 +11,8 @@ export interface DamageRelations {
 /** PokéAPI's `/type/{name}`, the part of it the chart reads. */
 export interface TypeResource {
   name: string;
+  /** Every Pokémon of this type, which the list's filter reads. */
+  pokemon: { pokemon: { name: string; url: string }; slot: number }[];
   /** The generation the type arrived in. */
   generation: { name: string };
   /** The relations in force today. */

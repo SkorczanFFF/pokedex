@@ -14,7 +14,7 @@ export const printed = (value: Effectiveness): string => {
 
 /**
  * The colour says what the number says. A neutral 1 is grey unless `traced`,
- * which the chart uses for the cells on a hover trace and the compare page for
+ * which the chart uses for the cells on a hover trace and the Versus page for
  * every chip.
  */
 export const effectClass = (value: Effectiveness, traced = false): string => {

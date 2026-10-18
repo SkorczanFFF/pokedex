@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { NotFoundError } from "@/api/client";
-import { getPokemonDetails } from "@/api/pokemon";
-import { getPokemonSpecies } from "@/api/species";
+import { pokemonQuery, speciesQuery } from "@/api/queries";
 import { formSuffix } from "@/domain/evolution";
 import { activeSpriteSet, type SpriteSetId } from "@/domain/sprites";
 import ErrorView from "@/components/ErrorView";
@@ -41,11 +40,7 @@ export const PokemonDetailsPage = () => {
     data: pokemon,
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["pokemon", name],
-    queryFn: () => getPokemonDetails(name!),
-    enabled: !!name,
-  });
+  } = useQuery(pokemonQuery(name));
 
   // A link or a bookmark can reach a Pokémon the era does not cover; the dex
   // scope only narrows the list, the search and the filters.
@@ -55,8 +50,7 @@ export const PokemonDetailsPage = () => {
   // flavour text, the genus, the generation and the evolution chain. Not worth
   // a request for a Pokémon whose card will not be shown.
   const { data: species } = useQuery({
-    queryKey: ["species", pokemon?.species.name],
-    queryFn: () => getPokemonSpecies(pokemon!.species.name),
+    ...speciesQuery(pokemon?.species.name),
     enabled: !!pokemon?.species.name && !outOfEra,
   });
 

@@ -1,10 +1,10 @@
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white mt-auto">
+    <footer className="bg-gray-800 text-white text-xs mt-auto">
       <div className="mx-auto px-4 py-2">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="text-center md:text-left mt-2 md:mt-0 mb-2 md:mb-0">
-            <p className="text-sm">
+            <p>
               &copy; {new Date().getFullYear()}{" "}
               <a
                 href="https://www.skoftware.pl"

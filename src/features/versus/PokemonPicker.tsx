@@ -1,24 +1,24 @@
 import { useEffect, useId, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { getAllPokemonNames } from "@/api/pokemon";
+import { allPokemonNamesQuery } from "@/api/queries";
 import { resourceIdFromUrl } from "@/domain/resource";
 import { useEra } from "@/era/context";
 import { humanize } from "@/i18n/labels";
 
-/** Enough to tell the forms of one Pokémon apart without a scroll. */
-const MATCHES = 8;
-
 /**
- * A name box with a list under it, read from the name index the search already
- * keeps for the session and bounded by the era.
+ * A name box with the dex under it, from Bulbasaur on, read from the name index
+ * the search already keeps for the session and bounded by the era. Typing
+ * narrows it.
  */
 export const PokemonPicker = ({
   label,
+  placeholder,
   value,
   onPick,
 }: {
   label: string;
+  placeholder: string;
   /** The slug in the URL, or null for an empty slot. */
   value: string | null;
   onPick: (name: string | null) => void;
@@ -36,29 +36,25 @@ export const PokemonPicker = ({
     setText(value ? humanize(value) : "");
   }, [value]);
 
-  const { data: names = [] } = useQuery({
-    queryKey: ["allPokemonNames"],
-    queryFn: getAllPokemonNames,
-    staleTime: Infinity,
-    gcTime: Infinity,
-  });
+  const { data: names = [] } = useQuery(allPokemonNamesQuery);
 
   const term = text.trim().toLowerCase().replace(/\s+/g, "-");
-  const matches =
-    open && term
-      ? names
-          .filter(
-            (entry) =>
-              entry.name.includes(term) &&
-              resourceIdFromUrl(entry.url) <= era.maxDexId,
-          )
-          .sort(
-            (x, y) =>
-              Number(y.name.startsWith(term)) - Number(x.name.startsWith(term)) ||
-              resourceIdFromUrl(x.url) - resourceIdFromUrl(y.url),
-          )
-          .slice(0, MATCHES)
-      : [];
+  // The index comes in dex order, forms after the national dex, so no sort.
+  const matches = open
+    ? names.filter(
+        (entry) =>
+          resourceIdFromUrl(entry.url) <= era.maxDexId &&
+          (term === "" || entry.name.includes(term)),
+      )
+    : [];
+
+  // Keeps the line the keyboard is on in view of a list a thousand long.
+  useEffect(() => {
+    if (!open) return;
+    document
+      .getElementById(`${listId}-${active}`)
+      ?.scrollIntoView({ block: "nearest" });
+  }, [open, active, listId]);
 
   const pick = (name: string) => {
     onPick(name);
@@ -85,8 +81,6 @@ export const PokemonPicker = ({
     }
   };
 
-  const expanded = open && term.length > 0;
-
   return (
     <div className="relative min-w-0 flex-1">
       <label htmlFor={inputId} className="mb-2 block text-xs">
@@ -97,11 +91,11 @@ export const PokemonPicker = ({
           id={inputId}
           type="text"
           role="combobox"
-          aria-expanded={expanded}
+          aria-expanded={open}
           aria-controls={listId}
           aria-autocomplete="list"
           aria-activedescendant={
-            expanded && matches[active] ? `${listId}-${active}` : undefined
+            open && matches[active] ? `${listId}-${active}` : undefined
           }
           autoComplete="off"
           value={text}
@@ -110,34 +104,39 @@ export const PokemonPicker = ({
             setOpen(true);
             setActive(0);
           }}
-          onFocus={() => setOpen(true)}
+          // Selected on focus, so a new name replaces the picked one at once.
+          onFocus={(e) => {
+            setOpen(true);
+            setActive(0);
+            e.target.select();
+          }}
           onBlur={() => {
             setOpen(false);
             setText(value ? humanize(value) : "");
           }}
           onKeyDown={onKeyDown}
-          placeholder={t("compare.pickPlaceholder")}
+          placeholder={placeholder}
           className="h-9 w-full min-w-0 border-2 bg-white px-2 text-sm"
         />
         {value && (
           <button
             type="button"
             onClick={() => onPick(null)}
-            aria-label={t("compare.clear")}
+            aria-label={t("versus.clear")}
             className="h-9 px-3 bg-[#E12025] text-sm text-white cursor-pointer hover:bg-red-700"
           >
             X
           </button>
         )}
       </div>
-      {expanded && (
+      {open && (
         <ul
           id={listId}
           role="listbox"
-          className="absolute left-0 right-0 z-10 mt-1 max-h-64 overflow-y-auto border-2 border-black bg-white text-xs"
+          className="absolute left-0 right-0 z-10 mt-1 max-h-64 overflow-x-hidden overflow-y-auto border-2 border-black bg-white text-xs"
         >
           {matches.length === 0 ? (
-            <li className="px-2 py-2 text-gray-500">{t("compare.noMatches")}</li>
+            <li className="px-2 py-2 text-gray-500">{t("versus.noMatches")}</li>
           ) : (
             matches.map((match, index) => (
               <li
@@ -158,7 +157,12 @@ export const PokemonPicker = ({
                 <span aria-hidden="true" className={index === active ? "" : "opacity-0"}>
                   {">"}
                 </span>
-                {match.name}
+                {/* A floor, not a width: up to #999 the names line up, and a
+                    form's #10xxx pushes its own name rather than covering it. */}
+                <span className="min-w-12 shrink-0 text-gray-400">
+                  #{resourceIdFromUrl(match.url)}
+                </span>
+                <span className="min-w-0 [overflow-wrap:anywhere]">{match.name}</span>
               </li>
             ))
           )}

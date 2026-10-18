@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { getDexWindow } from "@/api/pokemon";
+import { dexWindowQuery } from "@/api/queries";
 import { dexNeighbourIds, lastDexId } from "@/domain/dex";
 import { resourceIdFromUrl } from "@/domain/resource";
 import { useEra } from "@/era/context";
@@ -31,12 +31,7 @@ export const DexNeighbours = ({ id }: { id: number }) => {
   const { prev, next } = dexNeighbourIds(id, lastDexId(era.maxGen));
   const stepsNowhere = prev === null && next === null;
 
-  const { data } = useQuery({
-    queryKey: ["dexWindow", id],
-    queryFn: () => getDexWindow(id),
-    staleTime: Infinity,
-    enabled: !stepsNowhere,
-  });
+  const { data } = useQuery({ ...dexWindowQuery(id), enabled: !stepsNowhere });
 
   if (stepsNowhere) return null;
 

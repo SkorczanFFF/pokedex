@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllPokemonNames, getPokemonDetails } from "@/api/pokemon";
+import { allPokemonNamesQuery, pokemonQuery } from "@/api/queries";
 import type { DexEra } from "@/domain/era";
 import { resourceIdFromUrl } from "@/domain/resource";
 import type { Pokemon } from "@/types/pokemon";
@@ -23,12 +23,7 @@ export const useSearchResults = (
     data: allNames = [],
     isLoading: isAllNamesLoading,
     error: allNamesError,
-  } = useQuery({
-    queryKey: ["allPokemonNames"],
-    queryFn: getAllPokemonNames,
-    staleTime: Infinity,
-    gcTime: Infinity,
-  });
+  } = useQuery(allPokemonNamesQuery);
 
   const {
     data: pokemon = [],
@@ -51,9 +46,7 @@ export const useSearchResults = (
       return Promise.all(
         matches.map((entry) =>
           queryClient.fetchQuery({
-            queryKey: ["pokemon", entry.name],
-            queryFn: () => getPokemonDetails(entry.name),
-            staleTime: 1000 * 60 * 5,
+            ...pokemonQuery(entry.name),
             // One retry policy per thing the reader is waiting on. Promise.all
             // hands any rejection to this query, which retries on its own, so
             // retrying underneath as well multiplies the wait: three attempts

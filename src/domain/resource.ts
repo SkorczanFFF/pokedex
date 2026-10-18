@@ -20,3 +20,7 @@ export const officialArtwork = (id: number): string =>
 /** The same trick for a game's sprites, which sit under `generation-ii/crystal`. */
 export const gameSprite = (id: number, path: string): string =>
   `${SPRITE_ROOT}/versions/${path}/${id}.png`;
+
+/** Crystal's front sprites in motion: 56px GIFs on white, Gen I and II only. */
+export const crystalAnimated = (id: number): string =>
+  `${SPRITE_ROOT}/versions/generation-ii/crystal/animated/${id}.gif`;

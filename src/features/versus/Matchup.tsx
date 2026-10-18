@@ -34,17 +34,17 @@ export const EffectChip = ({ value }: { value: Effectiveness }) => (
 );
 
 type PhraseKey =
-  | "compare.super"
-  | "compare.notVery"
-  | "compare.noEffect"
-  | "compare.neutral";
+  | "versus.super"
+  | "versus.notVery"
+  | "versus.noEffect"
+  | "versus.neutral";
 
 /** The games' own line for a hit; ×4 and ×¼ get the same words as ×2 and ×½. */
 const phraseKey = (value: Effectiveness): PhraseKey => {
-  if (value >= 2) return "compare.super";
-  if (value === 0) return "compare.noEffect";
-  if (value < 1) return "compare.notVery";
-  return "compare.neutral";
+  if (value >= 2) return "versus.super";
+  if (value === 0) return "versus.noEffect";
+  if (value < 1) return "versus.notVery";
+  return "versus.neutral";
 };
 
 /** What each of the attacker's types does to the defender. */
@@ -69,7 +69,7 @@ export const Attacks = ({
   return (
     <section>
       <h2 className="text-xs mb-3">
-        {t("compare.attacks", { name: humanize(attacker.name) })}
+        {t("versus.attacks", { name: humanize(attacker.name) })}
       </h2>
       <ul className="space-y-2">
         {hits.map((hit) => (
@@ -104,7 +104,7 @@ export const Profile = ({
   return (
     <section>
       <h2 className="text-xs mb-3">
-        {t("compare.profile", { name: humanize(pokemon.name) })}
+        {t("versus.profile", { name: humanize(pokemon.name) })}
       </h2>
       <ul className="space-y-3">
         {groups.map((group) => (

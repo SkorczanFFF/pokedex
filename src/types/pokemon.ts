@@ -30,6 +30,11 @@ export interface Pokemon {
       "official-artwork": {
         front_default: string;
       };
+      /** Showdown's animated battle GIFs; missing for a few of the newest. */
+      showdown?: {
+        front_default: string | null;
+        back_default: string | null;
+      };
     };
     /** Sprite sheets by generation and game, keyed "generation-ii" / "crystal". */
     versions?: Record<string, Record<string, SpriteSheet>>;
@@ -80,14 +85,6 @@ export interface PokemonListResponse {
   results: {
     name: string;
     url: string;
-  }[];
-}
-
-export interface PokemonTypeResponse {
-  name: string;
-  pokemon: {
-    pokemon: { name: string; url: string };
-    slot: number;
   }[];
 }
 

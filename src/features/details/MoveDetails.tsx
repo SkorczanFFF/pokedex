@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { getMove } from "@/api/moves";
+import { moveQuery } from "@/api/queries";
 import { moveInGame, moveMethodAccent } from "@/domain/moves";
 import { typeClass } from "@/domain/pokemonTypes";
 import { humanize, useDamageClassLabel, useTypeLabel } from "@/i18n/labels";
@@ -34,11 +34,7 @@ export const MoveDetails = ({
   const damageClassLabel = useDamageClassLabel();
   const translatedText = useTranslatedMoveText();
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["move", name],
-    queryFn: () => getMove(name),
-    staleTime: Infinity,
-  });
+  const { data, isLoading, error } = useQuery(moveQuery(name));
 
   if (isLoading) return <MoveSkeleton />;
   // A move is a detail on a page that already works; losing one is not worth

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Chip } from "@/components/Chip";
 import { GEN_SLUGS, genRoman, type GenSlug } from "@/domain/dex";
 import { cryForSet } from "@/domain/pokemonView";
 import {
@@ -19,13 +20,6 @@ import { useAnimatedOnce } from "./useAnimatedOnce";
 
 /** How wide a sprite is drawn: the same 240 px the column always gave it. */
 const SPRITE_WIDTH = 240;
-
-const chip = (isActive: boolean) =>
-  `px-2 py-1 text-[10px] leading-none cursor-pointer ${
-    isActive
-      ? "bg-[#356DB2] text-white"
-      : "bg-gray-200 text-black hover:bg-[#FECB09]"
-  }`;
 
 const PICTURE_LABEL = {
   "front/default": "details.spriteDefault",
@@ -143,32 +137,25 @@ export const PokemonArtwork = ({
           aria-label={t("details.spriteSet")}
           className="mt-4 flex flex-wrap gap-1 justify-center"
         >
-          <button
-            type="button"
+          <Chip
+            kind="gen"
+            active={activeGen === null}
             onClick={() => setPicked("artwork")}
-            aria-pressed={activeGen === null}
-            title={t("details.showArtwork")}
-            aria-label={t("details.showArtwork")}
-            className={chip(activeGen === null)}
+            label={t("details.showArtwork")}
           >
             {t("details.artwork")}
-          </button>
-          {gens.map((gen) => {
-            const hint = t("details.showSprite", { roman: genRoman(gen) });
-            return (
-              <button
-                key={gen}
-                type="button"
-                onClick={() => pickGen(gen)}
-                aria-pressed={gen === activeGen}
-                title={hint}
-                aria-label={hint}
-                className={chip(gen === activeGen)}
-              >
-                {genRoman(gen)}
-              </button>
-            );
-          })}
+          </Chip>
+          {gens.map((gen) => (
+            <Chip
+              key={gen}
+              kind="gen"
+              active={gen === activeGen}
+              onClick={() => pickGen(gen)}
+              label={t("details.showSprite", { roman: genRoman(gen) })}
+            >
+              {genRoman(gen)}
+            </Chip>
+          ))}
         </div>
       )}
 
@@ -180,19 +167,16 @@ export const PokemonArtwork = ({
         >
           {games.map((set) => {
             const name = spriteGameName(set);
-            const hint = t("details.showGame", { game: name });
             return (
-              <button
+              <Chip
                 key={set}
-                type="button"
+                kind="game"
+                active={set === active}
                 onClick={() => setPicked(set)}
-                aria-pressed={set === active}
-                title={hint}
-                aria-label={hint}
-                className={chip(set === active)}
+                label={t("details.showGame", { game: name })}
               >
                 {name}
-              </button>
+              </Chip>
             );
           })}
         </div>
@@ -204,23 +188,19 @@ export const PokemonArtwork = ({
           aria-label={t("details.spritePicture")}
           className="mt-2 flex flex-wrap gap-1 justify-center"
         >
-          {variants.map((v) => {
-            const isActive = v.key === variant?.key;
-            return (
-              <button
-                key={v.key}
-                type="button"
-                onClick={() => {
-                  setPickedView(v.view);
-                  setPickedPalette(v.palette);
-                }}
-                aria-pressed={isActive}
-                className={chip(isActive)}
-              >
-                {t(PICTURE_LABEL[`${v.view}/${v.palette}`])}
-              </button>
-            );
-          })}
+          {variants.map((v) => (
+            <Chip
+              key={v.key}
+              kind="picture"
+              active={v.key === variant?.key}
+              onClick={() => {
+                setPickedView(v.view);
+                setPickedPalette(v.palette);
+              }}
+            >
+              {t(PICTURE_LABEL[`${v.view}/${v.palette}`])}
+            </Chip>
+          ))}
         </div>
       )}
     </div>

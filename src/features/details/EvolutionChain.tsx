@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getEvolutionChain } from "@/api/evolution";
+import { evolutionChainQuery } from "@/api/queries";
 import {
   evolutionTreeInEra,
   treeDepth,
@@ -40,12 +40,7 @@ export const EvolutionChain = ({
   const { era } = useEra();
   const chainId = resourceIdFromUrl(chainUrl);
 
-  const { data, error } = useQuery({
-    queryKey: ["evolutionChain", chainId],
-    queryFn: () => getEvolutionChain(chainId),
-    enabled: chainId > 0,
-    staleTime: Infinity,
-  });
+  const { data, error } = useQuery(evolutionChainQuery(chainId));
 
   // Evolution is a side dish on a page that already rendered. A failure here
   // drops the section rather than replacing a working page with an error.

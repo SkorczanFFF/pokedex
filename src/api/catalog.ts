@@ -1,15 +1,11 @@
-import type {
-  PokemonGenerationResponse,
-  PokemonTypeResponse,
-} from "@/types/pokemon";
+import type { PokemonGenerationResponse } from "@/types/pokemon";
 import { get } from "./client";
 
-/** The two endpoints that answer "which Pokémon belong to X" with a name list. */
-export const getPokemonByType = (
-  typeName: string
-): Promise<PokemonTypeResponse> =>
-  get<PokemonTypeResponse>(`type/${typeName}`, `Failed to fetch type ${typeName}`);
-
+/**
+ * Which species a generation introduced, as a name list. The other membership
+ * list — a type's Pokémon — rides on `/type/{name}` with the damage relations,
+ * so `getType` answers for both.
+ */
 export const getPokemonByGeneration = (
   generationName: string
 ): Promise<PokemonGenerationResponse> =>

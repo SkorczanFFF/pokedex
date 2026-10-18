@@ -9,7 +9,7 @@ import { MENU_ITEM, MenuCursor } from "./BattleScreen";
 
 const PAGES = [
   { to: "/types", label: "types.link" },
-  { to: "/compare", label: "nav.versus" },
+  { to: "/versus", label: "nav.versus" },
 ] as const;
 
 /**

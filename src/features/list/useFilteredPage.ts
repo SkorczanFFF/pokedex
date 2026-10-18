@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getPokemonByGeneration, getPokemonByType } from "@/api/catalog";
-import { getPokemonDetails } from "@/api/pokemon";
-import { genApiName } from "@/domain/dex";
+import { genListQuery, pokemonQuery, typeQuery } from "@/api/queries";
 import type { DexEra } from "@/domain/era";
 import { intersectByName } from "@/domain/intersect";
 import { typesAvailableIn } from "@/domain/pokemonTypes";
@@ -40,8 +38,8 @@ export const useFilteredPage = (
 ) => {
   const queryClient = useQueryClient();
 
-  // One request per selected type, each cached under its own ["typeList", type]
-  // key so toggling one type reuses whatever the other selection already got.
+  // One request per selected type, each under the type's own key, so toggling
+  // one type reuses what the other selection — or the chart page — already got.
   const {
     data: typeLists,
     isLoading: isTypeListLoading,
@@ -49,15 +47,7 @@ export const useFilteredPage = (
   } = useQuery({
     queryKey: ["typeLists", typeKey],
     queryFn: () =>
-      Promise.all(
-        types.map((type) =>
-          queryClient.fetchQuery({
-            queryKey: ["typeList", type],
-            queryFn: () => getPokemonByType(type),
-            staleTime: Infinity,
-          })
-        )
-      ),
+      Promise.all(types.map((type) => queryClient.fetchQuery(typeQuery(type)))),
     enabled: isTypeMode,
     staleTime: Infinity,
   });
@@ -66,12 +56,7 @@ export const useFilteredPage = (
     data: genData,
     isLoading: isGenListLoading,
     error: genError,
-  } = useQuery({
-    queryKey: ["genList", gen],
-    queryFn: () => getPokemonByGeneration(genApiName(gen!)),
-    enabled: isGenMode,
-    staleTime: Infinity,
-  });
+  } = useQuery({ ...genListQuery(gen), enabled: isGenMode });
 
   /** Every active type ANDed with the generation, then narrowed to the era. */
   const names = useMemo<NamedResource[]>(() => {
@@ -117,11 +102,7 @@ export const useFilteredPage = (
       // (form-only mons like deoxys, wormadam). Failed entries silently drop.
       const settled = await Promise.allSettled(
         pageNames.map((entry) =>
-          queryClient.fetchQuery({
-            queryKey: ["pokemon", entry.name],
-            queryFn: () => getPokemonDetails(entry.name),
-            staleTime: 1000 * 60 * 5,
-          })
+          queryClient.fetchQuery(pokemonQuery(entry.name))
         )
       );
       return settled

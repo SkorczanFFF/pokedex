@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ACTION } from "@/components/chips";
 import { useEra } from "@/era/context";
 import { hush, say } from "./pokedexVoice";
 
@@ -35,7 +36,7 @@ export const ReadButton = ({
         state === "idle" ? t("details.readEntry", { name }) : t("details.stopReading")
       }
       aria-busy={state === "loading"}
-      className="ml-2 align-middle whitespace-nowrap text-xs px-2 py-1 bg-[#FECB09] hover:bg-[#E12025] hover:text-white cursor-pointer"
+      className={`ml-2 align-middle whitespace-nowrap ${ACTION}`}
     >
       {state === "idle" && ` > ${t("details.read")}`}
       {state === "loading" && " ... "}

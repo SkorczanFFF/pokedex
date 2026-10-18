@@ -23,6 +23,19 @@ export const MenuCursor = () => (
   </span>
 );
 
+/** The panel's HP line: the label, the bar filled to `percent`, and a number if given. */
+export const HpBar = ({ percent, value }: { percent: number; value?: number }) => (
+  <div className="mt-2 flex items-center gap-2">
+    <span className="text-[8px] md:text-[10px]">HP:</span>
+    <div className="h-2 w-20 border-2 border-black md:w-28">
+      <div className="h-full bg-[#356DB2]" style={{ width: `${percent}%` }} />
+    </div>
+    {value !== undefined && (
+      <span className="text-[8px] md:text-[10px]">{value}</span>
+    )}
+  </div>
+);
+
 /** Gen 1 status panel: name and level on one line, HP bar under it. */
 const StatusBox = ({
   name,
@@ -38,12 +51,7 @@ const StatusBox = ({
       <span>{name}</span>
       <span className="ml-auto">:L{level}</span>
     </div>
-    <div className="mt-2 flex items-center gap-2">
-      <span className="text-[8px] md:text-[10px]">HP:</span>
-      <div className="h-2 w-20 border-2 border-black md:w-28">
-        <div className="h-full bg-[#356DB2]" style={{ width: `${hp}%` }} />
-      </div>
-    </div>
+    <HpBar percent={hp} />
   </div>
 );
 

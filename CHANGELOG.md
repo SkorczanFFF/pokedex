@@ -16,6 +16,50 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the compare pickers open on the whole dex, from Bulbasaur`
+
+- **Changed** — A picker on the compare page drops the whole dex of the era the moment it
+  is focused, in dex order with the numbers down the side, rather than waiting for a
+  letter. Typing narrows it. The eight-match cap is gone; the list scrolls, and the line
+  the keyboard is on is kept in view. Focusing selects the picked name, so a new one
+  replaces it at once.
+- **Changed** — The placeholders name Psyduck on the trainer's side and Slowpoke on the
+  opponent's, where both used to say Charizard.
+
+### `feat: a picker row owns a colour, an action is yellow, a reference page is framed`
+
+- **Changed** — The three rows of chips under a sprite — the generation, the game, the
+  picture — each take a colour of their own, the pressed one full and the rest a wash of
+  it: the app's blue for the generation, the Game Boy's green for the game, purple for the
+  picture. They used to be three rows of the same grey with one blue in each, which read
+  as one long question. The game picker on the encounters page takes the same green.
+- **Changed** — Every button that does something about this Pokémon — the cry, the
+  reading, where it is met, the compare with it picked — is the one yellow, out of one
+  constant. The two reference pages that are about no Pokémon in particular, the chart
+  from the badges and the compare from the chart, are framed in black on white instead of
+  the grey that made the chart chip look like one more sprite option.
+- **Added** — `Chip`, one component for a pressed-or-not option, and `components/chips.ts`
+  for the three vocabularies, so a new picker row says which kind it is rather than
+  spelling its colours.
+
+### `refactor: every resource is one query, defined once, and a type is fetched once`
+
+- **Changed** — `api/queries.ts` defines every resource the app reads — a Pokémon, the name
+  index, a page of the dex, a type, a generation's species, a species, encounters, an
+  evolution chain, a move — as `queryOptions`, and every page and hook reads those rather
+  than spelling `["pokemon", name]` by hand. The chart and the compare page read one
+  `useTypeChart(gen)`. React Query was already the shared store; this makes the sharing
+  a matter of the same key being written in one place.
+- **Changed** — `/type/{name}` is fetched once for both of its readers. The chart read its
+  damage relations and the filter its member list, each under its own key, so picking a
+  type on the list and opening the chart cost the same request twice.
+- **Changed** — The plain dex page hydrates its cards through the per-Pokémon cache, so
+  opening a card finds its details already there instead of asking again.
+- **Checked** — Redux or MobX were considered and set aside. The only client state is the
+  era (context and storage) and the language (i18next); everything else is server data,
+  which React Query already fetches once and hands to every reader. A second store would
+  hold a copy of the first.
+
 ### `feat: the navbar carries the era, the language and the two pages, folded into a menu on a phone`
 
 - **Added** — From `md` up, everything but the logo sits on the right in one order: Retro,

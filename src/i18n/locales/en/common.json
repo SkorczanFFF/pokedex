@@ -18,18 +18,20 @@
     "noEffect": "no effect",
     "neutral": "normal damage",
     "changes": "What read differently before",
-    "change": "{{attack}} → {{defender}}: ×{{from}} through Gen {{through}}, ×{{to}} from Gen {{since}}"
+    "change": "{{attack}} → {{defender}}: ×{{from}} through Gen {{through}}, ×{{to}} from Gen {{since}}",
+    "versusAd": "Pick any two Pokémon and see whose types hit harder."
   },
-  "compare": {
+  "versus": {
     "title": "Pokémon vs Pokémon",
-    "link": "Compare",
+    "link": "Versus",
     "intro": "Pick two Pokémon to see what each one's types do to the other, as of Gen {{roman}}. One alone shows what every type does to it.",
     "yours": "Your Pokémon",
     "foe": "Opponent",
-    "pickPlaceholder": "e.g. Charizard",
+    "pickYours": "e.g. Psyduck",
+    "pickFoe": "e.g. Slowpoke",
     "noMatches": "No Pokémon by that name",
     "clear": "Remove",
-    "swap": "Swap sides",
+    "swap": "Swap",
     "attacks": "{{name}} attacks",
     "profile": "Types against {{name}}",
     "super": "It's super effective!",
@@ -40,7 +42,9 @@
     "tabStats": "Stats",
     "empty": "Pick two Pokémon above, or one to see its weaknesses.",
     "notFound": "There is no Pokémon named {{name}}.",
-    "abilitiesNote": "Types only. Abilities that change a matchup — Levitate, Flash Fire, Wonder Guard — are not counted."
+    "abilitiesNote": "Types only. Abilities that change a matchup — Levitate, Flash Fire, Wonder Guard — are not counted.",
+    "chartAd": "See what every type does to every other in the type chart.",
+    "chartAdLine": "Fire, Water, Grass — and {{count}} more."
   },
   "language": {
     "en": "English",

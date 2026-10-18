@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getPokemonDetails, getPokemonList } from "@/api/pokemon";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { pokemonListQuery, pokemonQuery } from "@/api/queries";
 import type { DexEra } from "@/domain/era";
 import { resourceIdFromUrl } from "@/domain/resource";
 import type { Pokemon } from "@/types/pokemon";
@@ -18,17 +18,14 @@ export const useDefaultPage = (
   { page, perPage, isSearchMode, isFilterMode }: ListParams,
   era: DexEra
 ) => {
+  const queryClient = useQueryClient();
   const enabled = !isSearchMode && !isFilterMode;
 
   const {
     data: list,
     isLoading: isListLoading,
     error: listError,
-  } = useQuery({
-    queryKey: ["pokemonList", page, perPage],
-    queryFn: () => getPokemonList(perPage, (page - 1) * perPage),
-    enabled,
-  });
+  } = useQuery({ ...pokemonListQuery(page, perPage), enabled });
 
   const names = (list?.results ?? []).filter(
     (entry) => resourceIdFromUrl(entry.url) <= era.maxDexId
@@ -40,8 +37,11 @@ export const useDefaultPage = (
     error: detailsError,
   } = useQuery({
     queryKey: ["pokemonDetails", page, perPage, era.maxDexId],
+    // Through the cache, so a card's details are already there when it is opened.
     queryFn: async (): Promise<Pokemon[]> =>
-      Promise.all(names.map((entry) => getPokemonDetails(entry.name))),
+      Promise.all(
+        names.map((entry) => queryClient.fetchQuery(pokemonQuery(entry.name)))
+      ),
     enabled: !!list?.results && enabled,
   });
 

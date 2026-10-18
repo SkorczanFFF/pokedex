@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { PAGE_LINK } from "@/components/chips";
 import { typeClass } from "@/domain/pokemonTypes";
 import { typesInEra } from "@/domain/pokemonView";
 import { useEra } from "@/era/context";
@@ -28,13 +29,9 @@ export const TypeBadges = ({ pokemon }: { pokemon: Pokemon }) => {
           {typeLabel(type.type.name)}
         </Link>
       ))}
-      {/* The chart, a step from the types it is about — the one place it is
-          linked from, so it sits where a reader wonders what the badges mean.
-          A grey chip, not a coloured one: the colours are the types. */}
-      <Link
-        to="/types"
-        className="ml-2 px-3 py-1 text-xs bg-gray-200 text-black hover:bg-[#FECB09] cursor-pointer"
-      >
+      {/* The chart, a step from the types it is about, where a reader wonders
+          what the badges mean. Framed, not coloured: the colours are the types. */}
+      <Link to="/types" className={`ml-2 ${PAGE_LINK}`}>
         {t("types.link")}
       </Link>
     </div>

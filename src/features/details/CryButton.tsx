@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { ACTION } from "@/components/chips";
 import { cryForSet } from "@/domain/pokemonView";
 import type { SpriteSetId } from "@/domain/sprites";
 import { playCry } from "./cry";
@@ -25,7 +26,7 @@ export const CryButton = ({
     <button
       onClick={() => playCry(cry)}
       aria-label={t("details.playCry", { name: pokemon.name })}
-      className="text-xs px-2 py-1 bg-[#FECB09] hover:bg-[#E12025] hover:text-white cursor-pointer"
+      className={ACTION}
     >
       {" > "}
       {t("details.cry")}

@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEra } from "@/era/context";
-import { getPokemonDetails, getPokemonList } from "@/api/pokemon";
+import { pokemonListQuery, pokemonQuery } from "@/api/queries";
 import type { Pokemon } from "@/types/pokemon";
 import { useDefaultPage } from "./useDefaultPage";
 import { useFilteredPage } from "./useFilteredPage";
@@ -71,17 +71,10 @@ export const useListData = (
         page * params.perPage
       );
       slice.forEach((entry) =>
-        queryClient.prefetchQuery({
-          queryKey: ["pokemon", entry.name],
-          queryFn: () => getPokemonDetails(entry.name),
-        })
+        queryClient.prefetchQuery(pokemonQuery(entry.name))
       );
     } else if (!params.isSearchMode) {
-      queryClient.prefetchQuery({
-        queryKey: ["pokemonList", page, params.perPage],
-        queryFn: () =>
-          getPokemonList(params.perPage, (page - 1) * params.perPage),
-      });
+      queryClient.prefetchQuery(pokemonListQuery(page, params.perPage));
     }
   };
 

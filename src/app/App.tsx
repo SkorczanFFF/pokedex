@@ -1,17 +1,29 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { PokemonListPage } from "@/features/list/PokemonListPage";
 import { PokemonDetailsPage } from "@/features/details/PokemonDetailsPage";
 import { EncountersPage } from "@/features/details/EncountersPage";
 import { NotFound } from "@/features/not-found/NotFound";
 import { TypeChartPage } from "@/features/types/TypeChartPage";
-import { ComparePage } from "@/features/compare/ComparePage";
+import { VersusPage } from "@/features/versus/VersusPage";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { EraProvider } from "@/era/EraProvider";
 import { queryClient } from "./queryClient";
 import "@/global.css";
+
+/** Versus first shipped at `/compare`; links to it still land, picks and all. */
+const FormerVersusAddress = () => {
+  const { search } = useLocation();
+  return <Navigate to={`/versus${search}`} replace />;
+};
 
 function App() {
   return (
@@ -31,7 +43,8 @@ function App() {
                   element={<EncountersPage />}
                 />
                 <Route path="/types" element={<TypeChartPage />} />
-                <Route path="/compare" element={<ComparePage />} />
+                <Route path="/versus" element={<VersusPage />} />
+                <Route path="/compare" element={<FormerVersusAddress />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

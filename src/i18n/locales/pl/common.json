@@ -18,18 +18,20 @@
     "noEffect": "bez efektu",
     "neutral": "zwykłe obrażenia",
     "changes": "Co wcześniej było inaczej",
-    "change": "{{attack}} → {{defender}}: ×{{from}} do Gen {{through}}, ×{{to}} od Gen {{since}}"
+    "change": "{{attack}} → {{defender}}: ×{{from}} do Gen {{through}}, ×{{to}} od Gen {{since}}",
+    "versusAd": "Wybierz dowolne dwa Pokémony i sprawdź, czyje typy biją mocniej."
   },
-  "compare": {
+  "versus": {
     "title": "Pokémon kontra Pokémon",
-    "link": "Porównaj",
+    "link": "Versus",
     "intro": "Wybierz dwa Pokémony, żeby zobaczyć, co typy każdego z nich robią drugiemu, według stanu na Gen {{roman}}. Jeden sam pokazuje, co robi mu każdy typ.",
     "yours": "Twój Pokémon",
     "foe": "Przeciwnik",
-    "pickPlaceholder": "np. Charizard",
+    "pickYours": "np. Psyduck",
+    "pickFoe": "np. Slowpoke",
     "noMatches": "Nie ma Pokémona o takiej nazwie",
     "clear": "Usuń",
-    "swap": "Zamień strony",
+    "swap": "Zamień",
     "attacks": "{{name}} atakuje",
     "profile": "Typy przeciw {{name}}",
     "super": "Bardzo skuteczny!",
@@ -40,7 +42,9 @@
     "tabStats": "Statystyki",
     "empty": "Wybierz wyżej dwa Pokémony, albo jednego, żeby zobaczyć jego słabości.",
     "notFound": "Nie ma Pokémona o nazwie {{name}}.",
-    "abilitiesNote": "Tylko typy. Umiejętności zmieniające starcie — Levitate, Flash Fire, Wonder Guard — nie są liczone."
+    "abilitiesNote": "Tylko typy. Umiejętności zmieniające starcie — Levitate, Flash Fire, Wonder Guard — nie są liczone.",
+    "chartAd": "Zobacz w tabeli typów, co każdy typ robi każdemu innemu.",
+    "chartAdLine": "Ogień, woda, trawa — i {{count}} kolejnych."
   },
   "language": {
     "en": "English",

@@ -2,7 +2,7 @@ import type { TypeResource } from "@/types/damage";
 import { get } from "./client";
 
 /**
- * One type's damage relations, today's and every earlier set. The chart is
+ * One type: its damage relations, today's and every earlier set, and every Pokémon of it. The chart is
  * eighteen of these — one request per type rather than a table written from
  * memory, because the relations have changed four times across the
  * generations and PokéAPI dates every change.

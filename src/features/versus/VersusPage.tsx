@@ -1,30 +1,28 @@
 import { useState, type ReactNode } from "react";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { NotFoundError } from "@/api/client";
-import { getPokemonDetails } from "@/api/pokemon";
-import { getType } from "@/api/types";
+import { pokemonQuery } from "@/api/queries";
+import { Arrow } from "@/components/Arrow";
 import { MENU_ITEM } from "@/components/BattleScreen";
+import { ACTION } from "@/components/chips";
 import { genRoman, generationFromId } from "@/domain/dex";
 import type { DexEra } from "@/domain/era";
-import { typesUpTo } from "@/domain/pokemonTypes";
-import { typeChart, type TypeChart } from "@/domain/typeChart";
+import type { TypeChart } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
+import { useTypeChart } from "@/features/types/useTypeChart";
 import { humanize } from "@/i18n/labels";
 import { BattleField, type Fighter, type Known, type Side } from "./BattleField";
 import { Attacks, Profile } from "./Matchup";
 import { PokemonPicker } from "./PokemonPicker";
 import { StatDuel } from "./StatDuel";
+import { TypeChartAd } from "./TypeChartAd";
 
 type Tab = "types" | "stats";
 
 const useFighter = (side: Side, name: string | null, era: DexEra): Fighter => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["pokemon", name],
-    queryFn: () => getPokemonDetails(name!),
-    enabled: !!name,
-  });
+  const { data, isLoading, error } = useQuery(pokemonQuery(name));
 
   if (!name) return { side, name, pokemon: null, status: "empty" };
   if (isLoading) return { side, name, pokemon: null, status: "loading" };
@@ -45,7 +43,7 @@ const useFighter = (side: Side, name: string | null, era: DexEra): Fighter => {
  * Both slots live in the URL (`?a=x&b=y`) so a matchup is a link. The chart
  * comes from the same eighteen type requests the chart page keeps.
  */
-export const ComparePage = () => {
+export const VersusPage = () => {
   const { t } = useTranslation();
   const { era } = useEra();
   const [params, setParams] = useSearchParams();
@@ -55,20 +53,7 @@ export const ComparePage = () => {
   const foe = useFighter("b", b, era);
   const [tab, setTab] = useState<Tab>("types");
 
-  const typeQueries = useQueries({
-    queries: typesUpTo(era.maxGen).map((name) => ({
-      queryKey: ["type", name],
-      queryFn: () => getType(name),
-    })),
-  });
-  const chartError = typeQueries.some((q) => q.error);
-  const chart =
-    chartError || typeQueries.some((q) => q.isLoading)
-      ? null
-      : typeChart(
-          typeQueries.flatMap((q) => (q.data ? [q.data] : [])),
-          era.maxGen,
-        );
+  const { chart, error: chartError } = useTypeChart(era.maxGen);
 
   const set = (patch: Partial<Record<Side, string | null>>) =>
     setParams((prev) => {
@@ -82,14 +67,15 @@ export const ComparePage = () => {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <h1 className="text-2xl mb-3">{t("compare.title")}</h1>
+      <h1 className="text-2xl mb-3">{t("versus.title")}</h1>
       <p className="mb-6 text-xs leading-relaxed text-gray-500">
-        {t("compare.intro", { roman: genRoman(era.maxGen) })}
+        {t("versus.intro", { roman: genRoman(era.maxGen) })}
       </p>
 
       <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end">
         <PokemonPicker
-          label={t("compare.yours")}
+          label={t("versus.yours")}
+          placeholder={t("versus.pickYours")}
           value={a}
           onPick={(name) => set({ a: name })}
         />
@@ -97,12 +83,17 @@ export const ComparePage = () => {
           type="button"
           onClick={() => set({ a: b, b: a })}
           disabled={!a && !b}
-          className="h-9 self-center px-3 text-xs bg-gray-200 text-black cursor-pointer hover:bg-[#FECB09] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-gray-200 md:self-end"
+          className={`${ACTION} flex h-9 shrink-0 items-center gap-2 self-center whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#FECB09] disabled:hover:text-black md:self-end`}
         >
-          {t("compare.swap")}
+          {/* One arrow towards each picker: up and down while they are
+              stacked, left and right once they sit side by side. */}
+          <Arrow className="rotate-180 md:rotate-90" />
+          {t("versus.swap")}
+          <Arrow className="md:-rotate-90" />
         </button>
         <PokemonPicker
-          label={t("compare.foe")}
+          label={t("versus.foe")}
+          placeholder={t("versus.pickFoe")}
           value={b}
           onPick={(name) => set({ b: name })}
         />
@@ -115,11 +106,18 @@ export const ComparePage = () => {
           yours={yours}
           foe={foe}
           chart={chart}
-          chartError={chartError}
+          chartError={chartError !== null}
           tab={tab}
           onTab={setTab}
         />
       </div>
+
+      {/* Last, as the chart page ends on Versus: the way back to all of it. */}
+      {chart && (
+        <div className="mt-10">
+          <TypeChartAd chart={chart} />
+        </div>
+      )}
     </div>
   );
 };
@@ -171,10 +169,10 @@ const Message = ({
         <>
           <div className="flex gap-8">
             <TabButton active={tab === "types"} onClick={() => onTab("types")}>
-              {t("compare.tabTypes")}
+              {t("versus.tabTypes")}
             </TabButton>
             <TabButton active={tab === "stats"} onClick={() => onTab("stats")}>
-              {t("compare.tabStats")}
+              {t("versus.tabStats")}
             </TabButton>
           </div>
           {tab === "types" ? (
@@ -199,13 +197,13 @@ const Message = ({
       {ready.length === 1 && <Profile chart={chart} pokemon={ready[0].pokemon} />}
 
       {ready.length === 0 && problems.length === 0 && (
-        <p className="text-xs leading-relaxed">{t("compare.empty")}</p>
+        <p className="text-xs leading-relaxed">{t("versus.empty")}</p>
       )}
 
       {/* Retro has no abilities to leave out. */}
       {ready.length > 0 && era.hasAbilities && (
         <p className="text-[10px] leading-relaxed text-gray-500">
-          {t("compare.abilitiesNote")}
+          {t("versus.abilitiesNote")}
         </p>
       )}
     </div>
@@ -227,7 +225,7 @@ const Problem = ({ fighter }: { fighter: Fighter }) => {
       max: era.maxDexId,
     });
   } else if (fighter.status === "notFound") {
-    text = t("compare.notFound", { name });
+    text = t("versus.notFound", { name });
   } else {
     text = t("error.details");
   }
