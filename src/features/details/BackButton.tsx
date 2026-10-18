@@ -26,7 +26,7 @@ export const BackButton = () => {
   return (
     <button
       onClick={handleBack}
-      className="inline-block text-black bg-[#FECB09] hover:bg-[#E12025] hover:text-white px-4 py-2 cursor-pointer"
+      className="inline-block text-black bg-dex-yellow hover:bg-dex-red hover:text-white px-4 py-2 cursor-pointer"
     >
       {t("details.back")}
     </button>

@@ -22,10 +22,10 @@ const EraToggle = () => {
       // The dashed frame is what separates it from EN | PL beside it: those
       // pick a language, this one changes what the whole dex is. Without it the
       // three read as one group of three choices.
-      className={`border border-dashed px-2 py-1 text-xs cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
+      className={`border border-dashed px-2 py-1 text-xs cursor-pointer focus-ring ${
         isRetro
-          ? "border-black/50 bg-[#FECB09] text-black"
-          : "border-white/60 text-white hover:bg-[#c11a1e]"
+          ? "border-black/50 bg-dex-yellow text-black"
+          : "border-white/60 text-white hover:bg-dex-red-dark"
       }`}
     >
       {t("era.retro")}

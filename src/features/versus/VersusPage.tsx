@@ -95,7 +95,7 @@ export const VersusPage = () => {
           type="button"
           onClick={params.swap}
           disabled={!params.a.name && !params.b.name}
-          className={`${ACTION} flex h-9 shrink-0 items-center gap-2 self-center whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#FECB09] disabled:hover:text-black md:mt-6 md:self-start`}
+          className={`${ACTION} flex h-9 shrink-0 items-center gap-2 self-center whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-dex-yellow disabled:hover:text-black md:mt-6 md:self-start`}
         >
           {/* One arrow towards each picker: up and down while they are
               stacked, left and right once they sit side by side. */}
@@ -209,7 +209,7 @@ const Message = ({
 
   if (chartError) {
     return (
-      <p role="alert" className="text-xs text-[#E12025]">
+      <p role="alert" className="text-xs text-dex-red">
         {t("error.types")}
       </p>
     );
@@ -335,7 +335,7 @@ const TabButton = ({
     onClick={onClick}
     aria-pressed={active}
     className={`${MENU_ITEM} px-2 py-1 ${
-      active ? "bg-[#FECB09] text-black hover:text-black" : ""
+      active ? "bg-dex-yellow text-black hover:text-black" : ""
     }`}
   >
     <span

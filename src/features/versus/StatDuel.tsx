@@ -20,8 +20,8 @@ export const StatDuel = ({ yours, foe }: { yours: Pokemon; foe: Pokemon }) => {
   return (
     <div>
       <div className="mb-4 flex justify-between text-[10px]">
-        <span className="text-[#356DB2]">{humanize(yours.name)}</span>
-        <span className="text-[#E12025]">{humanize(foe.name)}</span>
+        <span className="text-dex-blue">{humanize(yours.name)}</span>
+        <span className="text-dex-red">{humanize(foe.name)}</span>
       </div>
       <dl className="space-y-3">
         {rows.map((row) => (
@@ -33,11 +33,11 @@ export const StatDuel = ({ yours, foe }: { yours: Pokemon; foe: Pokemon }) => {
               <span className={`text-right ${row.a < row.b ? "text-gray-400" : ""}`}>
                 {row.a}
               </span>
-              <div className="flex h-4 justify-end bg-[#EAEBF2]">
-                <div className="h-full bg-[#356DB2]" style={{ width: width(row.a) }} />
+              <div className="flex h-4 justify-end bg-dex-bg">
+                <div className="h-full bg-dex-blue" style={{ width: width(row.a) }} />
               </div>
-              <div className="flex h-4 bg-[#EAEBF2]">
-                <div className="h-full bg-[#E12025]" style={{ width: width(row.b) }} />
+              <div className="flex h-4 bg-dex-bg">
+                <div className="h-full bg-dex-red" style={{ width: width(row.b) }} />
               </div>
               <span className={row.b < row.a ? "text-gray-400" : ""}>{row.b}</span>
             </dd>

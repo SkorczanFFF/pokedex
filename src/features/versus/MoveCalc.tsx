@@ -35,7 +35,7 @@ import { MAX_LEVEL, MIN_LEVEL, clampLevel, type SideParams } from "./useVersusPa
 
 /** Every box a number or a move goes in: one height, one size of type. */
 const INPUT = "h-8 border-2 bg-white px-2 text-[10px] text-black";
-const SIDE_COLOUR: Record<Side, string> = { a: "text-[#356DB2]", b: "text-[#E12025]" };
+const SIDE_COLOUR: Record<Side, string> = { a: "text-dex-blue", b: "text-dex-red" };
 const OTHER: Record<Side, Side> = { a: "b", b: "a" };
 
 type Edits = Readonly<Record<string, number>>;
@@ -373,7 +373,7 @@ const Result = ({
   }
   if (error || !data) {
     return (
-      <p role="alert" className="text-xs text-[#E12025]">
+      <p role="alert" className="text-xs text-dex-red">
         {t("error.details")}
       </p>
     );
@@ -424,7 +424,7 @@ const Result = ({
           {damageClassLabel(cls)}
         </span>
         {stab && (
-          <span className="bg-[#FECB09] px-2 py-1 text-[10px] leading-none">
+          <span className="bg-dex-yellow px-2 py-1 text-[10px] leading-none">
             {t("versus.stab")}
           </span>
         )}

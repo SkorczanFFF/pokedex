@@ -123,7 +123,7 @@ export const PokemonPicker = ({
             type="button"
             onClick={() => onPick(null)}
             aria-label={t("versus.clear")}
-            className="h-9 px-3 bg-[#E12025] text-sm text-white cursor-pointer hover:bg-red-700"
+            className="h-9 px-3 bg-dex-red text-sm text-white cursor-pointer hover:bg-red-700"
           >
             X
           </button>
@@ -151,7 +151,7 @@ export const PokemonPicker = ({
                 }}
                 onMouseEnter={() => setActive(index)}
                 className={`flex cursor-pointer items-center gap-2 px-2 py-2 capitalize ${
-                  index === active ? "bg-[#FECB09]" : ""
+                  index === active ? "bg-dex-yellow" : ""
                 }`}
               >
                 <span aria-hidden="true" className={index === active ? "" : "opacity-0"}>

@@ -204,11 +204,11 @@ const NodeCard = ({
   // link dashes it in black instead of flooding it yellow, which would fight
   // the white panel the same way.
   const currentTile = isSprite
-    ? "border-dashed border-[#E12025] bg-[#EAEBF2]"
-    : "border-transparent bg-[#FECB09]";
+    ? "border-dashed border-dex-red bg-dex-bg"
+    : "border-transparent bg-dex-yellow";
   const linkTile = isSprite
-    ? "border-dashed border-transparent bg-[#EAEBF2] hover:border-black/50"
-    : "border-transparent bg-[#EAEBF2] hover:bg-[#FECB09]";
+    ? "border-dashed border-transparent bg-dex-bg hover:border-black/50"
+    : "border-transparent bg-dex-bg hover:bg-dex-yellow";
 
   const body = (
     <>
@@ -230,7 +230,7 @@ const NodeCard = ({
         {/* The same `>` the battle screen's menu uses — `aria-current` already
             says this to a screen reader, so it is decoration. */}
         {isSprite && isCurrent && (
-          <span aria-hidden="true" className="mr-1 text-[#E12025]">
+          <span aria-hidden="true" className="mr-1 text-dex-red">
             {">"}
           </span>
         )}

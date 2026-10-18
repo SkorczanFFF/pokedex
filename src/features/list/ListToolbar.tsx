@@ -49,8 +49,8 @@ export const ListToolbar = ({
       </div>
 
       {/* Mobile: search stays reachable, everything else sits behind one
-          button. Sticks directly under the fixed h-12 navbar. */}
-      <div className="md:hidden sticky top-12 z-40 -mx-4 mb-6 flex items-center gap-2 bg-[#eaebf2] px-4 py-2">
+          button. Sticks directly under the fixed navbar, whose height is `--spacing-nav`. */}
+      <div className="md:hidden sticky top-nav z-40 -mx-4 mb-6 flex items-center gap-2 bg-dex-bg px-4 py-2">
         <SearchBox
           compact
           initialQuery={params.query}
@@ -61,7 +61,7 @@ export const ListToolbar = ({
         <button
           onClick={onOpenFilters}
           aria-expanded={isFiltersOpen}
-          className="h-9 shrink-0 px-3 bg-[#356DB2] text-white text-sm cursor-pointer hover:bg-[#E12025]"
+          className="h-9 shrink-0 px-3 bg-dex-blue text-white text-sm cursor-pointer hover:bg-dex-red"
         >
           {filterCount > 0
             ? t("filters.openWithCount", { count: filterCount })

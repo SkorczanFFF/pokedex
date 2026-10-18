@@ -190,7 +190,7 @@ const FighterBox = ({ fighter }: { fighter: Fighter }) => {
         {ready ? (
           <Link
             to={`/pokemon/${ready.name}`}
-            className="uppercase hover:text-[#E12025]"
+            className="uppercase hover:text-dex-red"
           >
             {humanize(ready.name)}
           </Link>

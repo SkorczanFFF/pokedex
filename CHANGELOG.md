@@ -16,6 +16,27 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `refactor: the colours, the navbar's height and the focus ring are theme tokens, named once`
+
+- **Changed** — The app's colours are declared once, in `@theme` in `index.css`: `dex-red`,
+  `dex-red-dark`, `dex-yellow`, `dex-blue`, `dex-bg`, `dex-purple`, `gb-green`,
+  `gb-green-dark` and the four effect shades. Components spell `bg-dex-red` rather than
+  `bg-[#E12025]`, which ninety-odd places across thirty files had typed out by hand — in two
+  spellings of the background grey, and with one yellow that was not quite the other. The
+  eighteen type colours and the move-method accents stay as the keyed tables they are. The
+  navbar's height is `--spacing-nav`, read by the navbar itself, the page's top padding, the
+  sticky search bar, the filter sheet and the move panel's offset, each of which had carried
+  its own 48px. The focus outline is one `focus-ring` utility (and `focus-ring-dark`) in
+  place of the same three classes typed seven times. First phase of the refactor plan in
+  `REVIEW.md`; nothing on screen changes but the pagination's yellow.
+- **Changed** — One stylesheet. `global.css` folds into `index.css`, the loader's keyframe
+  gets a name, and the pixel font is linked from `index.html` with a preconnect rather than
+  imported from inside the CSS, where it blocked the stylesheet behind it. The changelog,
+  the review and the plan are excluded from Tailwind's class scan: it reads Markdown too,
+  and a class quoted in prose was becoming a rule in the stylesheet.
+- **Fixed** — The pagination's hover yellow was `#FFCD0B` where every other yellow in the
+  app is `#FECB09`. It takes the token like the rest.
+
 ### `feat: Versus calculates a hit, and reads the abilities that change a matchup`
 
 - **Added** — A third tab on Versus, Moves: a calculator, not a simulation. Each side picks

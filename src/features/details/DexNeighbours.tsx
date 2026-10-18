@@ -68,7 +68,7 @@ const Step = ({
   // The arrow reads as the direction; the name is the label a reader wants and
   // a screen reader gets both, in a sentence, off the link itself.
   const chevron = (
-    <span aria-hidden="true" className="text-[#E12025]">
+    <span aria-hidden="true" className="text-dex-red">
       {arrow}
     </span>
   );
@@ -90,7 +90,7 @@ const Step = ({
     <Link
       to={`/pokemon/${name}`}
       aria-label={t(`details.${label}`, { name })}
-      className={`${STEP} ${order} bg-gray-300 text-black cursor-pointer hover:bg-[#FECB09]`}
+      className={`${STEP} ${order} bg-gray-300 text-black cursor-pointer hover:bg-dex-yellow`}
     >
       {chevron}
       <span aria-hidden="true">{name}</span>

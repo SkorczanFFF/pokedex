@@ -30,7 +30,7 @@ export const Pagination = ({
         onClick={() => onPageChange(currentPage - 1)}
         onMouseEnter={() => handlePrefetch(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-[#FFCD0B] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
+        className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-dex-yellow disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
       >
         {t("pagination.prev")}
       </button>
@@ -58,8 +58,8 @@ export const Pagination = ({
               aria-current={isActive ? "page" : undefined}
               className={`w-10 h-10 text-sm cursor-pointer ${
                 isActive
-                  ? "bg-[#356DB2] text-white"
-                  : "bg-gray-300 hover:bg-[#FFCD0B]"
+                  ? "bg-dex-blue text-white"
+                  : "bg-gray-300 hover:bg-dex-yellow"
               }`}
             >
               {pageNumber}
@@ -72,7 +72,7 @@ export const Pagination = ({
         onClick={() => onPageChange(currentPage + 1)}
         onMouseEnter={() => handlePrefetch(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-[#FFCD0B] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
+        className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-dex-yellow disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
       >
         {t("pagination.next")}
       </button>

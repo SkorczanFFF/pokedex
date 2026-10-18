@@ -5,7 +5,7 @@ function ErrorView({ errorType }: { errorType: "list" | "details" | "types" }) {
 
   return (
     <div role="alert" className="flex justify-center items-center py-16">
-      <div className="text-[#E12025] text-center">
+      <div className="text-dex-red text-center">
         <p className="text-xl font-semibold">{t(`error.${errorType}`)}</p>
         <p className="mt-2">{t("error.retry")}</p>
       </div>

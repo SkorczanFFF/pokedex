@@ -74,15 +74,15 @@ export const FiltersPanel = ({
         role="dialog"
         aria-modal="true"
         aria-label={t("filters.title")}
-        className="absolute inset-x-0 top-12 flex max-h-[calc(100dvh-3rem)] flex-col bg-[#eaebf2]"
+        className="absolute inset-x-0 top-nav flex max-h-[calc(100dvh_-_var(--spacing-nav))] flex-col bg-dex-bg"
       >
-        <div className="flex items-center justify-between h-12 px-4 bg-[#E12025] text-white shrink-0">
+        <div className="flex items-center justify-between h-nav px-4 bg-dex-red text-white shrink-0">
           <span className="text-xl font-bold">{t("filters.title")}</span>
           <button
             ref={closeRef}
             onClick={onClose}
             aria-label={t("filters.close")}
-            className="px-3 py-1 text-sm cursor-pointer hover:bg-[#c11a1e] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="px-3 py-1 text-sm cursor-pointer hover:bg-dex-red-dark focus-ring"
           >
             X
           </button>
@@ -112,13 +112,13 @@ export const FiltersPanel = ({
           <button
             onClick={onClearAll}
             disabled={!hasActiveFilters}
-            className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-[#FECB09] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-dex-yellow disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
           >
             {t("filters.clearAll")}
           </button>
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 bg-[#FECB09] text-black text-sm cursor-pointer hover:bg-[#E12025] hover:text-white"
+            className="flex-1 px-4 py-2 bg-dex-yellow text-black text-sm cursor-pointer hover:bg-dex-red hover:text-white"
           >
             {resultCount === null
               ? t("filters.showResults")

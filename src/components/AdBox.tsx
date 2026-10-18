@@ -31,10 +31,10 @@ export const AdBox = ({
 /** Lettered like Pokémon Stadium's box: the logo's yellow and blue over a bigger red word. */
 export const StadiumTitle = ({ children }: { children: ReactNode }) => (
   <span aria-hidden="true" className="block leading-tight">
-    <span className="block text-[8px] tracking-widest text-[#FECB09] [filter:drop-shadow(1px_0_0_#356DB2)_drop-shadow(-1px_0_0_#356DB2)_drop-shadow(0_1px_0_#356DB2)_drop-shadow(0_-1px_0_#356DB2)] md:text-[10px]">
+    <span className="block text-[8px] tracking-widest text-dex-yellow [filter:drop-shadow(1px_0_0_var(--color-dex-blue))_drop-shadow(-1px_0_0_var(--color-dex-blue))_drop-shadow(0_1px_0_var(--color-dex-blue))_drop-shadow(0_-1px_0_var(--color-dex-blue))] md:text-[10px]">
       POKÉMON
     </span>
-    <span className="block text-sm uppercase tracking-wider text-[#E12025] [filter:drop-shadow(2px_2px_0_#000)] md:text-base">
+    <span className="block text-sm uppercase tracking-wider text-dex-red [filter:drop-shadow(2px_2px_0_#000)] md:text-base">
       {children}
     </span>
   </span>
@@ -42,7 +42,7 @@ export const StadiumTitle = ({ children }: { children: ReactNode }) => (
 
 /** The line under the art: the menu cursor, lit with the line when the box is hovered. */
 export const AdAction = ({ children }: { children: ReactNode }) => (
-  <span className="mt-2 block text-[10px] group-hover:text-[#E12025]">
+  <span className="mt-2 block text-[10px] group-hover:text-dex-red">
     <MenuCursor /> {children}
   </span>
 );

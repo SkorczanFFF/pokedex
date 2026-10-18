@@ -84,7 +84,7 @@ export const EncountersPage = () => {
       <Link
         to={`/pokemon/${pokemon.name}`}
         state={location.state}
-        className="inline-block mb-8 text-black bg-[#FECB09] hover:bg-[#E12025] hover:text-white px-4 py-2 cursor-pointer"
+        className="inline-block mb-8 text-black bg-dex-yellow hover:bg-dex-red hover:text-white px-4 py-2 cursor-pointer"
       >
         {t("encounters.back", { name: humanize(pokemon.name) })}
       </Link>
@@ -132,7 +132,7 @@ export const EncountersPage = () => {
                 type="button"
                 onClick={() => setShowAll(!showAll)}
                 aria-expanded={showAll}
-                className="mt-8 px-3 py-1 bg-gray-200 text-black text-xs cursor-pointer hover:bg-[#FECB09]"
+                className="mt-8 px-3 py-1 bg-gray-200 text-black text-xs cursor-pointer hover:bg-dex-yellow"
               >
                 {showAll
                   ? t("encounters.showLess")

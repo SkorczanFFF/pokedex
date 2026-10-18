@@ -29,7 +29,7 @@ export const VersusAd = () => {
           <LifeBar name={YOURS.name} />
           <span
             aria-hidden="true"
-            className="-skew-x-12 text-xl text-[#E12025] [filter:drop-shadow(2px_2px_0_#000)] md:text-2xl"
+            className="-skew-x-12 text-xl text-dex-red [filter:drop-shadow(2px_2px_0_#000)] md:text-2xl"
           >
             VS
           </span>
@@ -51,7 +51,7 @@ const LifeBar = ({ name, flipped = false }: { name: string; flipped?: boolean })
       {humanize(name)}
     </span>
     <span aria-hidden="true" className="block h-1.5 w-full border border-black">
-      <span className="block h-full bg-[#356DB2]" />
+      <span className="block h-full bg-dex-blue" />
     </span>
   </span>
 );

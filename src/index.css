@@ -1,5 +1,118 @@
 @import "tailwindcss";
 
+/* Tailwind reads every file in the repo for class names, prose included; the
+   notes quote classes they talk about, and those must not become CSS. */
+@source not "../CHANGELOG.md";
+@source not "../REVIEW.md";
+@source not "../PLAN.md";
+
+/*
+ * The app's own tokens, named once. Tailwind turns each `--color-*` into the
+ * usual utilities (`bg-dex-red`, `hover:text-dex-yellow`, `bg-dex-blue/15`)
+ * and `--spacing-nav` into `h-nav`, `pt-nav`, `top-nav`.
+ *
+ * The eighteen type colours and the move-method accents are tables of their
+ * own in the code, keyed by slug, and stay there.
+ */
 @theme {
   --font-press-start: "Press Start 2P", "system-ui";
+
+  /* The Pokédex: its red shell, the dark red a button presses to, the yellow
+     of anything that can be pressed about a Pokémon, the blue of a measured
+     number, the grey-blue of the page behind the cards. */
+  --color-dex-red: #e12025;
+  --color-dex-red-dark: #c11a1e;
+  --color-dex-yellow: #fecb09;
+  --color-dex-blue: #356db2;
+  --color-dex-bg: #eaebf2;
+  /* The picture picker's row, neither a date nor a game. */
+  --color-dex-purple: #7d3c98;
+
+  /* The Game Boy's green, light for a wash and dark when pressed. */
+  --color-gb-green: #8bac0f;
+  --color-gb-green-dark: #306230;
+
+  /* What a hit does, by range: super effective and doubly so, not very
+     effective and doubly so. Neutral is white and an immunity black. */
+  --color-effect-super: #7ac74c;
+  --color-effect-super-4x: #4e8a2e;
+  --color-effect-weak: #ee8130;
+  --color-effect-weak-4x: #b9521c;
+
+  /* The fixed navbar, which everything sticky sits under. */
+  --spacing-nav: 3rem;
+}
+
+/* The keyboard's focus outline, white on the red navbar and black on white. */
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+}
+
+@utility focus-ring-dark {
+  &:focus-visible {
+    outline: 2px solid black;
+    outline-offset: 2px;
+  }
+}
+
+/* For Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-dex-red);
+}
+
+/* The 404 standing in for an opponent tears sideways in steps rather than
+   easing — easing would read as motion, stepping reads as a glitch. */
+@keyframes glitch-shift {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-3px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-1px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.glitch {
+  animation: glitch-shift 1.2s steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch {
+    animation: none;
+  }
+}
+
+/* The loading bar: six steps sweeping across, the way a Game Boy drew a gauge. */
+.loader {
+  width: 140px;
+  height: 20px;
+  -webkit-mask: linear-gradient(90deg, #000 70%, #0000 0) 0/20%;
+  background: linear-gradient(#000 0 0) 0/0% no-repeat #ddd;
+  animation: loader-sweep 2s infinite steps(6);
+}
+
+@keyframes loader-sweep {
+  100% {
+    background-size: 120%;
+  }
 }

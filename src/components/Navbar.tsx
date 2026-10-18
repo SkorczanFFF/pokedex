@@ -38,17 +38,17 @@ const Navbar = () => {
   }, [open]);
 
   const pageLink = ({ isActive }: { isActive: boolean }) =>
-    `px-2 py-1 text-xs whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
-      isActive ? "underline underline-offset-4" : "hover:bg-[#c11a1e]"
+    `px-2 py-1 text-xs whitespace-nowrap focus-ring ${
+      isActive ? "underline underline-offset-4" : "hover:bg-dex-red-dark"
     }`;
 
   return (
     <nav
       aria-label={t("nav.main")}
-      className="fixed top-0 left-0 right-0 bg-[#E12025] text-white z-50"
+      className="fixed top-0 left-0 right-0 bg-dex-red text-white z-50"
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-12">
+        <div className="flex items-center justify-between h-nav">
           <Link to="/">
             <span className="text-xl font-bold">Pokédex</span>
           </Link>
@@ -68,8 +68,8 @@ const Navbar = () => {
             onClick={() => setOpen(!open)}
             aria-expanded={open}
             aria-controls={menuId}
-            className={`md:hidden px-2 py-1 text-xs cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
-              open ? "bg-[#FECB09] text-black" : "hover:bg-[#c11a1e]"
+            className={`md:hidden px-2 py-1 text-xs cursor-pointer focus-ring ${
+              open ? "bg-dex-yellow text-black" : "hover:bg-dex-red-dark"
             }`}
           >
             {t("nav.menu")}
@@ -135,8 +135,8 @@ const GameBoyMenu = () => {
                     aria-label={t("nav.switchTo", {
                       language: t(`language.${lng}`),
                     })}
-                    className={`px-2 py-1 text-xs cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${
-                      isActive ? "bg-[#FECB09]" : "hover:text-[#E12025]"
+                    className={`px-2 py-1 text-xs cursor-pointer focus-ring-dark ${
+                      isActive ? "bg-dex-yellow" : "hover:text-dex-red"
                     }`}
                   >
                     {lng.toUpperCase()}
@@ -151,7 +151,7 @@ const GameBoyMenu = () => {
             <NavLink
               to={page.to}
               className={({ isActive }) =>
-                `${MENU_ITEM} ${isActive ? "text-[#E12025]" : ""}`
+                `${MENU_ITEM} ${isActive ? "text-dex-red" : ""}`
               }
             >
               <MenuCursor />

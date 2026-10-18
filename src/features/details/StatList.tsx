@@ -36,9 +36,9 @@ export const StatList = ({ pokemon }: { pokemon: Pokemon }) => {
               <span className="w-full md:w-auto text-xs">
                 {statLabel(stat.name)}:
               </span>
-              <div className="relative flex w-full h-5 overflow-hidden bg-[#EAEBF2]">
+              <div className="relative flex w-full h-5 overflow-hidden bg-dex-bg">
                 <div
-                  className="h-full bg-[#356DB2]"
+                  className="h-full bg-dex-blue"
                   style={{ width: `${filled}%` }}
                 />
                 {/* Drawn twice and clipped at the fill edge, so a digit landing

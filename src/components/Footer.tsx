@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const FOOTER_LINK = "hover:text-[#FECB09]";
+const FOOTER_LINK = "hover:text-dex-yellow";
 
 const Footer = () => {
   const { t } = useTranslation();

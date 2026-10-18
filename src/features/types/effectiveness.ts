@@ -32,10 +32,10 @@ export const phraseKey = (value: Effectiveness): PhraseKey => {
  * chip.
  */
 export const effectClass = (value: Effectiveness, traced = false): string => {
-  if (value >= 4) return "bg-[#4E8A2E] text-white";
-  if (value > 1) return "bg-[#7AC74C] text-white";
+  if (value >= 4) return "bg-effect-super-4x text-white";
+  if (value > 1) return "bg-effect-super text-white";
   if (value === 0) return "bg-black text-white";
-  if (value < 0.5) return "bg-[#B9521C] text-white";
-  if (value < 1) return "bg-[#EE8130] text-white";
+  if (value < 0.5) return "bg-effect-weak-4x text-white";
+  if (value < 1) return "bg-effect-weak text-white";
   return traced ? "bg-white text-black" : "bg-white text-gray-300";
 };

@@ -111,7 +111,7 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
                 type="button"
                 onClick={() => setShowRest(!showRest)}
                 aria-expanded={showRest}
-                className="mt-6 px-3 py-1 bg-gray-200 text-black text-xs cursor-pointer hover:bg-[#FECB09]"
+                className="mt-6 px-3 py-1 bg-gray-200 text-black text-xs cursor-pointer hover:bg-dex-yellow"
               >
                 {showRest
                   ? t("details.movesHide")
@@ -140,9 +140,9 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
 
         {/* Follows the list down, because the machines run to ninety rows and a
             move picked at the top would otherwise be scrolled away from. The
-            navbar is fixed and 48px tall, hence the offset. */}
+            navbar is fixed, hence the offset: its height and a rem of air. */}
         <aside className="hidden lg:block">
-          <div className="sticky top-16 space-y-3">
+          <div className="sticky top-[calc(var(--spacing-nav)_+_1rem)] space-y-3">
             {open.length === 0 ? (
               <p className="border border-dashed border-gray-300 p-8 text-center text-[10px] leading-relaxed text-gray-400">
                 {t("details.movePick")}
@@ -173,7 +173,7 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
                         type="button"
                         onClick={() => toggle(row)}
                         aria-label={t("details.moveClose")}
-                        className="shrink-0 px-1 text-xs text-gray-400 cursor-pointer hover:text-[#E12025]"
+                        className="shrink-0 px-1 text-xs text-gray-400 cursor-pointer hover:text-dex-red"
                       >
                         X
                       </button>

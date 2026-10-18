@@ -11,7 +11,7 @@ const TRAINER_SPRITE = "/trainer-back.png";
 
 /** A menu line the way the games drew them, cursor and all. */
 export const MENU_ITEM =
-  "group flex items-center gap-2 text-sm cursor-pointer hover:text-[#E12025] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black";
+  "group flex items-center gap-2 text-sm cursor-pointer hover:text-dex-red focus-ring-dark";
 
 /** The `>` in front of it, dim until the line is hovered or focused. */
 export const MenuCursor = () => (
@@ -28,7 +28,7 @@ export const HpBar = ({ percent, value }: { percent: number; value?: number }) =
   <div className="mt-2 flex items-center gap-2">
     <span className="text-[8px] md:text-[10px]">HP:</span>
     <div className="h-2 w-20 border-2 border-black md:w-28">
-      <div className="h-full bg-[#356DB2]" style={{ width: `${percent}%` }} />
+      <div className="h-full bg-dex-blue" style={{ width: `${percent}%` }} />
     </div>
     {value !== undefined && (
       <span className="text-[8px] md:text-[10px]">{value}</span>

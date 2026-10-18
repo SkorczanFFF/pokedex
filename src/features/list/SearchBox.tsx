@@ -74,7 +74,7 @@ export const SearchBox = ({
           onClick={handleSearch}
           disabled={!searchTerm.trim()}
           aria-label={t("filters.searchAction")}
-          className="h-9 px-3 bg-[#FECB09] disabled:hover:text-black text-black hover:text-white text-sm hover:bg-[#E12025] disabled:opacity-50 disabled:bg-[#FECB09] disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
+          className="h-9 px-3 bg-dex-yellow disabled:hover:text-black text-black hover:text-white text-sm hover:bg-dex-red disabled:opacity-50 disabled:bg-dex-yellow disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
         >
           {">"}
         </button>
@@ -82,7 +82,7 @@ export const SearchBox = ({
           <button
             onClick={handleClearSearch}
             aria-label={t("filters.clearSearch")}
-            className="h-9 px-3 bg-[#E12025] text-white text-sm hover:bg-red-700 cursor-pointer"
+            className="h-9 px-3 bg-dex-red text-white text-sm hover:bg-red-700 cursor-pointer"
           >
             X
           </button>

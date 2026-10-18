@@ -46,7 +46,7 @@ const SOURCES = [
 
 const POLISH_ROWS = ["dex", "genus", "moveNames", "moveTexts", "abilities"] as const;
 
-const LINK = "underline underline-offset-2 hover:text-[#E12025]";
+const LINK = "underline underline-offset-2 hover:text-dex-red";
 
 const Ext = ({ href, children }: { href: string; children?: ReactNode }) => (
   <a href={href} target="_blank" rel="noopener noreferrer" className={LINK}>

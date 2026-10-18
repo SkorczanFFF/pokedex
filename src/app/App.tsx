@@ -18,7 +18,6 @@ import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { EraProvider } from "@/era/EraProvider";
 import { queryClient } from "./queryClient";
-import "@/global.css";
 
 /** Versus first shipped at `/compare`; links to it still land, picks and all. */
 const FormerVersusAddress = () => {
@@ -31,9 +30,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <EraProvider>
         <BrowserRouter>
-          <div className="min-h-screen bg-[#eaebf2] font-press-start flex flex-col">
+          <div className="min-h-screen bg-dex-bg font-press-start flex flex-col">
             <Navbar />
-            <main className="flex-grow pt-12">
+            <main className="flex-grow pt-nav">
               <Routes>
                 <Route path="/" element={<PokemonListPage />} />
                 <Route path="/pokemon/:name" element={<PokemonDetailsPage />} />
