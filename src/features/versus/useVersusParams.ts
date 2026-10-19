@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import type { Side } from "./BattleField";
 
-export const DEFAULT_LEVEL = 50;
+const DEFAULT_LEVEL = 50;
 export const MIN_LEVEL = 1;
 export const MAX_LEVEL = 100;
 

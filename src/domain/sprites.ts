@@ -78,7 +78,7 @@ const SPRITE_GAMES: Record<GenSlug, GenSheets> = {
   },
 };
 
-export const gameSet = (gen: GenSlug, game: string): SpriteSetId =>
+const gameSet = (gen: GenSlug, game: string): SpriteSetId =>
   `${gen}/${game}`;
 
 /** The generation and game behind a set, or null for the artwork. */

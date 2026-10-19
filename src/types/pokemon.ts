@@ -6,7 +6,7 @@ export interface PokemonTypeSlot {
 }
 
 /** A typing the Pokemon carried up to and including `generation`. */
-export interface PokemonPastTypes {
+interface PokemonPastTypes {
   generation: { name: string };
   types: PokemonTypeSlot[];
 }
@@ -198,7 +198,7 @@ export interface EncounterDetail {
   condition_values: { name: string }[];
 }
 
-export interface VersionEncounter {
+interface VersionEncounter {
   version: { name: string };
   /**
    * The sum of every slot's chance, which double-counts conditions that exclude

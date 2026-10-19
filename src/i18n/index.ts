@@ -48,5 +48,3 @@ i18n
   });
 
 syncDocumentLang(i18n.resolvedLanguage ?? "en");
-
-export default i18n;

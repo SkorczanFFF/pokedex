@@ -16,6 +16,25 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `test: the domain gets a test suite, and knip watches for code nothing reads`
+
+- **Added** — `vitest`, and 110 tests beside the domain files. The damage formula is held to
+  the numbers the changelog had only written down — Pikachu's Thunderbolt into Gyarados at
+  124–148, Crystal's 95 power at 132–156, the stats grown from IVs and from DVs to the same
+  70 and 120 and 170 — and with it every ability rule the matchup reads, the chart's dated
+  relations and the Gen I and Gen VI changes they produce, the evolution line re-rooted at
+  Mr. Mime and the step a regional form takes, the encounter slots folded into one Zubat at
+  39%, a learnset picked from the newest game that teaches by level, a move's power and
+  sentence as one game had them, the dex entry an era quotes, every sprite sheet's cuts and
+  palettes, and a GIF's frame table read from bytes the test builds. `npm test` runs them;
+  `npm run check` runs `tsc -b`, `eslint`, the tests and `knip` in that order, and is what
+  every phase of the refactor ends with.
+- **Added** — `knip`, which reads the import graph and names what nothing imports. Its
+  first pass found no unused file, dependency or stylesheet, and eight exports used only
+  in the file that declared them; those lose their `export`, and `src/i18n` stops
+  default-exporting an instance that `main.tsx` only ever imported for its side effect.
+  Phase 0 of the plan in `REVIEW.md`.
+
 ### `refactor: the colours, the navbar's height and the focus ring are theme tokens, named once`
 
 - **Changed** — The app's colours are declared once, in `@theme` in `index.css`: `dex-red`,

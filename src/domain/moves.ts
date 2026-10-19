@@ -9,7 +9,7 @@ export interface LearnedMove {
   level: number;
 }
 
-export interface MoveGroup {
+interface MoveGroup {
   /** PokéAPI's slug: `level-up`, `machine`, `egg`, `tutor`. */
   method: string;
   moves: LearnedMove[];

@@ -56,7 +56,7 @@ export const RETRO: DexEra = {
   damageClassByType: true,
 };
 
-export const ERA_NAMES = ["modern", "retro"] as const;
+const ERA_NAMES = ["modern", "retro"] as const;
 
 export type EraName = (typeof ERA_NAMES)[number];
 

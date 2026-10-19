@@ -25,7 +25,7 @@ const TYPE_STYLES: Record<string, string> = {
 export const typeClass = (name: string): string =>
   TYPE_STYLES[name] ?? "bg-gray-200 text-black";
 
-export const TYPE_NAMES = [
+const TYPE_NAMES = [
   "normal",
   "fire",
   "water",
