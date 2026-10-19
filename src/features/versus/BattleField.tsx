@@ -7,7 +7,7 @@ import { SkeletonBlock } from "@/components/Skeleton";
 import { TypeBadge } from "@/components/badges";
 import { GbBox } from "@/components/layout";
 import { statsInEra, typingInEra } from "@/domain/pokemonView";
-import { battleSprite, showdownSprite, type SpriteView } from "@/domain/sprites";
+import { battleSprite, showdownSprite, type SpriteView } from "@/domain/spriteVariants";
 import { STAT, barPercent, statValue } from "@/domain/stats";
 import { useEra } from "@/app/era/context";
 import { humanize } from "@/i18n/labels";

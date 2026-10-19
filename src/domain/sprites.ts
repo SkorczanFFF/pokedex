@@ -1,6 +1,9 @@
-import type { Pokemon, SpriteSheet } from "@/types/pokemon";
-import { GEN_SLUGS, genApiName, isGenSlug, type GenSlug } from "./dex";
-import { gameName } from "./games";
+import type { Pokemon } from "@/types/pokemon";
+import { genApiName } from "./dex";
+import { ALL_SPRITE_SETS, setGame, sheetOf, type SpriteSetId } from "./spriteSets";
+
+// Where a Pokémon's pictures are: in its payload, and in the sprite repository
+// by dex id for the places that never fetched a payload.
 
 /** Everything the sprite repo serves hangs off one root. */
 const SPRITE_ROOT =
@@ -22,77 +25,6 @@ const gameSprite = (id: number, path: string): string =>
 /** Crystal's front sprites in motion: 56px GIFs on white, Gen I and II only. */
 export const crystalAnimated = (id: number): string =>
   `${SPRITE_ROOT}/versions/generation-ii/crystal/animated/${id}.gif`;
-
-/**
- * The picture column shows the modern artwork or one game's sprite sheet,
- * named `ii/crystal` — the generation, then the game as PokéAPI keys it under
- * `sprites.versions`.
- */
-export type SpriteSetId = "artwork" | `${GenSlug}/${string}`;
-
-interface GenSheets {
-  /** The sheets the picker offers, in the order they are listed: PokéAPI's keys under `sprites.versions["generation-…"]`. */
-  games: readonly string[];
-  /** The sheet a generation opens on when picked by its numeral alone. */
-  opensOn: string;
-}
-
-/**
- * The sheets the picker offers, per generation.
- *
- * Gen I and II are broken out game by game, because each of those games drew
- * its own: Gold's Pikachu is not Silver's, and neither is Crystal's. Later
- * generations list one representative — they ship two or three sheets each and
- * the difference is a palette, so the picker shows the last and most refined.
- * Adding a game is one more entry here.
- *
- * What a generation opens on is the originals for Gen I and the last and most
- * polished sheet everywhere else.
- */
-const SPRITE_GAMES: Record<GenSlug, GenSheets> = {
-  i: { games: ["red-blue", "yellow", "red-green-japan"], opensOn: "red-blue" },
-  ii: { games: ["gold", "silver", "crystal"], opensOn: "crystal" },
-  iii: { games: ["emerald"], opensOn: "emerald" },
-  iv: { games: ["platinum"], opensOn: "platinum" },
-  v: { games: ["black-white"], opensOn: "black-white" },
-  vi: { games: ["x-y"], opensOn: "x-y" },
-  vii: { games: ["ultra-sun-ultra-moon"], opensOn: "ultra-sun-ultra-moon" },
-  viii: {
-    games: ["brilliant-diamond-shining-pearl"],
-    opensOn: "brilliant-diamond-shining-pearl",
-  },
-  ix: { games: ["scarlet-violet"], opensOn: "scarlet-violet" },
-};
-
-const gameSet = (gen: GenSlug, game: string): SpriteSetId =>
-  `${gen}/${game}`;
-
-/** The generation and game behind a set, or null for the artwork. */
-export const setGame = (
-  set: SpriteSetId,
-): { gen: GenSlug; game: string } | null => {
-  if (set === "artwork") return null;
-  const [gen, game] = set.split("/");
-  return isGenSlug(gen) && game ? { gen, game } : null;
-};
-
-/** The set a generation's numeral opens on. */
-export const genOpening = (gen: GenSlug): SpriteSetId =>
-  gameSet(gen, SPRITE_GAMES[gen].opensOn);
-
-/** The game's name as printed on its box; empty for the artwork. */
-export const spriteGameName = (set: SpriteSetId): string => {
-  const picked = setGame(set);
-  return picked ? gameName(picked.game) : "";
-};
-
-const sheetOf = (pokemon: Pokemon, set: SpriteSetId): SpriteSheet | null => {
-  const picked = setGame(set);
-  if (!picked) return null;
-  return (
-    pokemon.sprites.versions?.[genApiName(picked.gen)]?.[picked.game] ?? null
-  );
-};
 
 /**
  * URL for one picture of a set, or null when this Pokémon has none there.
@@ -138,12 +70,7 @@ export const spriteUrlById = (id: number, set: SpriteSetId): string => {
  * one request per generation.
  */
 export const spriteSets = (pokemon: Pokemon): SpriteSetId[] =>
-  [
-    "artwork" as const,
-    ...GEN_SLUGS.flatMap((gen) =>
-      SPRITE_GAMES[gen].games.map((game) => gameSet(gen, game)),
-    ),
-  ].filter((set) => spriteUrl(pokemon, set) !== null);
+  ALL_SPRITE_SETS.filter((set) => spriteUrl(pokemon, set) !== null);
 
 /**
  * The set actually up: the reader's pick while this Pokémon has it, else the
@@ -158,154 +85,4 @@ export const activeSpriteSet = (
   const sets = spriteSets(pokemon);
   const chosen = picked ?? era.sprites;
   return sets.includes(chosen) ? chosen : (sets[0] ?? "artwork");
-};
-
-/**
- * How a sheet colours a picture. `default` is the game's own palette — for
- * Red and Blue that is the Super Game Boy's, with the plain Game Boy's four
- * greys under `gray` and Yellow's Game Boy Color palette under `gbc`. Shiny
- * arrived with Gen II.
- */
-type SpriteColour = "default" | "shiny" | "gray" | "gbc";
-
-/**
- * The palettes on offer: the game's own and, from Gen II, shiny. The Game Boy
- * greys and Yellow's Game Boy Color palette are held back.
- */
-export type SpritePalette = "default" | "shiny";
-
-/** Which way the Pokémon faces: the opponent's view, or the trainer's. */
-export type SpriteView = "front" | "back";
-
-/** One picture on a sheet: one view, in one palette. */
-export interface SpriteVariant {
-  /** PokéAPI's own key, e.g. `back_shiny_transparent`; what a pick remembers. */
-  key: string;
-  /** The picture to show — the transparent one wherever the game has it. */
-  url: string;
-  view: SpriteView;
-  palette: SpritePalette;
-  /** The same picture in motion, where the game drew one: Crystal did, Gold did not. */
-  animated: string | null;
-}
-
-const COLOURS: readonly SpriteColour[] = ["default", "shiny", "gray", "gbc"];
-const PALETTES: readonly SpritePalette[] = ["default", "shiny"];
-const VIEWS: readonly SpriteView[] = ["front", "back"];
-
-/**
- * Reads a key apart. The keys are compound and not even in one order —
- * `back_shiny_transparent` but `front_transparent_gray` — so they are read
- * by their words rather than assembled from them.
- */
-const parseKey = (
-  key: string,
-): { back: boolean; colour: SpriteColour; transparent: boolean } | null => {
-  const words = key.split("_");
-  const side = words[0];
-  if (side !== "front" && side !== "back") return null;
-  return {
-    back: side === "back",
-    colour:
-      COLOURS.find((c) => c !== "default" && words.includes(c)) ?? "default",
-    transparent: words.includes("transparent"),
-  };
-};
-
-/**
- * The pictures a sheet holds for this Pokémon — front then back, each in the
- * palettes on offer — in that fixed order. Empty for the artwork, which is one
- * picture, and for a sheet the Pokémon is not on.
- *
- * Each is shown once, in its transparent cut where the game has one and
- * otherwise as it comes — Red / Green (JP) has no transparent cut at all. The
- * keys are still read in full, so that `front_transparent_gray` is known for
- * the grey picture it is and never taken for the default's transparent cut.
- */
-export const spriteVariants = (
-  pokemon: Pokemon,
-  set: SpriteSetId,
-): SpriteVariant[] => {
-  const sheet = sheetOf(pokemon, set);
-  if (!sheet) return [];
-  const picture = (key: string): string | null => {
-    const url = sheet[key];
-    return typeof url === "string" ? url : null;
-  };
-  const animated =
-    typeof sheet.animated === "object" && sheet.animated !== null
-      ? sheet.animated
-      : {};
-  // Emerald's "animated" entries are stills in PNG; only a GIF is a motion.
-  const moving = (key: string): string | null => {
-    const url = animated[key];
-    return typeof url === "string" && url.endsWith(".gif") ? url : null;
-  };
-
-  // Keyed `front/shiny`: the opaque key and the transparent one for each.
-  const slots = new Map<string, { opaque?: string; transparent?: string }>();
-  for (const key of Object.keys(sheet)) {
-    const parsed = parseKey(key);
-    if (!parsed || picture(key) === null) continue;
-    const at = `${parsed.back ? "back" : "front"}/${parsed.colour}`;
-    const slot = slots.get(at) ?? {};
-    slot[parsed.transparent ? "transparent" : "opaque"] = key;
-    slots.set(at, slot);
-  }
-
-  return VIEWS.flatMap((view) =>
-    PALETTES.flatMap((palette) => {
-      const slot = slots.get(`${view}/${palette}`);
-      const shown = slot?.transparent ?? slot?.opaque;
-      const url = shown ? picture(shown) : null;
-      if (!slot || !shown || !url) return [];
-      return [
-        {
-          key: shown,
-          url,
-          view,
-          palette,
-          animated: slot.opaque ? moving(slot.opaque) : null,
-        },
-      ];
-    }),
-  );
-};
-
-/**
- * The picture a battle screen puts in a slot: the set's own front or back, else
- * the default sheet's, else the front turned round — a back nobody drew is
- * still better shown than left empty.
- */
-export const battleSprite = (
-  pokemon: Pokemon,
-  set: SpriteSetId,
-  view: SpriteView,
-): { url: string; mirrored: boolean } | null => {
-  const own = spriteVariants(pokemon, set).find(
-    (v) => v.view === view && v.palette === "default",
-  );
-  if (own) return { url: own.url, mirrored: false };
-  const { front_default: front, back_default: back } = pokemon.sprites;
-  if (view === "back" && back) return { url: back, mirrored: false };
-  const fallback = front || spriteUrl(pokemon, "artwork");
-  return fallback ? { url: fallback, mirrored: view === "back" } : null;
-};
-
-/**
- * Showdown's animated GIF for the view, or its front turned round where only
- * the back is missing — one style in both slots beats a mix. Null sends the
- * slot back to the static sprites.
- */
-export const showdownSprite = (
-  pokemon: Pokemon,
-  view: SpriteView,
-): { url: string; mirrored: boolean } | null => {
-  const sheet = pokemon.sprites.other.showdown;
-  if (view === "back" && sheet?.back_default) {
-    return { url: sheet.back_default, mirrored: false };
-  }
-  return sheet?.front_default
-    ? { url: sheet.front_default, mirrored: view === "back" }
-    : null;
 };

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { LangMarker } from "@/components/badges";
 import { genRoman } from "@/domain/dex";
 import { getDescription, getGeneration, getGenus } from "@/domain/species";
-import type { SpriteSetId } from "@/domain/sprites";
+import type { SpriteSetId } from "@/domain/spriteSets";
 import { useEra } from "@/app/era/context";
 import { VersusLink } from "@/features/versus";
 import { useLocale } from "@/i18n/locale";

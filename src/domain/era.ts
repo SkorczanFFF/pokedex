@@ -1,5 +1,5 @@
 import { genOrder, lastDexId, type GenSlug } from "./dex";
-import type { SpriteSetId } from "./sprites";
+import type { SpriteSetId } from "./spriteSets";
 
 /**
  * The dex rendered as of a generation rather than as of today.

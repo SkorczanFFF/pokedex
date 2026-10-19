@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { LIST_PARAMS } from "@/app/routes";
 import { isGenSlug, type GenSlug } from "@/domain/dex";
 import { DEFAULT_PER_PAGE, isPerPage, type PerPage } from "@/domain/pagination";
@@ -126,7 +126,10 @@ export const useListParams = ({
    * For the caller's out-of-range clamp. Sets the page without scrolling,
    * because a correction is not a navigation the user asked for.
    */
-  const clampPage = (lastPage: number) => update({ [PAGE]: String(lastPage) });
+  const clampPage = useCallback(
+    (lastPage: number) => patch({ [PAGE]: String(lastPage) }, { replace: replaceHistory }),
+    [patch, replaceHistory],
+  );
 
   return { params, actions, clampPage };
 };
@@ -149,6 +152,5 @@ export const useClampPage = ({
   useEffect(() => {
     if (params.isSearchMode) return;
     if (totalPages > 0 && params.page > totalPages) clampPage(totalPages);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalPages, params.page, params.isSearchMode]);
+  }, [totalPages, params.page, params.isSearchMode, clampPage]);
 };

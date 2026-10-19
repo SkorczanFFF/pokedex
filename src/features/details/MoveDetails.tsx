@@ -1,13 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { moveQuery } from "@/api/queries";
 import { SkeletonMoveBody } from "@/components/Skeleton";
 import { ClassBadge, LangMarker, TypeBadge } from "@/components/badges";
-import { moveInGame } from "@/domain/moves";
-import { moveMethodAccent } from "./moveAccents";
+import { useMoveInGame } from "@/features/shared/useMoveInGame";
 import { useGameLabel } from "@/i18n/labels";
 import { useLocale } from "@/i18n/locale";
-import { useTranslatedMoveText } from "@/i18n/translated";
+import { moveMethodAccent } from "./moveAccents";
 
 /**
  * One move's numbers and the sentence its game printed about it.
@@ -35,16 +32,12 @@ export const MoveDetails = ({
   const { t } = useTranslation();
   const locale = useLocale();
   const gameLabel = useGameLabel();
-  const translatedText = useTranslatedMoveText();
-
-  const { data, isLoading, error } = useQuery(moveQuery(name));
+  const { move, isLoading, error } = useMoveInGame(name, game);
 
   if (isLoading) return <SkeletonMoveBody />;
   // A move is a detail on a page that already works; losing one is not worth
   // replacing anything with an error.
-  if (error || !data) return null;
-
-  const move = moveInGame(data, game, locale, translatedText(name));
+  if (error || !move) return null;
 
   return (
     <div className="space-y-4">

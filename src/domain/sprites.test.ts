@@ -1,16 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { makePokemon } from "./__fixtures__/pokemon";
-import {
-  activeSpriteSet,
-  battleSprite,
-  genOpening,
-  setGame,
-  spriteGameName,
-  spriteSets,
-  spriteUrl,
-  spriteUrlById,
-  spriteVariants,
-} from "./sprites";
+import { genOpening, setGame, spriteGameName } from "./spriteSets";
+import { battleSprite, showdownSprite, spriteVariants } from "./spriteVariants";
+import { activeSpriteSet, spriteSets, spriteUrl, spriteUrlById } from "./sprites";
 
 const pikachu = makePokemon({
   sprites: {
@@ -103,6 +95,21 @@ describe("battleSprite", () => {
   it("takes the set's own back where one was drawn", () => {
     expect(battleSprite(pikachu, "ii/crystal", "back")).toEqual({ url: "c/back.png", mirrored: false });
     expect(battleSprite(pikachu, "ii/crystal", "front")).toEqual({ url: "c/front-t.png", mirrored: false });
+  });
+
+  it("takes Showdown's GIF where there is one, mirrored for a missing back", () => {
+    const withShowdown = makePokemon({
+      sprites: {
+        ...pikachu.sprites,
+        other: {
+          ...pikachu.sprites.other,
+          showdown: { front_default: "sd/front.gif", back_default: null },
+        },
+      },
+    });
+    expect(showdownSprite(withShowdown, "front")).toEqual({ url: "sd/front.gif", mirrored: false });
+    expect(showdownSprite(withShowdown, "back")).toEqual({ url: "sd/front.gif", mirrored: true });
+    expect(showdownSprite(pikachu, "front")).toBeNull();
   });
 
   it("falls back to the default sheet, then turns the front round", () => {

@@ -3,7 +3,7 @@ import { genOrder, genOrderOf } from "./dex";
 import { inForceAt, type DexEra } from "./era";
 import { typingOf } from "./matchup";
 import type { PokemonType } from "./pokemonTypes";
-import { setGame, type SpriteSetId } from "./sprites";
+import { setGame, type SpriteSetId } from "./spriteSets";
 import { STAT, type StatInEra } from "./stats";
 
 /**

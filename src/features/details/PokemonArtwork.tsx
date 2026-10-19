@@ -3,17 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Chip, ChipRow } from "@/components/Chip";
 import { GEN_SLUGS, genRoman, type GenSlug } from "@/domain/dex";
 import { cryForSet } from "@/domain/pokemonView";
-import {
-  genOpening,
-  setGame,
-  spriteGameName,
-  spriteSets,
-  spriteUrl,
-  spriteVariants,
-  type SpritePalette,
-  type SpriteSetId,
-  type SpriteView,
-} from "@/domain/sprites";
+import { genOpening, setGame, spriteGameName, type SpriteSetId } from "@/domain/spriteSets";
+import { spriteVariants, type SpritePalette, type SpriteView } from "@/domain/spriteVariants";
+import { spriteSets, spriteUrl } from "@/domain/sprites";
 import type { Pokemon } from "@/types/pokemon";
 import { SpriteFrame } from "@/media/SpriteFrame";
 import { useAnimatedOnce } from "@/media/useAnimatedOnce";

@@ -1,47 +1,23 @@
-import { useState, type ReactNode } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NotFoundError } from "@/api/client";
-import { pokemonQuery } from "@/api/queries";
+import { useTypeChart } from "@/api/useTypeChart";
+import { useEra } from "@/app/era/context";
 import { Arrow } from "@/components/Arrow";
 import { InlineError } from "@/components/ErrorView";
 import { ACTION } from "@/components/buttons";
 import { GbBox } from "@/components/layout";
-import { MENU_ITEM, MenuCursor } from "@/components/menu";
-import { abilityRule, defaultAbility, hasAbility } from "@/domain/abilities";
+import { defaultAbility, hasAbility } from "@/domain/abilities";
 import { genRoman } from "@/domain/dex";
-import { isInEra, type DexEra } from "@/domain/era";
-import type { TypeChart } from "@/domain/typeChart";
-import { useEra } from "@/app/era/context";
-import { useNotInEraText } from "@/features/shared/useNotInEraText";
-import { useTypeChart } from "@/api/useTypeChart";
-import { humanize } from "@/i18n/labels";
+import type { DexEra } from "@/domain/era";
 import { AbilityPicker } from "./AbilityPicker";
 import { BattleField } from "./BattleField";
-import type { Fighter, Known, Side } from "./model";
-import { Attacks, Profile } from "./Matchup";
-import { MoveCalc } from "./MoveCalc";
 import { PokemonPicker } from "./PokemonPicker";
-import { StatDuel } from "./StatDuel";
 import { TypeChartAd } from "./TypeChartAd";
+import { VersusMessage } from "./VersusMessage";
+import type { Fighter, Side, Tab } from "./model";
+import { useFighter } from "./useFighter";
 import { useVersusParams, type SideParams } from "./useVersusParams";
-
-type Tab = "types" | "stats" | "moves";
-
-const useFighter = (side: Side, name: string | null, era: DexEra): Fighter => {
-  const { data, isLoading, error } = useQuery(pokemonQuery(name));
-
-  if (!name) return { side, name, pokemon: null, status: "empty" };
-  if (isLoading) return { side, name, pokemon: null, status: "loading" };
-  if (error instanceof NotFoundError) {
-    return { side, name, pokemon: null, status: "notFound" };
-  }
-  if (error || !data) return { side, name, pokemon: null, status: "error" };
-  if (!isInEra(data.id, era)) {
-    return { side, name, pokemon: data, status: "outOfEra" };
-  }
-  return { side, name, pokemon: data, status: "ready" };
-};
+import { VersusContext } from "./versusContext";
 
 /** The ability a fighter is read with: the URL's if it is one of its own, else its first. */
 const abilityOf = (fighter: Fighter, picked: string | null, era: DexEra): string | null => {
@@ -64,8 +40,8 @@ export const VersusPage = () => {
   const { t } = useTranslation();
   const { era } = useEra();
   const params = useVersusParams();
-  const yours = useFighter("a", params.a.name, era);
-  const foe = useFighter("b", params.b.name, era);
+  const yours = useFighter("a", params.a.name);
+  const foe = useFighter("b", params.b.name);
   const [tab, setTab] = useState<Tab>("types");
 
   const { chart, error: chartError } = useTypeChart(era.maxGen);
@@ -75,6 +51,7 @@ export const VersusPage = () => {
     b: abilityOf(foe, params.b.ability, era),
   };
   const sides: Record<Side, SideParams> = { a: params.a, b: params.b };
+  const loading = [yours, foe].some((fighter) => fighter.status === "loading");
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-8">
@@ -121,18 +98,17 @@ export const VersusPage = () => {
       <BattleField yours={yours} foe={foe} />
 
       <GbBox className="mt-4">
-        <Message
-          yours={yours}
-          foe={foe}
-          chart={chart}
-          chartError={chartError !== null}
-          tab={tab}
-          onTab={setTab}
-          abilities={abilities}
-          sides={sides}
-          onMove={params.setMove}
-          onLevel={params.setLevel}
-        />
+        {chartError ? (
+          <InlineError>{t("error.types")}</InlineError>
+        ) : !chart || loading ? (
+          <p className="text-xs text-gray-500">{t("loader.loading")}</p>
+        ) : (
+          <VersusContext.Provider
+            value={{ chart, abilities, sides, setMove: params.setMove, setLevel: params.setLevel }}
+          >
+            <VersusMessage yours={yours} foe={foe} tab={tab} onTab={setTab} />
+          </VersusContext.Provider>
+        )}
       </GbBox>
 
       {/* Last, as the chart page ends on Versus: the way back to all of it. */}
@@ -174,162 +150,4 @@ const Corner = ({
       <AbilityPicker pokemon={fighter.pokemon} value={ability} onPick={onAbility} />
     )}
   </div>
-);
-
-/** The text box under the field: the matchup, a profile, a calculation, or what is wrong. */
-const Message = ({
-  yours,
-  foe,
-  chart,
-  chartError,
-  tab,
-  onTab,
-  abilities,
-  sides,
-  onMove,
-  onLevel,
-}: {
-  yours: Fighter;
-  foe: Fighter;
-  chart: TypeChart | null;
-  chartError: boolean;
-  tab: Tab;
-  onTab: (tab: Tab) => void;
-  abilities: Record<Side, string | null>;
-  sides: Record<Side, SideParams>;
-  onMove: (side: Side, move: string | null) => void;
-  onLevel: (side: Side, level: number) => void;
-}) => {
-  const { t } = useTranslation();
-  const { era } = useEra();
-  const fighters = [yours, foe];
-  const ready = fighters.filter(
-    (fighter): fighter is Known => fighter.status === "ready",
-  );
-  const problems = fighters.filter(
-    (fighter) => fighter.status !== "ready" && fighter.status !== "empty",
-  );
-  const rule = (side: Side) => abilityRule(abilities[side]);
-
-  if (chartError) return <InlineError>{t("error.types")}</InlineError>;
-  if (!chart || fighters.some((fighter) => fighter.status === "loading")) {
-    return <p className="text-xs text-gray-500">{t("loader.loading")}</p>;
-  }
-
-  return (
-    <div className="space-y-6">
-      {problems.map((fighter) => (
-        <Problem key={fighter.side} fighter={fighter} />
-      ))}
-
-      {ready.length === 2 && (
-        <>
-          <div className="flex flex-wrap gap-4">
-            <TabButton active={tab === "types"} onClick={() => onTab("types")}>
-              {t("versus.tabTypes")}
-            </TabButton>
-            <TabButton active={tab === "stats"} onClick={() => onTab("stats")}>
-              {t("versus.tabStats")}
-            </TabButton>
-            <TabButton active={tab === "moves"} onClick={() => onTab("moves")}>
-              {t("versus.tabMoves")}
-            </TabButton>
-          </div>
-          {tab === "types" && (
-            <div className="grid gap-6 md:grid-cols-2">
-              <Attacks
-                chart={chart}
-                attacker={ready[0].pokemon}
-                defender={ready[1].pokemon}
-                abilities={{ attacker: rule("a"), defender: rule("b") }}
-              />
-              <Attacks
-                chart={chart}
-                attacker={ready[1].pokemon}
-                defender={ready[0].pokemon}
-                abilities={{ attacker: rule("b"), defender: rule("a") }}
-              />
-            </div>
-          )}
-          {tab === "stats" && <StatDuel yours={ready[0].pokemon} foe={ready[1].pokemon} />}
-          {tab === "moves" && (
-            <MoveCalc
-              yours={ready[0]}
-              foe={ready[1]}
-              chart={chart}
-              abilities={abilities}
-              sides={sides}
-              onMove={onMove}
-              onLevel={onLevel}
-            />
-          )}
-        </>
-      )}
-
-      {ready.length === 1 && (
-        <Profile
-          chart={chart}
-          pokemon={ready[0].pokemon}
-          abilities={{ defender: rule(ready[0].side) }}
-        />
-      )}
-
-      {ready.length === 0 && problems.length === 0 && (
-        <p className="text-xs leading-relaxed">{t("versus.empty")}</p>
-      )}
-
-      {/* Retro has no abilities to count or to leave out. */}
-      {ready.length > 0 && era.hasAbilities && (
-        <p className="text-[10px] leading-relaxed text-gray-500">
-          {t("versus.abilitiesScope")}
-        </p>
-      )}
-    </div>
-  );
-};
-
-const Problem = ({ fighter }: { fighter: Fighter }) => {
-  const { t } = useTranslation();
-  const notInEra = useNotInEraText();
-
-  let text: string;
-  if (fighter.status === "outOfEra") {
-    text = notInEra(fighter.pokemon);
-  } else if (fighter.status === "notFound") {
-    text = t("versus.notFound", { name: fighter.name ? humanize(fighter.name) : "" });
-  } else {
-    text = t("error.details");
-  }
-
-  return (
-    <p role="alert" className="text-xs leading-relaxed">
-      {text}
-    </p>
-  );
-};
-
-/**
- * A menu line; the open one keeps the cursor and is pressed yellow, the way
- * the language pair and the Retro toggle show which is on.
- */
-const TabButton = ({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: ReactNode;
-}) => (
-  <button
-    type="button"
-    onClick={onClick}
-    aria-pressed={active}
-    className={`${MENU_ITEM} px-2 py-1 ${
-      active ? "bg-dex-yellow text-black hover:text-black" : ""
-    }`}
-  >
-    <MenuCursor className={active ? "" : "opacity-0 group-hover:opacity-50"} />
-    {children}
-  </button>
 );

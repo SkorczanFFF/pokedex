@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { NotFoundError } from "@/api/client";
-import { encountersQuery, pokemonQuery } from "@/api/queries";
+import { encountersQuery } from "@/api/queries";
+import { useEra } from "@/app/era/context";
 import { pokemonPath } from "@/app/routes";
 import { Chip, ChipRow } from "@/components/Chip";
-import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
+import { PokemonGate } from "@/components/PokemonGate";
 import { ACTION_LG, MORE } from "@/components/buttons";
 import { EmptyState, PageContainer } from "@/components/layout";
 import {
@@ -17,10 +17,8 @@ import {
   type EncounterPlace,
   type EncounterRow,
 } from "@/domain/encounters";
-import { isInEra } from "@/domain/era";
 import { spriteUrl } from "@/domain/sprites";
-import { useEra } from "@/app/era/context";
-import { NotFound } from "@/components/NotFound";
+import { usePokemonStatus } from "@/features/shared/usePokemonStatus";
 import { useScrollTopOn } from "@/features/shared/useScrollTopOn";
 import {
   humanize,
@@ -28,7 +26,6 @@ import {
   useEncounterMethodLabel,
   useGameLabel,
 } from "@/i18n/labels";
-import { NotInEra } from "@/components/NotInEra";
 
 /** Kept short so the first screen is places rather than a wall of them. */
 const PLACES_SHOWN = 12;
@@ -60,20 +57,12 @@ export const EncountersPage = () => {
     setShowAll(false);
   }, [name]);
 
-  const {
-    data: pokemon,
-    isLoading,
-    error,
-  } = useQuery(pokemonQuery(name));
-
+  const result = usePokemonStatus(name);
   const { data: encounters, isLoading: loadingPlaces } = useQuery(
     encountersQuery(name),
   );
 
-  if (isLoading || loadingPlaces) return <Loader />;
-  if (error instanceof NotFoundError) return <NotFound />;
-  if (error || !pokemon) return <ErrorView message={t("error.details")} />;
-  if (!isInEra(pokemon.id, era)) return <NotInEra pokemon={pokemon} />;
+  if (loadingPlaces) return <Loader />;
 
   const games = encounters ? gamesInEra(encounters, era) : [];
   // A game picked in one era may not exist in another; fall back to all of them
@@ -83,72 +72,78 @@ export const EncountersPage = () => {
   const shown = showAll ? places : places.slice(0, PLACES_SHOWN);
   const rest = places.length - shown.length;
 
-  const sprite = spriteUrl(pokemon, era.sprites) ?? spriteUrl(pokemon, "artwork");
-
   return (
-    <PageContainer>
-      <Link
-        to={pokemonPath(pokemon.name)}
-        state={location.state}
-        className={`inline-block mb-8 ${ACTION_LG}`}
-      >
-        {t("encounters.back", { name: humanize(pokemon.name) })}
-      </Link>
+    <PokemonGate result={result}>
+      {(pokemon) => {
+        const sprite = spriteUrl(pokemon, era.sprites) ?? spriteUrl(pokemon, "artwork");
 
-      <section className="bg-white p-6">
-        <div className="flex items-center gap-4 mb-6">
-          {sprite && (
-            <img
-              src={sprite}
-              alt={pokemon.name}
-              className={`h-16 w-16 object-contain ${
-                era.pixelArt ? "[image-rendering:pixelated]" : ""
-              }`}
-            />
-          )}
-          <div>
-            <h1 className="text-lg capitalize">{pokemon.name}</h1>
-            <p className="mt-2 text-xs text-gray-500">
-              {t("encounters.title")} · {t("encounters.places", { count: places.length })}
-            </p>
-          </div>
-        </div>
+        return (
+          <PageContainer>
+            <Link
+              to={pokemonPath(pokemon.name)}
+              state={location.state}
+              className={`inline-block mb-8 ${ACTION_LG}`}
+            >
+              {t("encounters.back", { name: humanize(pokemon.name) })}
+            </Link>
 
-        {places.length === 0 ? (
-          <EmptyState>
-            <p className="text-xs leading-relaxed">{t("encounters.none")}</p>
-            <p className="mt-3 text-[10px] leading-relaxed text-gray-500">
-              {t("encounters.noneHint")}
-            </p>
-          </EmptyState>
-        ) : (
-          <>
-            {games.length > 1 && (
-              <GamePicker games={games} picked={picked} onPick={setGame} />
-            )}
+            <section className="bg-white p-6">
+              <div className="flex items-center gap-4 mb-6">
+                {sprite && (
+                  <img
+                    src={sprite}
+                    alt={pokemon.name}
+                    className={`h-16 w-16 object-contain ${
+                      era.pixelArt ? "[image-rendering:pixelated]" : ""
+                    }`}
+                  />
+                )}
+                <div>
+                  <h1 className="text-lg capitalize">{pokemon.name}</h1>
+                  <p className="mt-2 text-xs text-gray-500">
+                    {t("encounters.title")} · {t("encounters.places", { count: places.length })}
+                  </p>
+                </div>
+              </div>
 
-            <div className="grid gap-x-8 gap-y-6 lg:grid-cols-2">
-              {shown.map((place) => (
-                <Place key={place.area} place={place} />
-              ))}
-            </div>
+              {places.length === 0 ? (
+                <EmptyState>
+                  <p className="text-xs leading-relaxed">{t("encounters.none")}</p>
+                  <p className="mt-3 text-[10px] leading-relaxed text-gray-500">
+                    {t("encounters.noneHint")}
+                  </p>
+                </EmptyState>
+              ) : (
+                <>
+                  {games.length > 1 && (
+                    <GamePicker games={games} picked={picked} onPick={setGame} />
+                  )}
 
-            {(rest > 0 || showAll) && (
-              <button
-                type="button"
-                onClick={() => setShowAll(!showAll)}
-                aria-expanded={showAll}
-                className={`mt-8 ${MORE}`}
-              >
-                {showAll
-                  ? t("encounters.showLess")
-                  : t("encounters.showMore", { count: rest })}
-              </button>
-            )}
-          </>
-        )}
-      </section>
-    </PageContainer>
+                  <div className="grid gap-x-8 gap-y-6 lg:grid-cols-2">
+                    {shown.map((place) => (
+                      <Place key={place.area} place={place} />
+                    ))}
+                  </div>
+
+                  {(rest > 0 || showAll) && (
+                    <button
+                      type="button"
+                      onClick={() => setShowAll(!showAll)}
+                      aria-expanded={showAll}
+                      className={`mt-8 ${MORE}`}
+                    >
+                      {showAll
+                        ? t("encounters.showLess")
+                        : t("encounters.showMore", { count: rest })}
+                    </button>
+                  )}
+                </>
+              )}
+            </section>
+          </PageContainer>
+        );
+      }}
+    </PokemonGate>
   );
 };
 

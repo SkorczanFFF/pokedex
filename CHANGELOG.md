@@ -16,6 +16,36 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `refactor: the big files come apart along the seams they already had`
+
+- **Changed** — The three questions every page asks of a Pokémon — on its way, not one,
+  failed, outside the era, or here — have one answer: `usePokemonStatus` in
+  `features/shared`, which the details page and the encounters page read through the
+  `PokemonGate` component and both of Versus' slots through `useFighter`. The loader, the
+  404, the error view and the not-in-era screen are chosen in one place rather than three.
+- **Changed** — Versus' calculator is five files where it was one: `MoveCalc` keeps the two
+  sides and who moves first, `MoveSide` the level and the move, `StatInputs` the typed-over
+  stats and `HitResult` what one hit does; `useEdited`, the hook that forgets a typed number
+  when what it was typed over changes, is shared from `features/shared`. The chart, each
+  side's ability, the URL state and its two setters travel in a `VersusContext` instead of
+  four levels of props that no level in between read. The text box under the field is
+  `VersusMessage`, with its tabs; `useFighter` is a file of its own.
+- **Changed** — The moves list is likewise `MoveList` (the section and its two columns),
+  `MoveRows` (a group's rows and their drawers), `MovePanel` (one opened move in the wide
+  screen's column) and `usePickedMoves`, which holds which rows are open and heals that
+  state across a change of era. The fetch of a move as one game had it, in the reading
+  language, is `useMoveInGame`, read by the details panel and the calculator alike. The
+  type chart's table, with its hover trace, is `TypeChartTable`; the page keeps the legend
+  and the list of changes.
+- **Changed** — `domain/sprites.ts` is three files: `spriteSets.ts` names the sheets the
+  picker offers and reads a set id apart, `sprites.ts` resolves a picture's URL and the set
+  that is up, and `spriteVariants.ts` reads one sheet's fronts, backs and palettes and picks
+  the battle screen's picture. `showdownSprite` gets the test it lacked.
+- **Changed** — `useClampPage` lists every dependency instead of disabling the rule:
+  `clampPage` is stable across renders, so the effect can name it. `EvolutionChain`, at 260
+  lines, is the one file in `features/` still over the phase's 250, and is left as it is —
+  its length is one chain's worth of cases, not several concerns.
+
 ### `refactor: files move to where they are looked for, and the lint keeps the layers apart`
 
 - **Changed** — The domain is pure again: the type colours move to `components/typeStyles.ts`,
