@@ -1,3 +1,9 @@
+/** A link to another resource, as PokéAPI prints one everywhere: the slug and the URL it lives at. */
+export interface NamedApiResource {
+  name: string;
+  url: string;
+}
+
 export interface PokemonTypeSlot {
   slot: number;
   type: {
@@ -70,9 +76,9 @@ export interface Pokemon {
     /** 1 and 2 are the regular abilities, 3 the hidden one. */
     slot: number;
   }[];
-  species: { name: string; url: string };
+  species: NamedApiResource;
   moves: {
-    move: { name: string; url: string };
+    move: NamedApiResource;
     version_group_details: {
       level_learned_at: number;
       version_group: { name: string };
@@ -86,17 +92,14 @@ export interface PokemonListResponse {
   count: number;
   next: string | null;
   previous: string | null;
-  results: {
-    name: string;
-    url: string;
-  }[];
+  results: NamedApiResource[];
 }
 
 export interface PokemonGenerationResponse {
   id: number;
   name: string;
-  main_region: { name: string; url: string };
-  pokemon_species: { name: string; url: string }[];
+  main_region: NamedApiResource;
+  pokemon_species: NamedApiResource[];
 }
 
 export interface PokemonSpecies {
@@ -114,7 +117,7 @@ export interface PokemonSpecies {
 
 /** One row of `evolution_details` — the conditions attached to a single step. */
 export interface EvolutionDetail {
-  version_group: { name: string; url: string };
+  version_group: NamedApiResource;
   trigger: { name: string };
   item: { name: string } | null;
   held_item: { name: string } | null;
@@ -147,7 +150,7 @@ export interface EvolutionDetail {
 
 /** A node of the evolution tree. Branches (Eevee) mean several `evolves_to`. */
 export interface EvolutionLink {
-  species: { name: string; url: string };
+  species: NamedApiResource;
   evolution_details: EvolutionDetail[];
   evolves_to: EvolutionLink[];
 }

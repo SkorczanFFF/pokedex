@@ -4,7 +4,7 @@ import type { DexEra } from "@/domain/era";
 import { pageOffset } from "@/domain/pagination";
 import type { PokemonType } from "@/domain/pokemonTypes";
 import { matchNames } from "@/domain/search";
-import type { Pokemon } from "@/types/pokemon";
+import type { NamedApiResource, Pokemon } from "@/types/pokemon";
 import { getPokemonByGeneration } from "./catalog";
 import { NotFoundError } from "./client";
 import { getEncounters } from "./encounters";
@@ -199,7 +199,7 @@ export const filteredDetailsQuery = (
 export const searchQuery = (
   query: string,
   era: DexEra,
-  index: readonly { name: string; url: string }[],
+  index: readonly NamedApiResource[],
   limit: number,
 ) =>
   queryOptions({

@@ -4,21 +4,11 @@ import { ACTION_LG, GHOST } from "@/components/buttons";
 import { useEscape } from "@/features/shared/useEscape";
 import { ListOptions } from "./ListOptions";
 import { TypeFilter } from "./TypeFilter";
-
-interface FiltersPanelProps {
-  activeTypes: readonly string[];
-  activeGen: string | null;
-  itemsPerPage: number;
-  /** Live match count, or null while it is still unknown. */
-  resultCount: number | null;
-  hasActiveFilters: boolean;
-  onTypeToggle: (type: string) => void;
-  onTypesClear: () => void;
-  onGenerationChange: (gen: string | null) => void;
-  onItemsPerPageChange: (value: number) => void;
-  onClearAll: () => void;
-  onClose: () => void;
-}
+import {
+  activeFilterCount,
+  type ListActions,
+  type ListParams,
+} from "./useListParams";
 
 /**
  * Mobile filter sheet. Drops under the navbar and is only as tall as its
@@ -28,18 +18,17 @@ interface FiltersPanelProps {
  * the list page just holds back the expensive detail fetch until this closes.
  */
 export const FiltersPanel = ({
-  activeTypes,
-  activeGen,
-  itemsPerPage,
+  params,
+  actions,
   resultCount,
-  hasActiveFilters,
-  onTypeToggle,
-  onTypesClear,
-  onGenerationChange,
-  onItemsPerPageChange,
-  onClearAll,
   onClose,
-}: FiltersPanelProps) => {
+}: {
+  params: ListParams;
+  actions: ListActions;
+  /** Live match count, or null while it is still unknown. */
+  resultCount: number | null;
+  onClose: () => void;
+}) => {
   const { t } = useTranslation();
   const closeRef = useRef<HTMLButtonElement>(null);
 
@@ -91,24 +80,28 @@ export const FiltersPanel = ({
         <div className="min-h-0 overflow-y-auto px-4 py-6 space-y-6">
           <ListOptions
             stacked
-            activeGen={activeGen}
-            itemsPerPage={itemsPerPage}
-            onGenerationChange={onGenerationChange}
-            onItemsPerPageChange={onItemsPerPageChange}
+            activeGen={params.gen}
+            itemsPerPage={params.perPage}
+            onGenerationChange={actions.setGen}
+            onItemsPerPageChange={actions.setPerPage}
           />
 
           <div>
             <h2 className="text-sm mb-3">{t("filters.typeHeading")}</h2>
             <TypeFilter
-              active={activeTypes}
-              onToggle={onTypeToggle}
-              onClear={onTypesClear}
+              active={params.types}
+              onToggle={actions.toggleType}
+              onClear={actions.clearTypes}
             />
           </div>
         </div>
 
         <div className="flex gap-2 p-4 bg-white shrink-0">
-          <button onClick={onClearAll} disabled={!hasActiveFilters} className={GHOST}>
+          <button
+            onClick={actions.clearAll}
+            disabled={activeFilterCount(params) === 0}
+            className={GHOST}
+          >
             {t("filters.clearAll")}
           </button>
           <button onClick={onClose} className={`flex-1 text-sm ${ACTION_LG}`}>

@@ -5,11 +5,7 @@ import { ListStatus } from "./ListStatus";
 import { ListToolbar } from "./ListToolbar";
 import { Pagination } from "./Pagination";
 import { useListData } from "./useListData";
-import {
-  activeFilterCount,
-  useClampPage,
-  useListParams,
-} from "./useListParams";
+import { useClampPage, useListParams } from "./useListParams";
 import { useScrollRestore } from "./useScrollRestore";
 
 export const PokemonListPage = () => {
@@ -50,16 +46,9 @@ export const PokemonListPage = () => {
 
       {isFiltersOpen && (
         <FiltersPanel
-          activeTypes={params.types}
-          activeGen={params.gen}
-          itemsPerPage={params.perPage}
+          params={params}
+          actions={actions}
           resultCount={data.resultCount}
-          hasActiveFilters={activeFilterCount(params) > 0}
-          onTypeToggle={actions.toggleType}
-          onTypesClear={actions.clearTypes}
-          onGenerationChange={actions.setGen}
-          onItemsPerPageChange={actions.setPerPage}
-          onClearAll={actions.clearAll}
           onClose={closeFilters}
         />
       )}

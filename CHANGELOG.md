@@ -16,6 +16,29 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `chore: the loose ends — the README says what is here, the tests say the locales agree`
+
+- **Changed** — The README drops the Docker claim no Dockerfile backed and gains the
+  scripts, the folder structure with what each layer may import, and the conventions the
+  refactor settled on. `.claude/settings.local.json`, a per-machine file tracked since the
+  first commit, is untracked and ignored.
+- **Added** — `src/i18n/locales.test.ts` checks that the Polish and English tables name the
+  same keys, plural forms counted as one, in `common.json` and `pokemon.json` alike; until
+  now only the English `common` was typed and a Polish gap showed up as a raw key on screen.
+  The three English `encounters` keys that had both a bare form and `_one`/`_other` keep
+  only the plural forms, which were the ones read.
+- **Changed** — `NamedApiResource` in `types/pokemon.ts` is the slug-and-URL pair PokéAPI
+  prints everywhere, where seven places had spelled it out and the filtered list had its own
+  copy. `getPokemonList` takes its two numbers rather than defaulting to a page nobody asks
+  for. `FilterControls`, a pass-through of eight props with one reader, is inlined into
+  `ListToolbar`; `FiltersPanel` takes the list's `params` and `actions` under their own names
+  instead of eleven props that renamed them.
+- **Changed** — ESLint also reads `scripts/*.mjs` and its own config, with Node's globals.
+  `pokemon.json` stays typed as open records on purpose: its keys are PokéAPI slugs that
+  arrive as strings, and the label hooks fall back to `humanize` for one that is missing.
+  Prettier, the package version and the fate of `PLAN.md` are left for a decision rather
+  than taken here.
+
 ### `refactor: the big files come apart along the seams they already had`
 
 - **Changed** — The three questions every page asks of a Pokémon — on its way, not one,

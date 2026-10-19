@@ -1,10 +1,10 @@
-import type { Pokemon, PokemonListResponse } from "@/types/pokemon";
+import type { NamedApiResource, Pokemon, PokemonListResponse } from "@/types/pokemon";
 import { get, NotFoundError, request } from "./client";
 import { getDefaultVariety } from "./species";
 
 export const getPokemonList = (
-  limit = 20,
-  offset = 0
+  limit: number,
+  offset: number,
 ): Promise<PokemonListResponse> =>
   get<PokemonListResponse>(
     `pokemon?limit=${limit}&offset=${offset}`,
@@ -46,9 +46,7 @@ export const getPokemonDetails = async (name: string): Promise<Pokemon> => {
   return get<Pokemon>(`pokemon/${fallback}`, `Failed to fetch Pokemon ${name}`);
 };
 
-export const getAllPokemonNames = async (): Promise<
-  { name: string; url: string }[]
-> => {
+export const getAllPokemonNames = async (): Promise<NamedApiResource[]> => {
   const data = await get<PokemonListResponse>(
     "pokemon?limit=2000",
     "Failed to fetch all Pokemon names"

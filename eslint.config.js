@@ -46,6 +46,12 @@ export default tseslint.config([
     },
   },
   {
+    // The dev scripts and this config run under Node, not in the page.
+    files: ['scripts/**/*.mjs', 'eslint.config.js'],
+    extends: [js.configs.recommended],
+    languageOptions: { ecmaVersion: 'latest', globals: globals.node },
+  },
+  {
     files: ['src/domain/**/*.ts'],
     rules: forbid(
       [

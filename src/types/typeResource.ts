@@ -1,3 +1,5 @@
+import type { NamedApiResource } from "./pokemon";
+
 /** What one type's attacks do to the others, and the others' to it. */
 export interface DamageRelations {
   no_damage_to: { name: string }[];
@@ -12,7 +14,7 @@ export interface DamageRelations {
 export interface TypeResource {
   name: string;
   /** Every Pokémon of this type, which the list's filter reads. */
-  pokemon: { pokemon: { name: string; url: string }; slot: number }[];
+  pokemon: { pokemon: NamedApiResource; slot: number }[];
   /** The generation the type arrived in. */
   generation: { name: string };
   /** The relations in force today. */

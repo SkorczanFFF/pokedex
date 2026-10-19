@@ -1,3 +1,4 @@
+import type { NamedApiResource } from "@/types/pokemon";
 import { isInEra, type DexEra } from "./era";
 import { resourceIdFromUrl } from "./resource";
 
@@ -7,7 +8,7 @@ import { resourceIdFromUrl } from "./resource";
  * matches every entry. The term arrives normalised by the caller; what the
  * search box and the Versus picker do to the typed text is theirs.
  */
-export const matchNames = <T extends { name: string; url: string }>(
+export const matchNames = <T extends NamedApiResource>(
   names: readonly T[],
   term: string,
   era: DexEra,

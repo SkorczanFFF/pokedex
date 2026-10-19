@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { FilterControls } from "./FilterControls";
+import { ListOptions } from "./ListOptions";
 import { SearchBox } from "./SearchBox";
 import { TypeFilter } from "./TypeFilter";
 import {
@@ -7,13 +7,6 @@ import {
   type ListActions,
   type ListParams,
 } from "./useListParams";
-
-interface ListToolbarProps {
-  params: ListParams;
-  actions: ListActions;
-  isFiltersOpen: boolean;
-  onOpenFilters: () => void;
-}
 
 /**
  * Everything above the grid. The two layouts render different trees rather than
@@ -26,7 +19,12 @@ export const ListToolbar = ({
   actions,
   isFiltersOpen,
   onOpenFilters,
-}: ListToolbarProps) => {
+}: {
+  params: ListParams;
+  actions: ListActions;
+  isFiltersOpen: boolean;
+  onOpenFilters: () => void;
+}) => {
   const { t } = useTranslation();
   const filterCount = activeFilterCount(params);
 
@@ -34,22 +32,29 @@ export const ListToolbar = ({
     <>
       <div className="flex justify-between items-center mb-4 md:mb-8 flex-col md:flex-row gap-4 md:gap-0">
         <h1 className="text-2xl">{t("list.title")}</h1>
-        <div className="hidden md:block">
-          <FilterControls
+        {/* Desktop: the search and, while nothing is being searched, the
+            generation and page-size selects beside it. */}
+        <div className="hidden md:flex items-center gap-4">
+          <SearchBox
             initialQuery={params.query}
-            itemsPerPage={params.perPage}
-            activeGen={params.gen}
-            onItemsPerPageChange={actions.setPerPage}
-            onGenerationChange={actions.setGen}
-            onSearch={actions.search}
             isSearchMode={params.isSearchMode}
+            onSearch={actions.search}
             onClearSearch={actions.clearSearch}
           />
+          {!params.isSearchMode && (
+            <ListOptions
+              activeGen={params.gen}
+              itemsPerPage={params.perPage}
+              onGenerationChange={actions.setGen}
+              onItemsPerPageChange={actions.setPerPage}
+            />
+          )}
         </div>
       </div>
 
       {/* Mobile: search stays reachable, everything else sits behind one
-          button. Sticks directly under the fixed navbar, whose height is `--spacing-nav`. */}
+          button. Sticks directly under the fixed navbar, whose height is the
+          nav spacing token. */}
       <div className="md:hidden sticky top-nav z-40 -mx-4 mb-6 flex items-center gap-2 bg-dex-bg px-4 py-2">
         <SearchBox
           compact

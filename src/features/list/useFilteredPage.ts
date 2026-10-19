@@ -6,13 +6,8 @@ import { intersectByName } from "@/domain/intersect";
 import { pageSlice } from "@/domain/pagination";
 import { typesAvailableIn } from "@/domain/pokemonTypes";
 import { resourceIdFromUrl } from "@/domain/resource";
+import type { NamedApiResource } from "@/types/pokemon";
 import type { ListParams } from "./useListParams";
-
-/** A membership list entry, as both catalogue endpoints hand it over. */
-interface NamedResource {
-  name: string;
-  url: string;
-}
 
 /**
  * Type and generation filters, ANDed together.
@@ -49,7 +44,7 @@ export const useFilteredPage = (
   } = useQuery({ ...genListQuery(gen), enabled: isGenMode });
 
   /** Every active type ANDed with the generation, then narrowed to the era. */
-  const names = useMemo<NamedResource[]>(() => {
+  const names = useMemo<NamedApiResource[]>(() => {
     // A type that does not exist in this era cannot match anything in it, so
     // "Fairy in Gen II" is a question with no answer rather than no filter at
     // all. Reachable in one click: select Fairy, then switch to retro.
@@ -59,7 +54,7 @@ export const useFilteredPage = (
     if (isTypeMode && !typeLists) return [];
     if (isGenMode && !genData) return [];
 
-    const lists: NamedResource[][] = [];
+    const lists: NamedApiResource[][] = [];
     if (isTypeMode && typeLists) {
       for (const list of typeLists) {
         lists.push(list.pokemon.map((entry) => entry.pokemon));
