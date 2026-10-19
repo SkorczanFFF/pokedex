@@ -16,6 +16,33 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `refactor: the era answers its own questions, and the domain spells each rule once`
+
+- **Changed** — `domain/era.ts` gains the questions every payload reader had been asking in
+  its own words: `isInEra` for a dex id (eight places compared against `maxDexId` by hand),
+  `genInEra` for a generation (seven loops), `newestInEra` for the latest dated entry an era
+  covers (the species text, the evolution step and the encounters each had a copy),
+  `inForceAt` for PokéAPI's "what stood through this generation" (the typing, the stats, the
+  type relations and a move's past values each read it their own way), and a `pixelArt` field,
+  so a component asks the era whether its pictures are sprites instead of comparing a sheet's
+  name to "artwork". `DEFAULT_ERA` stands where five `"modern"`s were.
+- **Changed** — New homes for what several files had shared: `domain/text.ts` (cleaning the
+  games' flavour text, the locale-then-English fallback, and one shape for a translated
+  table where two types had the same shape), `domain/stats.ts` (the stat slugs, the bar's
+  scale and `statValue`, which the Versus panels had re-derived), `domain/search.ts`
+  (`matchNames`, written once for the list and the picker), `domain/pagination.ts`
+  (`pageOffset`, `pageSlice`, `pageCount`), `api/hydrate.ts` (names into records, one policy
+  for the dex, the filters and the search). The level's bounds move from the URL hook to
+  `domain/damage.ts`, which also gains `computeHit`: the Moves tab's whole pipeline — the
+  class in the era, STAB, the multiplier with the abilities, the roll — as one tested
+  function, where it had lived inline in a component. `getGeneration` answers a generation
+  slug rather than the raw API name, and `TYPE_STYLES` is keyed by `PokemonType`, so a
+  missing colour is a compile error. Phase 2 of the plan in `REVIEW.md`.
+- **Fixed** — The filtered list dropped any record that failed to load, a dead connection
+  included, and showed what was left as if it were the answer. It now drops only the species
+  names that are not Pokémon names — `wormadam`, `deoxys` — and reports anything else as the
+  error it is, the way the dex and the search already did.
+
 ### `test: the domain gets a test suite, and knip watches for code nothing reads`
 
 - **Added** — `vitest`, and 110 tests beside the domain files. The damage formula is held to

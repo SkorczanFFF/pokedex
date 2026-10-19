@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { genListQuery, pokemonQuery, typeQuery } from "@/api/queries";
-import type { DexEra } from "@/domain/era";
+import { hydratePokemon } from "@/api/hydrate";
+import { genListQuery, typeQuery } from "@/api/queries";
+import { isInEra, type DexEra } from "@/domain/era";
 import { intersectByName } from "@/domain/intersect";
+import { pageSlice } from "@/domain/pagination";
 import { typesAvailableIn } from "@/domain/pokemonTypes";
 import { resourceIdFromUrl } from "@/domain/resource";
-import type { Pokemon } from "@/types/pokemon";
 import type { ListParams } from "./useListParams";
 
 /** A membership list entry, as both catalogue endpoints hand it over. */
@@ -77,12 +78,12 @@ export const useFilteredPage = (
     }
     if (isGenMode && genData) lists.push(genData.pokemon_species);
 
-    return intersectByName(lists).filter(
-      (entry) => resourceIdFromUrl(entry.url) <= era.maxDexId
+    return intersectByName(lists).filter((entry) =>
+      isInEra(resourceIdFromUrl(entry.url), era)
     );
   }, [isTypeMode, isGenMode, typeLists, genData, types, era]);
 
-  const pageNames = names.slice((page - 1) * perPage, page * perPage);
+  const pageNames = pageSlice(names, page, perPage);
 
   const {
     data: pokemon,
@@ -97,20 +98,9 @@ export const useFilteredPage = (
       perPage,
       era.maxDexId,
     ],
-    queryFn: async (): Promise<Pokemon[]> => {
-      // Promise.allSettled because a few species names 404 on /pokemon/{name}
-      // (form-only mons like deoxys, wormadam). Failed entries silently drop.
-      const settled = await Promise.allSettled(
-        pageNames.map((entry) =>
-          queryClient.fetchQuery(pokemonQuery(entry.name))
-        )
-      );
-      return settled
-        .filter(
-          (r): r is PromiseFulfilledResult<Pokemon> => r.status === "fulfilled"
-        )
-        .map((r) => r.value);
-    },
+    // Species names that are not Pokémon names (deoxys, wormadam) drop out
+    // inside `hydratePokemon`; anything else that fails is this page's error.
+    queryFn: () => hydratePokemon(queryClient, pageNames),
     // Cards hydrate for the selection the user settles on, not for every tap
     // along the way. The URL, the heading and the panel's result count all
     // update live off the cached name lists — this only holds back the per-card

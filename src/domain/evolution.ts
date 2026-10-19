@@ -1,6 +1,5 @@
 import type { EvolutionDetail, EvolutionLink } from "@/types/pokemon";
-import { genOrder } from "./dex";
-import type { DexEra } from "./era";
+import { isInEra, newestInEra, type DexEra } from "./era";
 import { generationOfVersionGroup } from "./games";
 import { resourceIdFromUrl } from "./resource";
 
@@ -33,22 +32,12 @@ export interface EvolutionNode {
 const methodInEra = (
   details: EvolutionDetail[],
   era: DexEra,
-): EvolutionDetail | null => {
-  const cap = genOrder(era.maxGen);
-  let best: { order: number; detail: EvolutionDetail } | null = null;
-
-  for (const detail of details) {
-    const generation = generationOfVersionGroup(detail.version_group.name);
-    if (generation === null) continue;
-
-    const order = genOrder(generation);
-    if (order <= cap && (best === null || order >= best.order)) {
-      best = { order, detail };
-    }
-  }
-
-  return best?.detail ?? null;
-};
+): EvolutionDetail | null =>
+  newestInEra(
+    details,
+    (detail) => generationOfVersionGroup(detail.version_group.name),
+    era,
+  ) ?? null;
 
 /**
  * The steps that belong to one form.
@@ -132,7 +121,7 @@ export const treeDepth = (node: EvolutionNode): number =>
  */
 const prune = (node: EvolutionNode, era: DexEra): EvolutionNode[] => {
   const children = node.children.flatMap((child) => prune(child, era));
-  return node.id > era.maxDexId ? children : [{ ...node, children }];
+  return isInEra(node.id, era) ? [{ ...node, children }] : children;
 };
 
 /** The line as the era knew it: which species were in it, and how they evolved. */

@@ -6,6 +6,7 @@ import {
   MenuCursor,
 } from "@/components/BattleScreen";
 import { genRoman, generationFromId } from "@/domain/dex";
+import { DEFAULT_ERA } from "@/domain/era";
 import { useEra } from "@/era/context";
 import { humanize } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
@@ -56,7 +57,7 @@ export const NotInEra = ({ pokemon }: { pokemon: Pokemon }) => {
             name the one it drops back to. */}
         <button
           type="button"
-          onClick={() => setEra("modern")}
+          onClick={() => setEra(DEFAULT_ERA)}
           className={MENU_ITEM}
         >
           <MenuCursor />

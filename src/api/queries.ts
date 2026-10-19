@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { genApiName, type GenSlug } from "@/domain/dex";
+import { pageOffset } from "@/domain/pagination";
 import { getPokemonByGeneration } from "./catalog";
 import { getEncounters } from "./encounters";
 import { getEvolutionChain } from "./evolution";
@@ -44,7 +45,7 @@ export const allPokemonNamesQuery = queryOptions({
 export const pokemonListQuery = (page: number, perPage: number) =>
   queryOptions({
     queryKey: ["pokemonList", page, perPage],
-    queryFn: () => getPokemonList(perPage, (page - 1) * perPage),
+    queryFn: () => getPokemonList(perPage, pageOffset(page, perPage)),
   });
 
 /** The three index entries around a dex id. */

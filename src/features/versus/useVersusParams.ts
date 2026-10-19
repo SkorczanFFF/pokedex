@@ -1,9 +1,6 @@
 import { useSearchParams } from "react-router-dom";
+import { DEFAULT_LEVEL, clampLevel } from "@/domain/damage";
 import type { Side } from "./BattleField";
-
-const DEFAULT_LEVEL = 50;
-export const MIN_LEVEL = 1;
-export const MAX_LEVEL = 100;
 
 /** One side of the matchup as the URL has it. */
 export interface SideParams {
@@ -20,9 +17,6 @@ const KEYS: Record<Side, { name: string; ability: string; move: string; level: s
   a: { name: "a", ability: "aa", move: "am", level: "al" },
   b: { name: "b", ability: "ba", move: "bm", level: "bl" },
 };
-
-export const clampLevel = (level: number): number =>
-  Math.min(MAX_LEVEL, Math.max(MIN_LEVEL, Math.floor(level)));
 
 const readLevel = (raw: string | null): number => {
   const level = Number(raw);

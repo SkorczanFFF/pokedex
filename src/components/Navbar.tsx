@@ -1,6 +1,7 @@
 import { useEffect, useId, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { DEFAULT_ERA } from "@/domain/era";
 import EraToggle from "@/era/EraToggle";
 import { useEra } from "@/era/context";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
@@ -103,7 +104,7 @@ const GameBoyMenu = () => {
         <li>
           <button
             type="button"
-            onClick={() => setEra(isRetro ? "modern" : "retro")}
+            onClick={() => setEra(isRetro ? DEFAULT_ERA : "retro")}
             aria-pressed={isRetro}
             aria-label={t(isRetro ? "era.disable" : "era.enable")}
             className={`${MENU_ITEM} w-full`}

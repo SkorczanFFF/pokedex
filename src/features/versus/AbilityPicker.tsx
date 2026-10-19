@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Chip } from "@/components/Chip";
+import { abilitiesInOrder } from "@/domain/abilities";
 import { useEra } from "@/era/context";
 import { useAbilityLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
@@ -24,7 +25,7 @@ export const AbilityPicker = ({
 
   if (!era.hasAbilities || pokemon.abilities.length === 0) return null;
 
-  const abilities = [...pokemon.abilities].sort((x, y) => x.slot - y.slot);
+  const abilities = abilitiesInOrder(pokemon);
 
   return (
     <div

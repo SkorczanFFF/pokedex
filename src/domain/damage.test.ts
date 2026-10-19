@@ -1,16 +1,20 @@
 import { describe, expect, it } from "vitest";
 import {
+  DEFAULT_LEVEL,
   battleStats,
+  clampLevel,
+  computeHit,
   damageClassInEra,
   damageRange,
   defenceStat,
   firstToMove,
   hitsToKo,
   offenceStat,
-  statValue,
 } from "./damage";
 import { MODERN, RETRO } from "./era";
-import type { StatInEra } from "./pokemonView";
+import type { MoveInGame } from "./moves";
+import { statValue, type StatInEra } from "./stats";
+import type { TypeChart } from "./typeChart";
 
 const base = (
   hp: number,
@@ -138,5 +142,75 @@ describe("which stat a move reads", () => {
   it("reads a value, or 0 for a stat the list lacks", () => {
     expect(statValue(single, "special")).toBe(4);
     expect(statValue(single, "special-attack")).toBe(0);
+  });
+});
+
+describe("levels", () => {
+  it("clamps to the games' range and starts at 50", () => {
+    expect(DEFAULT_LEVEL).toBe(50);
+    expect(clampLevel(0)).toBe(1);
+    expect(clampLevel(101)).toBe(100);
+    expect(clampLevel(49.9)).toBe(49);
+    expect(clampLevel(50)).toBe(50);
+  });
+});
+
+describe("computeHit", () => {
+  const chart: TypeChart = {
+    types: ["electric", "water", "flying"],
+    multiplier: (attacker, defender) =>
+      attacker === "electric" && (defender === "water" || defender === "flying") ? 2 : 1,
+  };
+  const thunderbolt: MoveInGame = {
+    type: "electric",
+    damageClass: "special",
+    power: 90,
+    accuracy: 100,
+    pp: 15,
+    text: "",
+    textFromGame: null,
+    textLanguage: "en",
+  };
+  const input = {
+    move: thunderbolt,
+    power: 90,
+    level: 50,
+    attackerTypes: ["electric"] as const,
+    defenderTypes: ["water", "flying"] as const,
+    stats: battleStats(pikachu, 50, MODERN),
+    defenderStats: battleStats(gyarados, 50, MODERN),
+    abilities: {},
+    chart,
+    era: MODERN,
+  };
+
+  it("runs the whole pipeline to the calculator's numbers", () => {
+    expect(computeHit(input)).toEqual({
+      damageClass: "special",
+      type: "electric",
+      stab: true,
+      effectiveness: 4,
+      hp: 170,
+      range: { min: 124, max: 148 },
+    });
+  });
+
+  it("reads the typed-over power and the era's own stats", () => {
+    const retro = computeHit({
+      ...input,
+      power: 95,
+      era: RETRO,
+      stats: battleStats(pikachu, 50, RETRO),
+      defenderStats: battleStats(gyarados, 50, RETRO),
+    });
+    expect(retro.range).toEqual({ min: 132, max: 156 });
+  });
+
+  it("does no damage for a status move, an immunity, or no power", () => {
+    expect(computeHit({ ...input, move: { ...thunderbolt, damageClass: "status" } }).range).toBeNull();
+    expect(computeHit({ ...input, power: null }).range).toBeNull();
+    expect(
+      computeHit({ ...input, abilities: { defender: { takes: [{ types: ["electric"], times: 0 }] } } }),
+    ).toMatchObject({ effectiveness: 0, range: null });
   });
 });

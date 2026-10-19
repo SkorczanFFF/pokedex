@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import type { TranslatedMoveText } from "@/domain/moves";
 import type { TranslatedSpeciesText } from "@/domain/species";
+import type { TranslatedText } from "@/domain/text";
 
 /**
  * The text PokéAPI does not carry in the reading language.
@@ -24,7 +24,7 @@ const POLISH = {
     import("./locales/pl/moveDescriptions.json").then(
       // A JSON import widens every pair to an array of unions, so the pairing
       // the generator guarantees has to be restated rather than inferred.
-      (module) => module.default as unknown as Record<string, TranslatedMoveText>
+      (module) => module.default as unknown as Record<string, TranslatedText>
     ),
   species: () =>
     import("./locales/pl/pokemonDescriptions.json").then(
@@ -50,7 +50,7 @@ const useTable = <T,>(which: keyof typeof POLISH) => {
 };
 
 /** A move's sentence in the reading language, or null when there is none. */
-export const useTranslatedMoveText = () => useTable<TranslatedMoveText>("moves");
+export const useTranslatedMoveText = () => useTable<TranslatedText>("moves");
 
 /** A species' dex entries and genus in the reading language, or null. */
 export const useTranslatedSpeciesText = () =>

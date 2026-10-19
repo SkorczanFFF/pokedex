@@ -71,12 +71,15 @@ const RULES: Record<string, AbilityRule> = {
 export const abilityRule = (slug: string | null | undefined): AbilityRule | null =>
   slug ? (RULES[slug] ?? null) : null;
 
+/** A Pokémon's abilities in slot order: the regular one or two first, the hidden one last. */
+export const abilitiesInOrder = (pokemon: Pokemon): Pokemon["abilities"] =>
+  [...pokemon.abilities].sort((x, y) => x.slot - y.slot);
+
 /** The ability a Pokémon is assumed to have: its first regular one. */
 export const defaultAbility = (pokemon: Pokemon): string | null => {
-  const regular = pokemon.abilities
-    .filter((entry) => !entry.is_hidden)
-    .sort((x, y) => x.slot - y.slot);
-  return (regular[0] ?? pokemon.abilities[0])?.ability.name ?? null;
+  const ordered = abilitiesInOrder(pokemon);
+  const regular = ordered.filter((entry) => !entry.is_hidden);
+  return (regular[0] ?? ordered[0])?.ability.name ?? null;
 };
 
 export const hasAbility = (pokemon: Pokemon, slug: string): boolean =>

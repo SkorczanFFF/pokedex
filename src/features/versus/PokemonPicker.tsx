@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { allPokemonNamesQuery } from "@/api/queries";
 import { resourceIdFromUrl } from "@/domain/resource";
+import { matchNames } from "@/domain/search";
 import { useEra } from "@/era/context";
 import { humanize } from "@/i18n/labels";
 
@@ -40,13 +41,7 @@ export const PokemonPicker = ({
 
   const term = text.trim().toLowerCase().replace(/\s+/g, "-");
   // The index comes in dex order, forms after the national dex, so no sort.
-  const matches = open
-    ? names.filter(
-        (entry) =>
-          resourceIdFromUrl(entry.url) <= era.maxDexId &&
-          (term === "" || entry.name.includes(term)),
-      )
-    : [];
+  const matches = open ? matchNames(names, term, era) : [];
 
   // Keeps the line the keyboard is on in view of a list a thousand long.
   useEffect(() => {

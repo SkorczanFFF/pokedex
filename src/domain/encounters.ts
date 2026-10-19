@@ -1,6 +1,5 @@
 import type { EncounterDetail, LocationEncounter } from "@/types/pokemon";
-import { genOrder } from "./dex";
-import type { DexEra } from "./era";
+import { genInEra, type DexEra } from "./era";
 import { generationOfVersion, versionRank } from "./games";
 
 /** One way of meeting a Pokémon, and every game that words it the same way. */
@@ -120,6 +119,12 @@ const rowsOf = (details: EncounterDetail[]): Omit<EncounterRow, "games">[] => {
 
 const rank = (version: string): number => versionRank(version) ?? Number.MAX_SAFE_INTEGER;
 
+/** Whether a game belongs to the era; one this table cannot date does not. */
+const versionInEra = (version: string, era: DexEra): boolean => {
+  const generation = generationOfVersion(version);
+  return generation !== null && genInEra(generation, era);
+};
+
 /**
  * Whether the era has anywhere at all to show — the question the link on the
  * details page asks, and the reason it is not `placesInEra(...).length > 0`:
@@ -129,30 +134,21 @@ const rank = (version: string): number => versionRank(version) ?? Number.MAX_SAF
 export const hasPlacesInEra = (
   encounters: LocationEncounter[],
   era: DexEra
-): boolean => {
-  const cap = genOrder(era.maxGen);
-
-  return encounters.some((place) =>
-    place.version_details.some((detail) => {
-      const generation = generationOfVersion(detail.version.name);
-      return generation !== null && genOrder(generation) <= cap;
-    })
+): boolean =>
+  encounters.some((place) =>
+    place.version_details.some((detail) => versionInEra(detail.version.name, era))
   );
-};
 
 /** The games inside the era this Pokémon is met in at all, oldest first. */
 export const gamesInEra = (
   encounters: LocationEncounter[],
   era: DexEra
 ): string[] => {
-  const cap = genOrder(era.maxGen);
   const games = new Set<string>();
 
   for (const place of encounters) {
     for (const detail of place.version_details) {
-      const generation = generationOfVersion(detail.version.name);
-      if (generation === null || genOrder(generation) > cap) continue;
-      games.add(detail.version.name);
+      if (versionInEra(detail.version.name, era)) games.add(detail.version.name);
     }
   }
 
@@ -172,7 +168,6 @@ export const placesInEra = (
   era: DexEra,
   game: string | null = null
 ): EncounterPlace[] => {
-  const cap = genOrder(era.maxGen);
   const places: EncounterPlace[] = [];
 
   for (const place of encounters) {
@@ -181,9 +176,7 @@ export const placesInEra = (
     for (const detail of place.version_details) {
       const version = detail.version.name;
       if (game !== null && version !== game) continue;
-
-      const generation = generationOfVersion(version);
-      if (generation === null || genOrder(generation) > cap) continue;
+      if (!versionInEra(version, era)) continue;
 
       for (const row of rowsOf(detail.encounter_details)) {
         const key = `${row.method}|${row.minLevel}|${row.maxLevel}|${row.chance}|${row.conditions

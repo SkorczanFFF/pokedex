@@ -47,6 +47,12 @@ export const genSlugOf = (apiName: string): GenSlug | null => {
   return isGenSlug(slug) ? slug : null;
 };
 
+/** `generation-iv` -> its position in dex order, or null for one we do not know. */
+export const genOrderOf = (apiName: string): number | null => {
+  const slug = genSlugOf(apiName);
+  return slug === null ? null : genOrder(slug);
+};
+
 /** Generations from I up to and including `maxGen`, in dex order. */
 export const gensUpTo = (maxGen: GenSlug): readonly GenSlug[] =>
   GEN_SLUGS.slice(0, GEN_SLUGS.indexOf(maxGen) + 1);

@@ -27,7 +27,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   // costs no request — the sprite tree rides in the payload the grid already
   // fetched for the types — and it saves the download: the official artwork is
   // around 130 kB a card, the Crystal sprite half a kilobyte.
-  const isSprite = era.sprites !== "artwork";
+  const isSprite = era.pixelArt;
   const imageUrl =
     spriteUrl(pokemon, era.sprites) ?? spriteUrl(pokemon, "artwork") ?? undefined;
 

@@ -195,7 +195,7 @@ const NodeCard = ({
   const location = useLocation();
   const { era } = useEra();
   const isCurrent = node.id === currentId;
-  const isSprite = era.sprites !== "artwork";
+  const isSprite = era.pixelArt;
 
   // Retro marks the line the way a Game Boy menu did, because the yellow fill
   // has nothing left to fill: the sprite brings its own opaque white panel and

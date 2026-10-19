@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { DEFAULT_ERA } from "@/domain/era";
 import { useEra } from "./context";
 
 /**
@@ -15,7 +16,7 @@ const EraToggle = () => {
   return (
     <button
       type="button"
-      onClick={() => setEra(isRetro ? "modern" : "retro")}
+      onClick={() => setEra(isRetro ? DEFAULT_ERA : "retro")}
       aria-pressed={isRetro}
       aria-label={description}
       title={description}

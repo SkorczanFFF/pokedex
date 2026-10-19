@@ -1,7 +1,8 @@
 import type { PokemonSpecies } from "@/types/pokemon";
-import { genOrder } from "./dex";
-import type { DexEra } from "./era";
+import { genSlugOf, type GenSlug } from "./dex";
+import { newestInEra, type DexEra } from "./era";
 import { generationOfVersion } from "./games";
+import { cleanFlavorText, flattenTranslated, inLanguage, type TranslatedText } from "./text";
 
 // Reading a species payload: which language wins, which game's text wins, and
 // what the raw fields mean. Fetching one is `api/species.ts` — choosing what to
@@ -17,7 +18,7 @@ import { generationOfVersion } from "./games";
  */
 export interface TranslatedSpeciesText {
   genus?: string;
-  dex: readonly (readonly [readonly string[], string])[];
+  dex: TranslatedText;
 }
 
 /** A sentence and the language it turned out to be in. */
@@ -26,52 +27,13 @@ export interface SpeciesDescription {
   language: string;
 }
 
-/**
- * Every entry in the best available language.
- *
- * PokéAPI serves no Polish — its /language list has no `pl` — so a Polish UI
- * always falls through to English here, and anything better has to be passed
- * in from outside.
- */
-const inLanguage = <T>(
-  entries: T[],
-  languageOf: (entry: T) => string,
-  locale: string
-): T[] => {
-  for (const language of [locale, "en"]) {
-    const hits = entries.filter((entry) => languageOf(entry) === language);
-    if (hits.length > 0) return hits;
-  }
-  return [];
-};
-
-/**
- * The newest entry the era knows about.
- *
- * Ties within one generation go to the later entry, which is how a pair like
- * Gold and Silver resolves to the one PokéAPI lists last. Entries from a game
- * this table cannot date are skipped rather than guessed at.
- */
-const newestInEra = <T>(
-  entries: T[],
+/** The newest entry the era knows, dated by the game that printed it. */
+const newestVersion = <T>(
+  entries: readonly T[],
   versionOf: (entry: T) => string,
-  era: DexEra
-): T | undefined => {
-  const cap = genOrder(era.maxGen);
-  let best: { order: number; entry: T } | undefined;
-
-  for (const entry of entries) {
-    const generation = generationOfVersion(versionOf(entry));
-    if (generation === null) continue;
-
-    const order = genOrder(generation);
-    if (order <= cap && (best === undefined || order >= best.order)) {
-      best = { order, entry };
-    }
-  }
-
-  return best?.entry;
-};
+  era: DexEra,
+): T | undefined =>
+  newestInEra(entries, (entry) => generationOfVersion(versionOf(entry)), era);
 
 /**
  * The dex entry to show.
@@ -91,10 +53,8 @@ export const getDescription = (
   era: DexEra,
   translated: TranslatedSpeciesText | null = null
 ): SpeciesDescription => {
-  const carried = (translated?.dex ?? []).flatMap(([versions, text]) =>
-    versions.map((version) => ({ version, text }))
-  );
-  const own = newestInEra(carried, (entry) => entry.version, era) ?? carried[0];
+  const carried = flattenTranslated(translated?.dex ?? []);
+  const own = newestVersion(carried, (entry) => entry.game, era) ?? carried[0];
   if (own) return { text: own.text, language: locale };
 
   const entries = inLanguage(
@@ -102,12 +62,10 @@ export const getDescription = (
     (entry) => entry.language.name,
     locale
   );
-  const entry =
-    newestInEra(entries, (e) => e.version.name, era) ?? entries[0];
+  const entry = newestVersion(entries, (e) => e.version.name, era) ?? entries[0];
 
   return {
-    text:
-      entry?.flavor_text.replace(/[\f\n\r\u00ad]/g, " ").trim() ?? "",
+    text: entry ? cleanFlavorText(entry.flavor_text) : "",
     // `inLanguage` answers in `locale` when it can and in English otherwise.
     language: entry?.language.name ?? "en",
   };
@@ -123,8 +81,6 @@ export const getGenus = (
   inLanguage(species.genera, (entry) => entry.language.name, locale)[0]?.genus ||
   "";
 
-/** Raw generation slug (e.g. `generation-i`), or null. Display formatting is the UI's job. */
-export const getGeneration = (species: PokemonSpecies): string | null => {
-  const raw = species.generation?.name ?? "";
-  return raw.startsWith("generation-") ? raw : null;
-};
+/** The generation the species arrived in, or null for one the dex does not know. */
+export const getGeneration = (species: PokemonSpecies): GenSlug | null =>
+  genSlugOf(species.generation?.name ?? "");

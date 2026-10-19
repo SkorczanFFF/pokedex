@@ -1,7 +1,10 @@
 import type { Pokemon, PokemonTypeSlot } from "@/types/pokemon";
-import { genOrder, genSlugOf } from "./dex";
-import type { DexEra } from "./era";
+import { genOrder, genOrderOf } from "./dex";
+import { inForceAt, type DexEra } from "./era";
+import { typingOf } from "./matchup";
+import type { PokemonType } from "./pokemonTypes";
 import { setGame, type SpriteSetId } from "./sprites";
+import { STAT, type StatInEra } from "./stats";
 
 /**
  * The typing a Pokémon had in an era.
@@ -16,34 +19,16 @@ import { setGame, type SpriteSetId } from "./sprites";
  * Written without assuming `past_types` arrives in order — the API happens to
  * sort it, but nothing documents that.
  */
-export const typesInEra = (
-  pokemon: Pokemon,
-  era: DexEra
-): PokemonTypeSlot[] => {
-  const eraOrder = genOrder(era.maxGen);
-  let earliest: { order: number; types: PokemonTypeSlot[] } | null = null;
+export const typesInEra = (pokemon: Pokemon, era: DexEra): PokemonTypeSlot[] =>
+  inForceAt(
+    pokemon.past_types ?? [],
+    (past) => genOrderOf(past.generation.name),
+    genOrder(era.maxGen),
+  )?.types ?? pokemon.types;
 
-  for (const past of pokemon.past_types ?? []) {
-    const slug = genSlugOf(past.generation.name);
-    if (slug === null) continue;
-
-    const order = genOrder(slug);
-    if (order >= eraOrder && (earliest === null || order < earliest.order)) {
-      earliest = { order, types: past.types };
-    }
-  }
-
-  return earliest?.types ?? pokemon.types;
-};
-
-/** A stat as an era had it. The name is a slug, and at era I it can be `special`. */
-export interface StatInEra {
-  name: string;
-  value: number;
-}
-
-/** Gen I kept one Special. The split into two arrived with Gen II. */
-const SPECIAL = "special";
+/** The era's typing as type names, in slot order — what the chart is asked about. */
+export const typingInEra = (pokemon: Pokemon, era: DexEra): PokemonType[] =>
+  typingOf(typesInEra(pokemon, era));
 
 /**
  * The base stats an era actually played with.
@@ -61,38 +46,35 @@ const SPECIAL = "special";
  */
 export const statsInEra = (pokemon: Pokemon, era: DexEra): StatInEra[] => {
   const eraOrder = genOrder(era.maxGen);
-  const applied = new Map<string, { order: number; value: number }>();
+  const past = pokemon.past_stats ?? [];
 
-  for (const past of pokemon.past_stats ?? []) {
-    const slug = genSlugOf(past.generation.name);
-    if (slug === null) continue;
+  /** The value a stat had in the era, or undefined when today's stands. */
+  const valueIn = (name: string): number | undefined =>
+    inForceAt(
+      past.flatMap((entry) =>
+        entry.stats
+          .filter((stat) => stat.stat.name === name)
+          .map((stat) => ({ order: genOrderOf(entry.generation.name), value: stat.base_stat })),
+      ),
+      (entry) => entry.order,
+      eraOrder,
+    )?.value;
 
-    const order = genOrder(slug);
-    if (order < eraOrder) continue;
-
-    for (const entry of past.stats) {
-      const seen = applied.get(entry.stat.name);
-      if (seen === undefined || order < seen.order) {
-        applied.set(entry.stat.name, { order, value: entry.base_stat });
-      }
-    }
-  }
-
-  const special = applied.get(SPECIAL);
+  const special = valueIn(STAT.special);
   const stats: StatInEra[] = [];
 
   for (const stat of pokemon.stats) {
     const name = stat.stat.name;
 
     if (special !== undefined) {
-      if (name === "special-attack") {
-        stats.push({ name: SPECIAL, value: special.value });
+      if (name === STAT.specialAttack) {
+        stats.push({ name: STAT.special, value: special });
         continue;
       }
-      if (name === "special-defense") continue;
+      if (name === STAT.specialDefense) continue;
     }
 
-    stats.push({ name, value: applied.get(name)?.value ?? stat.base_stat });
+    stats.push({ name, value: valueIn(name) ?? stat.base_stat });
   }
 
   return stats;

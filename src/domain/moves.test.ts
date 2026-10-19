@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Move, Pokemon } from "@/types/pokemon";
 import { makePokemon } from "./__fixtures__/pokemon";
 import { MODERN, RETRO } from "./era";
-import { learnsetInEra, moveInGame, moveMethodAccent } from "./moves";
+import { learnsetInEra, moveInGame, moveMethodAccent, uniqueMoves } from "./moves";
 
 const learns = (
   move: string,
@@ -150,5 +150,20 @@ describe("moveInGame", () => {
     expect(polish.text).toBe("Silne wyładowanie elektryczne.");
     expect(polish.textFromGame).toBe("crystal");
     expect(polish.textLanguage).toBe("pl");
+  });
+});
+
+describe("uniqueMoves", () => {
+  it("offers a move once, keeping its first row", () => {
+    expect(
+      uniqueMoves([
+        { name: "ember", level: 1 },
+        { name: "ember", level: 12 },
+        { name: "smokescreen", level: 6 },
+      ]),
+    ).toEqual([
+      { name: "ember", level: 1 },
+      { name: "smokescreen", level: 6 },
+    ]);
   });
 });

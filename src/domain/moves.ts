@@ -1,7 +1,12 @@
-import type { Move, MovePastValues, Pokemon } from "@/types/pokemon";
-import { genOrder } from "./dex";
-import type { DexEra } from "./era";
+import type { Move, Pokemon } from "@/types/pokemon";
+import { genInEra, inForceAt, type DexEra } from "./era";
 import { generationOfVersionGroup, versionGroupRank } from "./games";
+import {
+  cleanFlavorText,
+  flattenTranslated,
+  type PrintedText,
+  type TranslatedText,
+} from "./text";
 
 export interface LearnedMove {
   name: string;
@@ -145,8 +150,6 @@ export const moveMethodAccent = (method: string): MethodAccent =>
  * every move, and only the move's own type and power would need fetching.
  */
 export const learnsetInEra = (pokemon: Pokemon, era: DexEra): Learnset => {
-  const cap = genOrder(era.maxGen);
-
   /** Every game inside the era this Pokémon appears in, and how it teaches. */
   const candidates = new Map<string, { rank: number; byLevel: boolean }>();
 
@@ -155,8 +158,7 @@ export const learnsetInEra = (pokemon: Pokemon, era: DexEra): Learnset => {
       const group = detail.version_group.name;
       const generation = generationOfVersionGroup(group);
       const rank = versionGroupRank(group);
-      if (generation === null || rank === null) continue;
-      if (genOrder(generation) > cap) continue;
+      if (generation === null || rank === null || !genInEra(generation, era)) continue;
 
       const seen = candidates.get(group) ?? { rank, byLevel: false };
       seen.byLevel ||= detail.move_learn_method.name === "level-up";
@@ -207,6 +209,12 @@ export const learnsetInEra = (pokemon: Pokemon, era: DexEra): Learnset => {
   return { game, groups };
 };
 
+/** A move once per group: Typhlosion knows Ember at 1 and again at 12, and a picker offers it once. */
+export const uniqueMoves = (moves: readonly LearnedMove[]): LearnedMove[] => {
+  const seen = new Set<string>();
+  return moves.filter((move) => !seen.has(move.name) && seen.add(move.name));
+};
+
 export interface MoveInGame {
   type: string;
   damageClass: string;
@@ -221,37 +229,18 @@ export interface MoveInGame {
 }
 
 /**
- * Flavour text for a language PokéAPI does not carry, one sentence per run of
- * games.
- *
- * Shaped the way the source prints it — `[["gold-silver", "crystal"], "…"]` —
- * because a run of games sharing one sentence is the source's own unit, and
- * flattening it would store that sentence once per game.
- */
-export type TranslatedMoveText = readonly (readonly [
-  readonly string[],
-  string,
-])[];
-
-/** A sentence and the version group that printed it. */
-interface Printed {
-  text: string;
-  game: string;
-}
-
-/**
  * The sentence the named game printed, or the nearest one before it.
  *
  * A move's wording is rewritten every few generations and not every game gets
  * its own entry, so reading Crystal falls back to Gold and Silver rather than
  * to whatever the newest game happens to say.
  */
-const printedIn = (entries: Printed[], game: string): Printed | null => {
+const printedIn = (entries: PrintedText[], game: string): PrintedText | null => {
   const played = versionGroupRank(game);
   const exact = entries.find((entry) => entry.game === game);
   if (exact) return exact;
 
-  const nearest = entries.reduce<Printed | null>((best, entry) => {
+  const nearest = entries.reduce<PrintedText | null>((best, entry) => {
     const rank = versionGroupRank(entry.game);
     if (rank === null || played === null || rank > played) return best;
     const bestRank = best ? (versionGroupRank(best.game) ?? -1) : -1;
@@ -273,24 +262,23 @@ export const moveInGame = (
   move: Move,
   game: string,
   locale: string,
-  translated: TranslatedMoveText | null = null
+  translated: TranslatedText | null = null
 ): MoveInGame => {
   const played = versionGroupRank(game);
+  const applies =
+    played === null
+      ? undefined
+      : inForceAt(
+          move.past_values,
+          (past) => versionGroupRank(past.version_group.name),
+          played,
+        );
 
-  let applies: MovePastValues | null = null;
-  for (const past of move.past_values) {
-    const rank = versionGroupRank(past.version_group.name);
-    if (rank === null || played === null || rank < played) continue;
-    if (applies === null || rank < versionGroupRank(applies.version_group.name)!) {
-      applies = past;
-    }
-  }
-
-  const spokenIn = (language: string): Printed[] =>
+  const spokenIn = (language: string): PrintedText[] =>
     move.flavor_text_entries
       .filter((entry) => entry.language.name === language)
       .map((entry) => ({
-        text: entry.flavor_text.replace(/[\f\n\r\u00ad]/g, " ").trim(),
+        text: cleanFlavorText(entry.flavor_text),
         game: entry.version_group.name,
       }));
 
@@ -298,11 +286,7 @@ export const moveInGame = (
   // carries one it does not. English is the last resort either way, and the
   // only language every move is written in.
   const own = printedIn(
-    translated
-      ? translated.flatMap(([games, text]) =>
-          games.map((printedBy) => ({ text, game: printedBy }))
-        )
-      : spokenIn(locale),
+    translated ? flattenTranslated(translated) : spokenIn(locale),
     game
   );
   const chosen = own ?? printedIn(spokenIn("en"), game);

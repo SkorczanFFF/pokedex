@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { makePokemon, stat, stats } from "./__fixtures__/pokemon";
 import { MODERN, RETRO } from "./era";
-import { cryForSet, statsInEra, typesInEra } from "./pokemonView";
+import { cryForSet, statsInEra, typesInEra, typingInEra } from "./pokemonView";
 
 const GEN_I = { ...RETRO, maxGen: "i" as const };
 
@@ -80,5 +80,17 @@ describe("cryForSet", () => {
     expect(cryForSet(noLegacy, "ii/crystal")).toBe("latest.ogg");
     const silent = makePokemon({ cries: { latest: null, legacy: null } });
     expect(cryForSet(silent, "artwork")).toBeNull();
+  });
+});
+
+describe("typingInEra", () => {
+  it("names the era's typing in slot order", () => {
+    const gyarados = makePokemon({
+      types: [
+        { slot: 2, type: { name: "flying" } },
+        { slot: 1, type: { name: "water" } },
+      ],
+    });
+    expect(typingInEra(gyarados, MODERN)).toEqual(["water", "flying"]);
   });
 });

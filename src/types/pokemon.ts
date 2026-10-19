@@ -158,7 +158,7 @@ export interface EvolutionChainResponse {
 }
 
 /** What a move's numbers were before they were last changed. */
-export interface MovePastValues {
+interface MovePastValues {
   version_group: { name: string };
   power: number | null;
   accuracy: number | null;

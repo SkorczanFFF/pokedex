@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { NotFoundError } from "@/api/client";
 import { pokemonQuery, speciesQuery } from "@/api/queries";
+import { isInEra } from "@/domain/era";
 import { formSuffix } from "@/domain/evolution";
 import { activeSpriteSet, type SpriteSetId } from "@/domain/sprites";
 import ErrorView from "@/components/ErrorView";
@@ -44,7 +45,7 @@ export const PokemonDetailsPage = () => {
 
   // A link or a bookmark can reach a Pokémon the era does not cover; the dex
   // scope only narrows the list, the search and the filters.
-  const outOfEra = pokemon !== undefined && pokemon.id > era.maxDexId;
+  const outOfEra = pokemon !== undefined && !isInEra(pokemon.id, era);
 
   // Everything the entry says about the species rather than the specimen: the
   // flavour text, the genus, the generation and the evolution chain. Not worth

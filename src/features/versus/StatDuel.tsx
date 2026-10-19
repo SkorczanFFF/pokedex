@@ -1,10 +1,10 @@
 import { statsInEra } from "@/domain/pokemonView";
+import { barPercent, statValue } from "@/domain/stats";
 import { useEra } from "@/era/context";
-import { SCALE_MAX } from "@/features/details/StatList";
 import { humanize, useStatLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 
-const width = (value: number) => `${Math.min(value / SCALE_MAX, 1) * 100}%`;
+const width = (value: number) => `${barPercent(value)}%`;
 
 /** Base stats back to back: yours grow left in blue, the opponent's right in red. */
 export const StatDuel = ({ yours, foe }: { yours: Pokemon; foe: Pokemon }) => {
@@ -14,7 +14,7 @@ export const StatDuel = ({ yours, foe }: { yours: Pokemon; foe: Pokemon }) => {
   const rows = statsInEra(yours, era).map((stat) => ({
     name: stat.name,
     a: stat.value,
-    b: theirs.find((other) => other.name === stat.name)?.value ?? 0,
+    b: statValue(theirs, stat.name),
   }));
 
   return (

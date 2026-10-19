@@ -1,9 +1,20 @@
 import type { DexEra } from "./era";
+import { effectiveness, type MatchupAbilities } from "./matchup";
 import type { MoveInGame } from "./moves";
-import type { StatInEra } from "./pokemonView";
+import { isPokemonType, type PokemonType } from "./pokemonTypes";
+import { STAT, statValue, type StatInEra } from "./stats";
+import type { TypeChart } from "./typeChart";
 
 // The damage calculator's arithmetic: the stats a battle is fought with, which
 // stat a move reads, and what one hit does. Nothing here fetches or renders.
+
+export const MIN_LEVEL = 1;
+export const MAX_LEVEL = 100;
+/** Where a calculation starts: the level the games' own battle facilities fight at. */
+export const DEFAULT_LEVEL = 50;
+
+export const clampLevel = (level: number): number =>
+  Math.min(MAX_LEVEL, Math.max(MIN_LEVEL, Math.floor(level)));
 
 export type DamageClass = "physical" | "special" | "status";
 
@@ -40,12 +51,12 @@ export const damageClassInEra = (
  * before. Shedinja's HP is 1 at every level.
  */
 const grow = (name: string, base: number, level: number, era: DexEra): number => {
-  if (name === "hp" && base === 1) return 1;
+  if (name === STAT.hp && base === 1) return 1;
   const core =
     era.statFormula === "dv"
       ? Math.floor(((base + 15) * 2 * level) / 100)
       : Math.floor(((2 * base + 31) * level) / 100);
-  return name === "hp" ? core + level + 10 : core + 5;
+  return name === STAT.hp ? core + level + 10 : core + 5;
 };
 
 /** The era's base stats grown to a level, in the same order and under the same names. */
@@ -56,21 +67,18 @@ export const battleStats = (
 ): StatInEra[] =>
   base.map((stat) => ({ name: stat.name, value: grow(stat.name, stat.value, level, era) }));
 
-export const statValue = (stats: readonly StatInEra[], name: string): number =>
-  stats.find((stat) => stat.name === name)?.value ?? 0;
-
 /**
  * The stat a move's class reads on each side. Gen I had one Special for both
  * offence and defence, and `statsInEra` names it `special` where that holds.
  */
 export const offenceStat = (stats: readonly StatInEra[], cls: DamageClass): string =>
-  cls === "physical" ? "attack" : pickSpecial(stats, "special-attack");
+  cls === "physical" ? STAT.attack : pickSpecial(stats, STAT.specialAttack);
 
 export const defenceStat = (stats: readonly StatInEra[], cls: DamageClass): string =>
-  cls === "physical" ? "defense" : pickSpecial(stats, "special-defense");
+  cls === "physical" ? STAT.defense : pickSpecial(stats, STAT.specialDefense);
 
 const pickSpecial = (stats: readonly StatInEra[], split: string): string =>
-  stats.some((stat) => stat.name === split) ? split : "special";
+  stats.some((stat) => stat.name === split) ? split : STAT.special;
 
 export interface DamageRange {
   /** The lowest roll, 85%. */
@@ -132,4 +140,71 @@ export const hitsToKo = (
 export const firstToMove = (speedA: number, speedB: number): "a" | "b" | "tie" => {
   if (speedA === speedB) return "tie";
   return speedA > speedB ? "a" : "b";
+};
+
+/** Everything one hit is computed from. */
+export interface HitInput {
+  move: MoveInGame;
+  /** The power to use: the move's own, or what the reader typed over it. */
+  power: number | null;
+  level: number;
+  attackerTypes: readonly PokemonType[];
+  defenderTypes: readonly PokemonType[];
+  /** Both sides' stats as the battle is fought with them, already grown. */
+  stats: readonly StatInEra[];
+  defenderStats: readonly StatInEra[];
+  abilities: MatchupAbilities;
+  chart: TypeChart;
+  era: DexEra;
+}
+
+/** What the calculator says about one hit. */
+export interface ComputedHit {
+  damageClass: DamageClass;
+  type: string;
+  stab: boolean;
+  effectiveness: number;
+  /** The defender's HP, which the damage is read against. */
+  hp: number;
+  /** Null for a status move, an immunity, or a move without power. */
+  range: DamageRange | null;
+}
+
+/**
+ * One hit, from the move's class in the era through to the damage: the class
+ * decides which stats it reads, the type decides STAB and the multiplier, and
+ * the abilities have their say on the multiplier before the roll.
+ */
+export const computeHit = ({
+  move,
+  power,
+  level,
+  attackerTypes,
+  defenderTypes,
+  stats,
+  defenderStats,
+  abilities,
+  chart,
+  era,
+}: HitInput): ComputedHit => {
+  const damageClass = damageClassInEra(move, era);
+  const type = move.type;
+  const stab = isPokemonType(type) && attackerTypes.includes(type);
+  const value =
+    damageClass !== "status" && isPokemonType(type)
+      ? effectiveness(chart, type, defenderTypes, abilities)
+      : 1;
+  const hp = statValue(defenderStats, STAT.hp);
+  const range =
+    damageClass === "status"
+      ? null
+      : damageRange({
+          level,
+          power,
+          attack: statValue(stats, offenceStat(stats, damageClass)),
+          defense: statValue(defenderStats, defenceStat(defenderStats, damageClass)),
+          stab,
+          effectiveness: value,
+        });
+  return { damageClass, type, stab, effectiveness: value, hp, range };
 };

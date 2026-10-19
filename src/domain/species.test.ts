@@ -77,7 +77,7 @@ describe("getGenus and getGeneration", () => {
   });
 
   it("hands back the generation slug raw, or null", () => {
-    expect(getGeneration(bulbasaur)).toBe("generation-i");
+    expect(getGeneration(bulbasaur)).toBe("i");
     expect(getGeneration({ ...bulbasaur, generation: { name: "unknown" } })).toBeNull();
   });
 });

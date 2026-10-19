@@ -2,11 +2,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { HpBar } from "@/components/BattleScreen";
-import { typingOf } from "@/domain/matchup";
-import { statsInEra, typesInEra } from "@/domain/pokemonView";
+import { statsInEra, typingInEra } from "@/domain/pokemonView";
 import { battleSprite, type SpriteView } from "@/domain/sprites";
+import { STAT, barPercent, statValue } from "@/domain/stats";
 import { useEra } from "@/era/context";
-import { SCALE_MAX } from "@/features/details/StatList";
 import { humanize } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 import { TypeChip } from "./Matchup";
@@ -45,7 +44,7 @@ export const BattleField = ({
   const { era } = useEra();
   // Modern's taller slots pull the trainer's side up into the empty corner
   // under the foe's panel; on a phone that corner is too shallow to take it.
-  const rows = era.sprites === "artwork" ? "md:-mt-12" : "mt-6";
+  const rows = era.pixelArt ? "mt-6" : "md:-mt-12";
 
   return (
     <div className="border-4 border-black bg-white p-4 md:p-6">
@@ -63,7 +62,7 @@ export const BattleField = ({
 
 const Slot = ({ fighter, view }: { fighter: Fighter; view: SpriteView }) => {
   const { era } = useEra();
-  const modern = era.sprites === "artwork";
+  const modern = !era.pixelArt;
   const size = modern ? MODERN_SIZE : SIZE;
 
   switch (fighter.status) {
@@ -180,9 +179,7 @@ const FighterBox = ({ fighter }: { fighter: Fighter }) => {
   const { t } = useTranslation();
   const { era } = useEra();
   const ready = fighter.status === "ready" ? fighter.pokemon : null;
-  const hp = ready
-    ? (statsInEra(ready, era).find((stat) => stat.name === "hp")?.value ?? 0)
-    : 0;
+  const hp = ready ? statValue(statsInEra(ready, era), STAT.hp) : 0;
 
   return (
     <div className="min-w-40 border-2 border-black bg-white px-2 py-1 md:px-3 md:py-2">
@@ -203,13 +200,10 @@ const FighterBox = ({ fighter }: { fighter: Fighter }) => {
         )}
         {ready && <span className="ml-auto">#{ready.id}</span>}
       </div>
-      <HpBar
-        percent={Math.min(hp / SCALE_MAX, 1) * 100}
-        value={ready ? hp : undefined}
-      />
+      <HpBar percent={barPercent(hp)} value={ready ? hp : undefined} />
       {ready && (
         <div className="mt-2 flex flex-wrap gap-1">
-          {typingOf(typesInEra(ready, era)).map((type) => (
+          {typingInEra(ready, era).map((type) => (
             <TypeChip key={type} type={type} />
           ))}
         </div>

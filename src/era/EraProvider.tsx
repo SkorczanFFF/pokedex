@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState, type ReactNode } from "react";
-import { ERAS, isEraName, type EraName } from "@/domain/era";
+import { DEFAULT_ERA, ERAS, isEraName, type EraName } from "@/domain/era";
 import { EraContext } from "./context";
 
 const STORAGE_KEY = "era";
@@ -11,9 +11,9 @@ const STORAGE_KEY = "era";
 const storedEra = (): EraName => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return isEraName(stored) ? stored : "modern";
+    return isEraName(stored) ? stored : DEFAULT_ERA;
   } catch {
-    return "modern";
+    return DEFAULT_ERA;
   }
 };
 

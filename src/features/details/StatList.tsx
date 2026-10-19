@@ -1,14 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { statsInEra } from "@/domain/pokemonView";
+import { barPercent } from "@/domain/stats";
 import { useEra } from "@/era/context";
 import { useStatLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
-
-/**
- * Top of the bar's scale. Blissey's 255 HP would otherwise run past the track,
- * so the fill is clamped rather than the track widened for one outlier.
- */
-export const SCALE_MAX = 160;
 
 export const StatList = ({ pokemon }: { pokemon: Pokemon }) => {
   const { t } = useTranslation();
@@ -26,7 +21,7 @@ export const StatList = ({ pokemon }: { pokemon: Pokemon }) => {
       {/* One shared grid on desktop, so all bars start at the same edge. */}
       <div className="flex flex-col gap-3 md:grid md:grid-cols-[fit-content(8rem)_1fr] md:items-center md:gap-x-2">
         {stats.map((stat) => {
-          const filled = Math.min((stat.value / SCALE_MAX) * 100, 100);
+          const filled = barPercent(stat.value);
 
           return (
             <div

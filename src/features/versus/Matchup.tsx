@@ -2,12 +2,11 @@ import { useTranslation } from "react-i18next";
 import {
   defensiveProfile,
   matchup,
-  typingOf,
   type Effectiveness,
   type MatchupAbilities,
 } from "@/domain/matchup";
 import { typeClass, type PokemonType } from "@/domain/pokemonTypes";
-import { typesInEra } from "@/domain/pokemonView";
+import { typingInEra } from "@/domain/pokemonView";
 import type { TypeChart } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
 import { effectClass, phraseKey, printed } from "@/features/types/effectiveness";
@@ -50,8 +49,8 @@ export const Attacks = ({
   const { era } = useEra();
   const hits = matchup(
     chart,
-    typingOf(typesInEra(attacker, era)),
-    typingOf(typesInEra(defender, era)),
+    typingInEra(attacker, era),
+    typingInEra(defender, era),
     abilities,
   );
   const name = humanize(defender.name);
@@ -91,11 +90,7 @@ export const Profile = ({
 }) => {
   const { t } = useTranslation();
   const { era } = useEra();
-  const groups = defensiveProfile(
-    chart,
-    typingOf(typesInEra(pokemon, era)),
-    abilities,
-  );
+  const groups = defensiveProfile(chart, typingInEra(pokemon, era), abilities);
 
   return (
     <section>

@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEra } from "@/era/context";
 import { pokemonListQuery, pokemonQuery } from "@/api/queries";
+import { pageCount, pageSlice } from "@/domain/pagination";
 import type { Pokemon } from "@/types/pokemon";
 import { useDefaultPage } from "./useDefaultPage";
 import { useFilteredPage } from "./useFilteredPage";
@@ -49,9 +50,9 @@ export const useListData = (
   const totalPages = params.isSearchMode
     ? 0
     : params.isFilterMode
-    ? Math.ceil(filtered.names.length / params.perPage)
+    ? pageCount(filtered.names.length, params.perPage)
     : defaultPage.count
-    ? Math.ceil(defaultPage.count / params.perPage)
+    ? pageCount(defaultPage.count, params.perPage)
     : 0;
 
   // Only the live source can be loading — the other two are gated off — so one
@@ -66,11 +67,7 @@ export const useListData = (
   /** Warms whichever slice the next page will actually come from. */
   const prefetchPage = (page: number) => {
     if (params.isFilterMode) {
-      const slice = filtered.names.slice(
-        (page - 1) * params.perPage,
-        page * params.perPage
-      );
-      slice.forEach((entry) =>
+      pageSlice(filtered.names, page, params.perPage).forEach((entry) =>
         queryClient.prefetchQuery(pokemonQuery(entry.name))
       );
     } else if (!params.isSearchMode) {

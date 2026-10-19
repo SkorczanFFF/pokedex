@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { allPokemonNamesQuery, pokemonQuery } from "@/api/queries";
+import { hydratePokemon } from "@/api/hydrate";
+import { allPokemonNamesQuery } from "@/api/queries";
 import type { DexEra } from "@/domain/era";
-import { resourceIdFromUrl } from "@/domain/resource";
-import type { Pokemon } from "@/types/pokemon";
+import { matchNames } from "@/domain/search";
 import type { ListParams } from "./useListParams";
 
 /**
@@ -31,31 +31,12 @@ export const useSearchResults = (
     error: searchError,
   } = useQuery({
     queryKey: ["search", query, era.maxDexId],
-    queryFn: async (): Promise<Pokemon[]> => {
+    queryFn: () => {
       const term = query.trim().toLowerCase();
       if (!term) return [];
-
-      const matches = allNames
-        .filter(
-          (entry) =>
-            entry.name.includes(term) &&
-            resourceIdFromUrl(entry.url) <= era.maxDexId
-        )
-        .slice(0, SEARCH_LIMIT);
-
-      return Promise.all(
-        matches.map((entry) =>
-          queryClient.fetchQuery({
-            ...pokemonQuery(entry.name),
-            // One retry policy per thing the reader is waiting on. Promise.all
-            // hands any rejection to this query, which retries on its own, so
-            // retrying underneath as well multiplies the wait: three attempts
-            // each, three times over, turned a dead connection into the better
-            // part of a minute of skeletons before the error appeared.
-            retry: false,
-          })
-        )
-      );
+      const matches = matchNames(allNames, term, era).slice(0, SEARCH_LIMIT);
+      // This query retries as a whole, so the records underneath must not.
+      return hydratePokemon(queryClient, matches, { retry: false });
     },
     enabled: isSearchMode && allNames.length > 0,
   });

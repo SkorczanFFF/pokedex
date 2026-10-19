@@ -1,5 +1,6 @@
 import type { DamageRelations, TypeResource } from "@/types/damage";
-import { GEN_SLUGS, genOrder, genSlugOf, type GenSlug } from "./dex";
+import { GEN_SLUGS, genOrder, genOrderOf, genSlugOf, type GenSlug } from "./dex";
+import { inForceAt } from "./era";
 import { typesUpTo, type PokemonType } from "./pokemonTypes";
 
 /** What an attack of one type does to a Pokémon of another. */
@@ -16,19 +17,12 @@ export type Multiplier = 0 | 0.5 | 1 | 2;
 export const relationsIn = (
   type: TypeResource,
   gen: GenSlug,
-): DamageRelations => {
-  const past = type.past_damage_relations
-    .map((entry) => ({
-      through: genSlugOf(entry.generation.name),
-      relations: entry.damage_relations,
-    }))
-    .filter(
-      (entry): entry is { through: GenSlug; relations: DamageRelations } =>
-        entry.through !== null && genOrder(entry.through) >= genOrder(gen),
-    )
-    .sort((a, b) => genOrder(a.through) - genOrder(b.through));
-  return past[0]?.relations ?? type.damage_relations;
-};
+): DamageRelations =>
+  inForceAt(
+    type.past_damage_relations,
+    (entry) => genOrderOf(entry.generation.name),
+    genOrder(gen),
+  )?.damage_relations ?? type.damage_relations;
 
 /** The damage an attack of `relations`' type does to a `defender`. */
 const multiplierTo = (

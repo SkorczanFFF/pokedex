@@ -4,19 +4,18 @@ import { useTranslation } from "react-i18next";
 import { moveQuery } from "@/api/queries";
 import { abilityRule } from "@/domain/abilities";
 import {
+  MAX_LEVEL,
+  MIN_LEVEL,
   battleStats,
-  damageClassInEra,
-  damageRange,
-  defenceStat,
+  clampLevel,
+  computeHit,
   firstToMove,
   hitsToKo,
-  offenceStat,
-  statValue,
 } from "@/domain/damage";
-import { effectiveness, typingOf } from "@/domain/matchup";
-import { learnsetInEra, moveInGame, type LearnedMove } from "@/domain/moves";
-import { isPokemonType, typeClass } from "@/domain/pokemonTypes";
-import { statsInEra, typesInEra, type StatInEra } from "@/domain/pokemonView";
+import { learnsetInEra, moveInGame, uniqueMoves } from "@/domain/moves";
+import { typeClass } from "@/domain/pokemonTypes";
+import { statsInEra, typingInEra } from "@/domain/pokemonView";
+import { STAT, statValue, type StatInEra } from "@/domain/stats";
 import type { TypeChart } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
 import {
@@ -31,7 +30,7 @@ import { phraseKey } from "@/features/types/effectiveness";
 import { useTranslatedMoveText } from "@/i18n/translated";
 import type { Known, Side } from "./BattleField";
 import { EffectChip } from "./Matchup";
-import { MAX_LEVEL, MIN_LEVEL, clampLevel, type SideParams } from "./useVersusParams";
+import type { SideParams } from "./useVersusParams";
 
 /** Every box a number or a move goes in: one height, one size of type. */
 const INPUT = "h-8 border-2 bg-white px-2 text-[10px] text-black";
@@ -106,8 +105,8 @@ export const MoveCalc = ({
   const grown: Record<Side, StatInEra[]> = { a: stats("a"), b: stats("b") };
 
   const speed: Record<Side, number> = {
-    a: statValue(grown.a, "speed"),
-    b: statValue(grown.b, "speed"),
+    a: statValue(grown.a, STAT.speed),
+    b: statValue(grown.b, STAT.speed),
   };
   const first = firstToMove(speed.a, speed.b);
 
@@ -222,7 +221,7 @@ const MoveSide = ({
             <option value="">{t("versus.pickMove")}</option>
             {learnset.groups.map((group) => (
               <optgroup key={group.method} label={methodLabel(group.method)}>
-                {firstOfEach(group.moves).map((entry) => (
+                {uniqueMoves(group.moves).map((entry) => (
                   <option key={entry.name} value={entry.name}>
                     {entry.level > 0
                       ? `${t("details.moveLevel", { level: entry.level })} · ${moveLabel(entry.name)}`
@@ -254,12 +253,6 @@ const MoveSide = ({
       )}
     </section>
   );
-};
-
-/** A move once per group: Typhlosion knows Ember at 1 and again at 12, and a list offers it once. */
-const firstOfEach = (moves: readonly LearnedMove[]): LearnedMove[] => {
-  const seen = new Set<string>();
-  return moves.filter((move) => !seen.has(move.name) && seen.add(move.name));
 };
 
 const Field = ({
@@ -381,32 +374,23 @@ const Result = ({
 
   const locale = i18n.resolvedLanguage ?? "en";
   const inGame = moveInGame(data, game, locale, translatedText(move));
-  const cls = damageClassInEra(inGame, era);
-  const type = inGame.type;
-  const attackerTypes = typingOf(typesInEra(attacker.pokemon, era));
-  const defenderTypes = typingOf(typesInEra(defender.pokemon, era));
-  const stab = isPokemonType(type) && attackerTypes.includes(type);
-  const value =
-    cls !== "status" && isPokemonType(type)
-      ? effectiveness(chart, type, defenderTypes, {
-          attacker: abilityRule(abilities[side]),
-          defender: abilityRule(abilities[OTHER[side]]),
-        })
-      : 1;
-
   const power = edits.power ?? inGame.power;
-  const hp = statValue(defenderStats, "hp");
-  const range =
-    cls === "status"
-      ? null
-      : damageRange({
-          level,
-          power,
-          attack: statValue(stats, offenceStat(stats, cls)),
-          defense: statValue(defenderStats, defenceStat(defenderStats, cls)),
-          stab,
-          effectiveness: value,
-        });
+  const hit = computeHit({
+    move: inGame,
+    power,
+    level,
+    attackerTypes: typingInEra(attacker.pokemon, era),
+    defenderTypes: typingInEra(defender.pokemon, era),
+    stats,
+    defenderStats,
+    abilities: {
+      attacker: abilityRule(abilities[side]),
+      defender: abilityRule(abilities[OTHER[side]]),
+    },
+    chart,
+    era,
+  });
+  const { damageClass: cls, type, stab, effectiveness: value, hp, range } = hit;
   const percent = (damage: number) => ((damage / hp) * 100).toFixed(1);
   const foeName = humanize(defender.name);
 

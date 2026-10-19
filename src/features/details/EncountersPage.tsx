@@ -14,6 +14,7 @@ import {
   type EncounterPlace,
   type EncounterRow,
 } from "@/domain/encounters";
+import { isInEra } from "@/domain/era";
 import { spriteUrl } from "@/domain/sprites";
 import { useEra } from "@/era/context";
 import { NotFound } from "@/features/not-found/NotFound";
@@ -67,7 +68,7 @@ export const EncountersPage = () => {
   if (isLoading || loadingPlaces) return <Loader />;
   if (error instanceof NotFoundError) return <NotFound />;
   if (error || !pokemon) return <ErrorView errorType="details" />;
-  if (pokemon.id > era.maxDexId) return <NotInEra pokemon={pokemon} />;
+  if (!isInEra(pokemon.id, era)) return <NotInEra pokemon={pokemon} />;
 
   const games = encounters ? gamesInEra(encounters, era) : [];
   // A game picked in one era may not exist in another; fall back to all of them
@@ -96,7 +97,7 @@ export const EncountersPage = () => {
               src={sprite}
               alt={pokemon.name}
               className={`h-16 w-16 object-contain ${
-                era.sprites === "artwork" ? "" : "[image-rendering:pixelated]"
+                era.pixelArt ? "[image-rendering:pixelated]" : ""
               }`}
             />
           )}

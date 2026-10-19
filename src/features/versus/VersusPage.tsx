@@ -8,7 +8,7 @@ import { MENU_ITEM } from "@/components/BattleScreen";
 import { ACTION } from "@/components/chips";
 import { abilityRule, defaultAbility, hasAbility } from "@/domain/abilities";
 import { genRoman, generationFromId } from "@/domain/dex";
-import type { DexEra } from "@/domain/era";
+import { isInEra, type DexEra } from "@/domain/era";
 import type { TypeChart } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
 import { useTypeChart } from "@/features/types/useTypeChart";
@@ -33,7 +33,7 @@ const useFighter = (side: Side, name: string | null, era: DexEra): Fighter => {
     return { side, name, pokemon: null, status: "notFound" };
   }
   if (error || !data) return { side, name, pokemon: null, status: "error" };
-  if (data.id > era.maxDexId) {
+  if (!isInEra(data.id, era)) {
     return { side, name, pokemon: data, status: "outOfEra" };
   }
   return { side, name, pokemon: data, status: "ready" };
