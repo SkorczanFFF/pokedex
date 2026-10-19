@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { NumberField } from "@/components/NumberField";
 import type { StatInEra } from "@/domain/stats";
 import { useStatLabel } from "@/i18n/labels";
 import { CALC_INPUT } from "./MoveSide";
@@ -40,18 +41,18 @@ export const StatInputs = ({
             </label>
           ))}
           {row.map((stat, column) => (
-            <input
+            <NumberField
               key={stat.name}
               id={`${id}-${stat.name}`}
-              type="number"
               min={1}
               value={stat.value}
-              onChange={(e) => {
-                if (e.target.value === "") return onEdit(stat.name, null);
-                const value = Math.floor(Number(e.target.value));
+              onChange={(raw) => {
+                if (raw === "") return onEdit(stat.name, null);
+                const value = Math.floor(Number(raw));
                 if (Number.isFinite(value) && value > 0) onEdit(stat.name, value);
               }}
-              className={`row-start-2 ${COLUMNS[column]} ${CALC_INPUT} w-full px-1`}
+              className={`row-start-2 ${COLUMNS[column]} ${CALC_INPUT} w-full`}
+              inputClassName="px-1"
             />
           ))}
         </div>

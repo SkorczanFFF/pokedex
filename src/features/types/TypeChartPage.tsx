@@ -4,7 +4,7 @@ import { useEra } from "@/app/era/context";
 import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
 import { effectClass, printed } from "@/components/effectiveness";
-import { PageContainer } from "@/components/layout";
+import { GbBox, Screen } from "@/components/layout";
 import { GEN_SLUGS, genOrder, genRoman } from "@/domain/dex";
 import { chartChanges, type ChartChange, type Multiplier } from "@/domain/typeChart";
 import { useTypeLabel } from "@/i18n/labels";
@@ -20,6 +20,11 @@ import { VersusAd } from "./VersusAd";
  * generations and PokéAPI dates every change, so the retro chart is Gen II's
  * with Gen I's four quirks footnoted, and the modern one today's — out of the
  * same eighteen requests, which React Query keeps for the session.
+ *
+ * Laid out as Versus is, since the two pages end on an ad for each other: the
+ * same column, the chart in the box the battle field takes there, the notes in
+ * the text box under it. The column is the table's own width, so nothing on
+ * the page is wider than the chart.
  */
 export const TypeChartPage = () => {
   const { t } = useTranslation();
@@ -34,29 +39,23 @@ export const TypeChartPage = () => {
   const changes = chartChanges(types, gen);
 
   return (
-    <PageContainer>
-      <section className="bg-white p-6">
-        <h1 className="text-2xl mb-4">{t("types.title")}</h1>
-        <p className="text-xs leading-relaxed mb-6">
-          {t("types.intro", { roman: genRoman(gen) })}
-        </p>
-
+    <Screen fit title={t("types.title")} intro={t("types.intro", { roman: genRoman(gen) })}>
+      <GbBox>
         <Legend />
+        <TypeChartTable chart={chart} />
+      </GbBox>
 
-        {/* As wide as the table, so the notes and the ad under it line up with
-            its edges; never wider than the card, where the table scrolls. */}
-        <div className="w-fit max-w-full">
-          <TypeChartTable chart={chart} />
+      {changes.length > 0 && (
+        <GbBox className="mt-4">
+          <ChartChanges changes={changes} />
+        </GbBox>
+      )}
 
-          {changes.length > 0 && <ChartChanges changes={changes} />}
-
-          {/* Last, once the chart is read: the way on to a real matchup. */}
-          <div className="mt-10">
-            <VersusAd />
-          </div>
-        </div>
-      </section>
-    </PageContainer>
+      {/* Last, once the chart is read: the way on to a real matchup. */}
+      <div className="mt-10">
+        <VersusAd />
+      </div>
+    </Screen>
   );
 };
 
@@ -93,9 +92,7 @@ const ChartChanges = ({ changes }: { changes: ChartChange[] }) => {
   const typeLabel = useTypeLabel();
 
   return (
-    // Inline-size containment: its long lines wrap to the table's width
-    // instead of stretching the wrapper past it.
-    <section className="mt-8 [contain:inline-size]">
+    <section>
       <h2 className="text-sm mb-3">{t("types.changes")}</h2>
       <ul className="text-[10px] leading-relaxed space-y-1">
         {changes.map((change) => (

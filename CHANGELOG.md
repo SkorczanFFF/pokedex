@@ -16,6 +16,40 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `fix: the chart and Versus stand on one screen, and the names, numbers and selects draw alike everywhere`
+
+- **Fixed** — The two pages that end on an ad for each other were laid out as two different
+  kinds of page: the chart in a full-width white card that left the right half empty, Versus
+  in a narrow column with the Game Boy boxes straight on the grey. Both now stand on one
+  column, `Screen` in `components/layout.tsx`: the title, the grey line under it, and the
+  chart in the same black-framed box the battle field takes, with the generation notes in the
+  text box under it. The chart's column shrinks to its table — one cell narrower in retro,
+  which has no Fairy — and the column Versus and About get is, through the token
+  `--container-gb-screen`, exactly as wide as the modern chart comes to, built from the
+  chart's own cell and corner sizes. The dex pages keep `PageContainer`.
+- **Fixed** — Versus' Stats tab names the two Pokémon the way its Moves tab does: a heading
+  in capitals over each half, yours in the dex's blue and the foe's in its red, where it had
+  two smaller lower-case labels. One `SideHeading` draws both tabs' names.
+- **Fixed** — The calculator's number boxes — the level, the six stats, the power — step with
+  two framed buttons of their own, always there, yellow under the pointer, instead of the
+  browser's spinner, which appeared only on hover, was a few pixels tall, and at the pixel
+  font's line height lost the top of its upper arrow under the frame. `NumberField` in
+  `components/` holds the box; the field is still a number input, so the arrow keys step it
+  and what is typed arrives as before.
+- **Fixed** — The three selects — the generation and the page size over the list, the move
+  in the calculator — are a `Dropdown` of the app's own, drawn the same in every browser: the
+  closed box is the framed line the inputs have, with a chevron the app draws, and the open
+  list is a menu of the kind the games drew, a cursor on the line under the pointer and the
+  line pressed yellow, groups headed as `<optgroup>` would. A native select lets a page
+  style the box but not the list, and Firefox drew that list nothing like Chrome. It works
+  as a select does: Space or Enter opens, the arrows walk, a letter jumps, Escape closes;
+  the generation box stays as wide as its widest option.
+- **Added** — In retro, the opponent's Crystal sprite plays its animation when it comes out
+  and every ten seconds while it stands there, as the game animated the enemy's; the
+  trainer's back has no animation to play, in Crystal or here. Without a cry, and held still
+  for a reader who asked for reduced motion. `SpriteFrame` can now fill a square of CSS
+  size, so the animation takes the still's place in the slot without the Pokémon shifting.
+
 ### `chore: the loose ends — the README says what is here, the tests say the locales agree`
 
 - **Changed** — The README drops the Docker claim no Dockerfile backed and gains the

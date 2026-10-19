@@ -44,7 +44,7 @@ export const TypeChartTable = ({ chart }: { chart: TypeChart }) => {
               scope="col"
               className={`p-0 border border-gray-300 text-gray-500 font-normal transition-[opacity,filter] ${lit(false)}`}
             >
-              <span className="relative block h-32 w-32">
+              <span className="relative block h-chart-corner w-chart-corner">
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 1 1"
@@ -82,7 +82,7 @@ export const TypeChartTable = ({ chart }: { chart: TypeChart }) => {
                     in the same place. Padded as the attackers are: px/py are
                     logical, so they turn with the text. */}
                 <span
-                  className={`block h-32 w-7 px-2 py-1 [writing-mode:vertical-rl] rotate-180 text-start whitespace-nowrap ${typeClass(defender)}`}
+                  className={`block h-chart-corner w-chart-cell px-2 py-1 [writing-mode:vertical-rl] rotate-180 text-start whitespace-nowrap ${typeClass(defender)}`}
                 >
                   {typeLabel(defender)}
                 </span>
@@ -121,7 +121,7 @@ export const TypeChartTable = ({ chart }: { chart: TypeChart }) => {
                       value: printed(value),
                     })}
                     onMouseEnter={() => setHover({ attacker, defender })}
-                    className={`h-7 w-7 text-center border border-gray-300 transition-[opacity,filter] ${effectClass(
+                    className={`h-chart-cell w-chart-cell text-center border border-gray-300 transition-[opacity,filter] ${effectClass(
                       value,
                       onTrace,
                     )} ${lit(onTrace)} ${

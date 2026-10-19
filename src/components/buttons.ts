@@ -24,8 +24,11 @@ export const MORE =
 export const DANGER =
   "h-9 px-3 bg-dex-red text-white text-sm hover:bg-red-700 cursor-pointer";
 
-/** A text box or a select, the height of the buttons beside it. */
+/** A text box, the height of the buttons beside it. */
 export const INPUT = "h-9 border-2 px-2 text-sm bg-white";
+
+/** The closed box of a dropdown, the height of the buttons beside it. */
+export const SELECT = "h-9 border-2 pl-2 bg-white";
 
 /**
  * A framed link is a reference page that is about no Pokémon in particular:

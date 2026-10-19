@@ -5,7 +5,7 @@ import { useEra } from "@/app/era/context";
 import { Arrow } from "@/components/Arrow";
 import { InlineError } from "@/components/ErrorView";
 import { ACTION } from "@/components/buttons";
-import { GbBox } from "@/components/layout";
+import { GbBox, Screen } from "@/components/layout";
 import { defaultAbility, hasAbility } from "@/domain/abilities";
 import { genRoman } from "@/domain/dex";
 import type { DexEra } from "@/domain/era";
@@ -54,12 +54,10 @@ export const VersusPage = () => {
   const loading = [yours, foe].some((fighter) => fighter.status === "loading");
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-8">
-      <h1 className="text-2xl mb-3">{t("versus.title")}</h1>
-      <p className="mb-6 text-xs leading-relaxed text-gray-500">
-        {t("versus.intro", { roman: genRoman(era.maxGen) })}
-      </p>
-
+    <Screen
+      title={t("versus.title")}
+      intro={t("versus.intro", { roman: genRoman(era.maxGen) })}
+    >
       <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-start">
         <Corner
           fighter={yours}
@@ -117,7 +115,7 @@ export const VersusPage = () => {
           <TypeChartAd chart={chart} />
         </div>
       )}
-    </div>
+    </Screen>
   );
 };
 

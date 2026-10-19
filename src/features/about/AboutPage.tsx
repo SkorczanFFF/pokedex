@@ -3,7 +3,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { LINKS } from "@/app/links";
 import { encountersPath, paths, pokemonPath } from "@/app/routes";
-import { GbBox } from "@/components/layout";
+import { GbBox, Screen } from "@/components/layout";
 import { MenuCursor } from "@/components/menu";
 import { lastDexId } from "@/domain/dex";
 import { RETRO } from "@/domain/era";
@@ -99,10 +99,7 @@ export const AboutPage = () => {
   useScrollTopOn();
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-8">
-      <h1 className="mb-3 text-2xl">{t("about.title")}</h1>
-      <p className="mb-6 text-xs leading-relaxed text-gray-500">{t("about.intro")}</p>
-
+    <Screen title={t("about.title")} intro={t("about.intro")}>
       <div className="space-y-6">
         <Box heading={t("about.what.heading")}>
           <p>{t("about.what.body", COUNTS)}</p>
@@ -201,6 +198,6 @@ export const AboutPage = () => {
           <p className="text-[10px] text-gray-500">{t("about.credits.trademark")}</p>
         </Box>
       </div>
-    </div>
+    </Screen>
   );
 };

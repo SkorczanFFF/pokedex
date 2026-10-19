@@ -41,6 +41,19 @@
 
   /* The fixed navbar, which everything sticky sits under. */
   --spacing-nav: 3rem;
+
+  /* The type chart's geometry: one cell, and the corner, which is also how
+     tall the names stood on end along the top are (fits "Elektryczny"). */
+  --spacing-chart-cell: 1.75rem;
+  --spacing-chart-corner: 8rem;
+
+  /* The Game Boy screens' column — Versus, About — exactly as wide as the
+     modern type chart comes to on its own page: the corner, eighteen cells,
+     22px of collapsed borders, the box's 4px frame and 1.5rem of padding at
+     each side, and the page's 1rem gutter at each side. */
+  --container-gb-screen: calc(
+    var(--spacing-chart-corner) + 18 * var(--spacing-chart-cell) + 22px + 2 * (4px + 1.5rem) + 2rem
+  );
 }
 
 /* The keyboard's focus outline, white on the red navbar and black on white. */
@@ -48,6 +61,30 @@
   &:focus-visible {
     outline: 2px solid white;
     outline-offset: 2px;
+  }
+}
+
+/* A number input without the browser's spinner; the box draws its own. */
+@utility number-plain {
+  appearance: textfield;
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+}
+
+/* The closed box of a dropdown: the chevron at its right edge, and room for
+   it. Grey when there is nothing to pick. */
+@utility dropdown-box {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Cpath d=%22M2 4l4 4 4-4%22 fill=%22none%22 stroke=%22black%22 stroke-width=%222%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 0.75rem 0.75rem;
+  padding-right: 1.75rem;
+  &:disabled {
+    color: var(--color-gray-500);
+    cursor: default;
   }
 }
 

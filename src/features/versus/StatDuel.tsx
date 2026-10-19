@@ -1,8 +1,9 @@
 import { statsInEra } from "@/domain/pokemonView";
 import { barPercent, statValue } from "@/domain/stats";
 import { useEra } from "@/app/era/context";
-import { humanize, useStatLabel } from "@/i18n/labels";
+import { useStatLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
+import { SideHeading } from "./SideHeading";
 
 const width = (value: number) => `${barPercent(value)}%`;
 
@@ -19,9 +20,10 @@ export const StatDuel = ({ yours, foe }: { yours: Pokemon; foe: Pokemon }) => {
 
   return (
     <div>
-      <div className="mb-4 flex justify-between text-[10px]">
-        <span className="text-dex-blue">{humanize(yours.name)}</span>
-        <span className="text-dex-red">{humanize(foe.name)}</span>
+      {/* The same two headings the Moves tab opens its halves with. */}
+      <div className="mb-4 flex justify-between gap-4">
+        <SideHeading side="a" name={yours.name} />
+        <SideHeading side="b" name={foe.name} className="text-right" />
       </div>
       <dl className="space-y-3">
         {rows.map((row) => (

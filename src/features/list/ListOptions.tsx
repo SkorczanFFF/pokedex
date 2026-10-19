@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
-import { INPUT } from "@/components/buttons";
+import { Dropdown } from "@/components/Dropdown";
+import { SELECT } from "@/components/buttons";
 import { gensUpTo } from "@/domain/dex";
 import { useEra } from "@/app/era/context";
 import { PER_PAGE_OPTIONS } from "@/domain/pagination";
@@ -36,21 +37,18 @@ export const ListOptions = ({
         <label htmlFor={genId} className="text-sm">
           {t("filters.genLabel")}
         </label>
-        <select
+        <Dropdown
           id={genId}
+          fit
           value={activeGen ?? ""}
-          onChange={(e) =>
-            onGenerationChange(e.target.value === "" ? null : e.target.value)
-          }
-          className={INPUT}
-        >
-          <option value="">{t("gen.any")}</option>
-          {gensUpTo(era.maxGen).map((slug) => (
-            <option key={slug} value={slug}>
-              {slug.toUpperCase()}
-            </option>
-          ))}
-        </select>
+          onChange={(gen) => onGenerationChange(gen === "" ? null : gen)}
+          items={[
+            { value: "", label: t("gen.any") },
+            ...gensUpTo(era.maxGen).map((slug) => ({ value: slug, label: slug.toUpperCase() })),
+          ]}
+          className="text-sm"
+          boxClassName={SELECT}
+        />
       </div>
 
       <div className="flex items-center gap-2">
@@ -62,18 +60,15 @@ export const ListOptions = ({
         >
           {t("filters.perPageLabel")}
         </label>
-        <select
+        <Dropdown
           id={perPageId}
-          value={itemsPerPage}
-          onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-          className={INPUT}
-        >
-          {PER_PAGE_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+          fit
+          value={String(itemsPerPage)}
+          onChange={(perPage) => onItemsPerPageChange(Number(perPage))}
+          items={PER_PAGE_OPTIONS.map((option) => ({ value: String(option), label: String(option) }))}
+          className="text-sm"
+          boxClassName={SELECT}
+        />
       </div>
     </div>
   );

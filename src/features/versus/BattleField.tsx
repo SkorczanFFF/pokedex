@@ -7,14 +7,25 @@ import { SkeletonBlock } from "@/components/Skeleton";
 import { TypeBadge } from "@/components/badges";
 import { GbBox } from "@/components/layout";
 import { statsInEra, typingInEra } from "@/domain/pokemonView";
-import { battleSprite, showdownSprite, type SpriteView } from "@/domain/spriteVariants";
+import {
+  battleSprite,
+  showdownSprite,
+  spriteVariants,
+  type SpriteView,
+} from "@/domain/spriteVariants";
 import { STAT, barPercent, statValue } from "@/domain/stats";
 import { useEra } from "@/app/era/context";
 import { humanize } from "@/i18n/labels";
+import { SpriteFrame } from "@/media/SpriteFrame";
+import { useAnimatedEvery } from "@/media/useAnimatedEvery";
+import type { Pokemon } from "@/types/pokemon";
 import type { Fighter } from "./model";
 
 /** Showdown's sprites run to twice Crystal's size, so the modern slot is bigger. */
 const MODERN_SLOT = "h-24 w-24 md:h-40 md:w-40";
+
+/** How often the enemy's Crystal sprite plays its animation while it stands there. */
+const FOE_ANIMATION_EVERY_MS = 10_000;
 
 /** The Game Boy's battle layout with two real Pokémon in it. */
 export const BattleField = ({
@@ -79,6 +90,17 @@ const Slot = ({ fighter, view }: { fighter: Fighter; view: SpriteView }) => {
       }
       const sprite = battleSprite(fighter.pokemon, era.sprites, view);
       if (!sprite) return <span className={size} />;
+      // Crystal drew the enemy's sprite in motion; the trainer's back it did not.
+      if (view === "front" && !sprite.mirrored) {
+        return (
+          <RetroFront
+            key={sprite.url}
+            pokemon={fighter.pokemon}
+            still={sprite.url}
+            className={size}
+          />
+        );
+      }
       return (
         <img
           src={sprite.url}
@@ -93,6 +115,41 @@ const Slot = ({ fighter, view }: { fighter: Fighter; view: SpriteView }) => {
       // Not found, or not in this era: the slot tears the way the 404's does.
       return <GlitchSlot className={size}>???</GlitchSlot>;
   }
+};
+
+/**
+ * The enemy's sprite as the game showed it: it plays its animation when it
+ * comes out, and again every ten seconds while it stands there. Measured and
+ * cropped as the details page does it, so the animation takes the still's
+ * place without the Pokémon shifting or changing size.
+ */
+const RetroFront = ({
+  pokemon,
+  still,
+  className,
+}: {
+  pokemon: Pokemon;
+  still: string;
+  className: string;
+}) => {
+  const { era } = useEra();
+  const animated =
+    spriteVariants(pokemon, era.sprites).find(
+      (variant) => variant.view === "front" && variant.palette === "default",
+    )?.animated ?? null;
+  const motion = useAnimatedEvery(animated, FOE_ANIMATION_EVERY_MS);
+
+  return (
+    <span className={`${className} block`}>
+      <SpriteFrame
+        src={motion ?? still}
+        still={still}
+        animated={animated}
+        width="fill"
+        alt={pokemon.name}
+      />
+    </span>
+  );
 };
 
 /**

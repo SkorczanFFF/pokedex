@@ -20,9 +20,10 @@ const TILE = 8;
  * reaches, so the animation takes the still's place without the Pokémon
  * shifting or changing size.
  *
- * `width` is how wide to draw the frame, which is square. Until the bounds are
- * measured nothing is drawn, so the picture lands once, at its size, rather
- * than twice.
+ * `width` is how wide to draw the frame, which is square — a number of pixels,
+ * or `"fill"` to take the parent's square, which must then have a height of
+ * its own. Until the bounds are measured nothing is drawn, so the picture
+ * lands once, at its size, rather than twice.
  */
 export const SpriteFrame = ({
   src,
@@ -37,11 +38,13 @@ export const SpriteFrame = ({
   still: string;
   /** Its animation, whose reach the measure takes in. */
   animated: string | null;
-  width: number;
+  width: number | "fill";
   alt: string;
 }) => {
   const bounds = useSpriteBounds(still, animated);
   if (bounds === undefined) return null;
+
+  const fill = width === "fill";
 
   // Bounds that could not be read: show the picture whole, as it comes.
   if (!bounds) {
@@ -49,20 +52,25 @@ export const SpriteFrame = ({
       <img
         src={src}
         alt={alt}
-        className="block [image-rendering:pixelated]"
-        style={{ width }}
+        className={`block [image-rendering:pixelated] ${fill ? "h-full w-full object-contain" : ""}`}
+        style={fill ? undefined : { width }}
       />
     );
   }
 
   const box = Math.ceil(Math.max(bounds.width, bounds.height) / TILE) * TILE;
-  const scale = width / box;
   // The drawing sits centred in its box.
   const left = bounds.x - (box - bounds.width) / 2;
   const top = bounds.y - (box - bounds.height) / 2;
+  // In a filled frame every length is a share of the frame's width — margins
+  // included, which CSS measures against the width even on the top. The frame
+  // is square, so that is the height too.
+  const part = (length: number) =>
+    fill ? `${(length / box) * 100}%` : length * (width / box);
+  const frame = fill ? "100%" : width;
 
   return (
-    <div className="overflow-hidden" style={{ width, height: width }}>
+    <div className="overflow-hidden" style={{ width: frame, height: frame }}>
       {/* Preflight caps an <img> at its parent's width; this one is meant to
           overflow it by exactly the padding being cropped away. */}
       <img
@@ -70,10 +78,10 @@ export const SpriteFrame = ({
         alt={alt}
         className="block max-w-none [image-rendering:pixelated]"
         style={{
-          width: bounds.canvas.width * scale,
-          height: bounds.canvas.height * scale,
-          marginLeft: -left * scale,
-          marginTop: -top * scale,
+          width: part(bounds.canvas.width),
+          height: part(bounds.canvas.height),
+          marginLeft: part(-left),
+          marginTop: part(-top),
         }}
       />
     </div>

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useEra } from "@/app/era/context";
 import { InlineError } from "@/components/ErrorView";
+import { NumberField } from "@/components/NumberField";
 import { SkeletonBlock } from "@/components/Skeleton";
 import { ClassBadge, EffectChip, TypeBadge } from "@/components/badges";
 import { phraseKey } from "@/components/effectiveness";
@@ -81,16 +82,16 @@ export const HitResult = ({
         {cls !== "status" && (
           <label className="ml-auto flex items-center gap-1 text-[10px] text-gray-500">
             {t("versus.power")}
-            <input
-              type="number"
+            <NumberField
               min={0}
               value={power ?? ""}
-              onChange={(e) => {
-                if (e.target.value === "") return edit("power", null);
-                const typed = Math.floor(Number(e.target.value));
+              onChange={(raw) => {
+                if (raw === "") return edit("power", null);
+                const typed = Math.floor(Number(raw));
                 if (Number.isFinite(typed) && typed >= 0) edit("power", typed);
               }}
-              className={`${CALC_INPUT} w-16 px-1`}
+              className={`${CALC_INPUT} w-24`}
+              inputClassName="px-1"
             />
           </label>
         )}
