@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { MORE } from "@/components/buttons";
+import { EmptyState, SectionCard } from "@/components/layout";
 import {
   learnsetInEra,
   moveMethodAccent,
@@ -84,12 +86,10 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
     );
 
   return (
-    <section className="bg-white p-6 mt-6">
-      <h2 className="text-lg mb-2">{t("details.moves")}</h2>
-      <p className="text-xs text-gray-500 mb-6">
-        {t("details.movesFrom", { game: gameLabel(game) })}
-      </p>
-
+    <SectionCard
+      title={t("details.moves")}
+      subtitle={t("details.movesFrom", { game: gameLabel(game) })}
+    >
       <div className="lg:grid lg:grid-cols-2 lg:gap-8">
         <div>
           {byLevel && (
@@ -112,7 +112,7 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
                 type="button"
                 onClick={() => setShowRest(!showRest)}
                 aria-expanded={showRest}
-                className="mt-6 px-3 py-1 bg-gray-200 text-black text-xs cursor-pointer hover:bg-dex-yellow"
+                className={`mt-6 ${MORE}`}
               >
                 {showRest
                   ? t("details.movesHide")
@@ -145,9 +145,9 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
         <aside className="hidden lg:block">
           <div className="sticky top-[calc(var(--spacing-nav)_+_1rem)] space-y-3">
             {open.length === 0 ? (
-              <p className="border border-dashed border-gray-300 p-8 text-center text-[10px] leading-relaxed text-gray-400">
+              <EmptyState className="text-[10px] leading-relaxed text-gray-400">
                 {t("details.movePick")}
-              </p>
+              </EmptyState>
             ) : (
               open.map((row) => {
                 const accent = moveMethodAccent(row.method);
@@ -187,7 +187,7 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
           </div>
         </aside>
       </div>
-    </section>
+    </SectionCard>
   );
 };
 

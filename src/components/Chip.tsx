@@ -27,3 +27,18 @@ export const Chip = ({
     {children}
   </button>
 );
+
+/** A row of chips that answers one question, named for a screen reader. */
+export const ChipRow = ({
+  label,
+  className = "",
+  children,
+}: {
+  label: string;
+  className?: string;
+  children: ReactNode;
+}) => (
+  <div role="group" aria-label={label} className={`flex flex-wrap gap-1 ${className}`}>
+    {children}
+  </div>
+);

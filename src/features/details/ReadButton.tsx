@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ACTION } from "@/components/chips";
+import { ACTION } from "@/components/buttons";
 import { useEra } from "@/era/context";
 import { hush, say } from "./pokedexVoice";
 

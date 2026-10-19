@@ -2,6 +2,8 @@ import { useEffect, useId, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { allPokemonNamesQuery } from "@/api/queries";
+import { DANGER, INPUT } from "@/components/buttons";
+import { MenuCursor } from "@/components/menu";
 import { resourceIdFromUrl } from "@/domain/resource";
 import { matchNames } from "@/domain/search";
 import { useEra } from "@/era/context";
@@ -111,14 +113,14 @@ export const PokemonPicker = ({
           }}
           onKeyDown={onKeyDown}
           placeholder={placeholder}
-          className="h-9 w-full min-w-0 border-2 bg-white px-2 text-sm"
+          className={`${INPUT} w-full min-w-0`}
         />
         {value && (
           <button
             type="button"
             onClick={() => onPick(null)}
             aria-label={t("versus.clear")}
-            className="h-9 px-3 bg-dex-red text-sm text-white cursor-pointer hover:bg-red-700"
+            className={DANGER}
           >
             X
           </button>
@@ -149,9 +151,7 @@ export const PokemonPicker = ({
                   index === active ? "bg-dex-yellow" : ""
                 }`}
               >
-                <span aria-hidden="true" className={index === active ? "" : "opacity-0"}>
-                  {">"}
-                </span>
+                <MenuCursor className={index === active ? "" : "opacity-0"} />
                 {/* A floor, not a width: up to #999 the names line up, and a
                     form's #10xxx pushes its own name rather than covering it. */}
                 <span className="min-w-12 shrink-0 text-gray-400">

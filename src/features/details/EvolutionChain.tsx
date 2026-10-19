@@ -4,6 +4,9 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { evolutionChainQuery } from "@/api/queries";
 import { pokemonPath } from "@/app/routes";
+import { SkeletonBlock } from "@/components/Skeleton";
+import { SectionCard } from "@/components/layout";
+import { MenuCursor } from "@/components/menu";
 import {
   evolutionTreeInEra,
   treeDepth,
@@ -53,16 +56,15 @@ export const EvolutionChain = ({
   if (roots !== null && roots.length === 0) return null;
 
   return (
-    <section className="bg-white p-6 mt-6">
-      <h2 className="text-lg mb-6">{t("details.evolution")}</h2>
+    <SectionCard title={t("details.evolution")}>
       {roots ? (
         roots.map((root) => (
           <Tree key={root.name} root={root} currentId={currentId} />
         ))
       ) : (
-        <div className="h-64 bg-gray-100 animate-pulse" />
+        <SkeletonBlock className="h-64" />
       )}
-    </section>
+    </SectionCard>
   );
 };
 
@@ -230,11 +232,7 @@ const NodeCard = ({
       <p className="mt-2 text-xs capitalize leading-relaxed break-words md:text-[length:var(--evo-name)]">
         {/* The same `>` the battle screen's menu uses — `aria-current` already
             says this to a screen reader, so it is decoration. */}
-        {isSprite && isCurrent && (
-          <span aria-hidden="true" className="mr-1 text-dex-red">
-            {">"}
-          </span>
-        )}
+        {isSprite && isCurrent && <MenuCursor className="mr-1 text-dex-red" />}
         {node.name}
       </p>
     </>

@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { GHOST } from "@/components/buttons";
 
 interface PaginationProps {
   currentPage: number;
@@ -30,7 +31,7 @@ export const Pagination = ({
         onClick={() => onPageChange(currentPage - 1)}
         onMouseEnter={() => handlePrefetch(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-dex-yellow disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
+        className={GHOST}
       >
         {t("pagination.prev")}
       </button>
@@ -72,7 +73,7 @@ export const Pagination = ({
         onClick={() => onPageChange(currentPage + 1)}
         onMouseEnter={() => handlePrefetch(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-dex-yellow disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
+        className={GHOST}
       >
         {t("pagination.next")}
       </button>

@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { listPath, paths } from "@/app/routes";
-import { PAGE_LINK } from "@/components/chips";
-import { typeClass } from "@/domain/pokemonTypes";
+import { typeBadgeClass } from "@/components/typeBadge";
+import { PAGE_LINK } from "@/components/buttons";
 import { typesInEra } from "@/domain/pokemonView";
 import { useEra } from "@/era/context";
 import { useTypeLabel } from "@/i18n/labels";
@@ -23,9 +23,7 @@ export const TypeBadges = ({ pokemon }: { pokemon: Pokemon }) => {
           aria-label={t("details.showType", {
             type: typeLabel(type.type.name),
           })}
-          className={`px-4 py-1 text-xs cursor-pointer hover:opacity-80 ${typeClass(
-            type.type.name,
-          )}`}
+          className={`${typeBadgeClass(type.type.name, "md")} cursor-pointer hover:opacity-80`}
         >
           {typeLabel(type.type.name)}
         </Link>

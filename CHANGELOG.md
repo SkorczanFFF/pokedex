@@ -16,6 +16,32 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `refactor: the badges, boxes, buttons and menu lines the pages had each drawn become components`
+
+- **Changed** — `components/badges.tsx`: `TypeBadge`, which six places had each drawn with
+  their own padding; `ClassBadge`; `LangMarker`, the "EN" mark the dex entry and a move's
+  sentence had each spelled out; `EffectChip`, out of the Versus file. `components/menu.tsx`
+  owns the menu line and its cursor, which Navbar, the About page, Versus' tabs, the picker's
+  list and the evolution tile had each redrawn as a `>` of their own; the cursor takes the
+  classes that say when it shows. `components/layout.tsx`: the Game Boy box, the page column,
+  the section card and the dashed empty state. `components/buttons.ts`: the yellow action in
+  two sizes, the grey step, the "show more", the red X and the text box — the Back button, the
+  encounters page, the filter sheet, the pager and the search box had typed the same strings.
+  `Skeleton.tsx` gains a block and a move body, in place of five pulsing greys drawn in place;
+  `ErrorView` takes its message rather than a union of pages, and gains `InlineError`.
+- **Changed** — `BattleScreen` is built from the parts Versus' field already needed —
+  `StatusBox`, `GlitchSlot`, `BATTLE_SLOT` — and lends the 404 and not-in-era screens
+  `BattleTitle`, `BattleText` and `BattleActions`. `features/shared/` gains `useEraToggle`
+  and `useLanguageSwitch`, so the navbar's two switches and the phone menu's two lines share
+  their logic and their labels; `useEscape`, which the menu and the filter sheet had each
+  written; and `useScrollTopOn`, for the three pages that scrolled to the top by hand.
+  `ChipRow` names a row of chips for a screen reader once, where four rows had each set
+  `role="group"`. `effectiveness.ts` moves from the chart's feature to `components/`, where
+  the badges that read it live. Phase 4 of the plan in `REVIEW.md`.
+- **Changed** — The type badges on the list's cards are a few pixels shorter: they take the
+  one badge every other page uses rather than a line height of their own. A move's class
+  badge on the details page lines up with the type beside it the same way.
+
 ### `refactor: the routes, the list's origin, the query keys and the language are each named once`
 
 - **Changed** — `app/routes.ts` declares every address and query key: the router reads

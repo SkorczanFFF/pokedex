@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import ErrorView from "@/components/ErrorView";
 import { SkeletonGrid } from "@/components/Skeleton";
 import { PokemonCard } from "./PokemonCard";
@@ -12,7 +13,9 @@ export const ListResults = ({
   params: ListParams;
   data: ListData;
 }) => {
-  if (data.hasError) return <ErrorView errorType="list" />;
+  const { t } = useTranslation();
+
+  if (data.hasError) return <ErrorView message={t("error.list")} />;
 
   // Skeletons match the requested page size, so nothing jumps when the real
   // cards land.

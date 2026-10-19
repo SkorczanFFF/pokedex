@@ -3,12 +3,13 @@ import { useTranslation } from "react-i18next";
 import { Arrow } from "@/components/Arrow";
 import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
+import { effectClass, printed } from "@/components/effectiveness";
+import { PageContainer } from "@/components/layout";
 import { GEN_SLUGS, genOrder, genRoman } from "@/domain/dex";
 import { typeClass, type PokemonType } from "@/domain/pokemonTypes";
 import { chartChanges, type Multiplier } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
 import { useTypeLabel } from "@/i18n/labels";
-import { effectClass, printed } from "./effectiveness";
 import { VersusAd } from "./VersusAd";
 import { useTypeChart } from "./useTypeChart";
 
@@ -41,7 +42,7 @@ export const TypeChartPage = () => {
   const { chart, types, isLoading, error } = useTypeChart(gen);
 
   if (isLoading) return <Loader />;
-  if (error || !chart) return <ErrorView errorType="types" />;
+  if (error || !chart) return <ErrorView message={t("error.types")} />;
 
   const changes = chartChanges(types, gen);
 
@@ -53,7 +54,7 @@ export const TypeChartPage = () => {
   ];
 
   return (
-    <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
+    <PageContainer>
       <section className="bg-white p-6">
         <h1 className="text-2xl mb-4">{t("types.title")}</h1>
         <p className="text-xs leading-relaxed mb-6">
@@ -224,6 +225,6 @@ export const TypeChartPage = () => {
           </div>
         </div>
       </section>
-    </div>
+    </PageContainer>
   );
 };

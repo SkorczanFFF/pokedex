@@ -3,12 +3,11 @@ import { useTranslation } from "react-i18next";
 import { leaveList } from "@/app/listOrigin";
 import { pokemonPath } from "@/app/routes";
 import type { Pokemon } from "@/types/pokemon";
-import { typeClass } from "@/domain/pokemonTypes";
+import { TypeBadge } from "@/components/badges";
 import { typesInEra } from "@/domain/pokemonView";
 import { spriteUrl } from "@/domain/sprites";
 import { useEra } from "@/era/context";
 import { genRoman, generationFromId } from "@/domain/dex";
-import { useTypeLabel } from "@/i18n/labels";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -18,7 +17,6 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const typeLabel = useTypeLabel();
   const { era } = useEra();
   const target = pokemonPath(pokemon.name);
   const gen = generationFromId(pokemon.id);
@@ -89,12 +87,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
         <h2 className="text-lg capitalize leading-relaxed">{pokemon.name}</h2>
         <div className="flex flex-wrap gap-2 mt-2">
           {types.map((type) => (
-            <span
-              key={type.type.name}
-              className={`px-2 py-1 text-[10px] leading-4 ${typeClass(type.type.name)}`}
-            >
-              {typeLabel(type.type.name)}
-            </span>
+            <TypeBadge key={type.type.name} type={type.type.name} />
           ))}
         </div>
       </div>

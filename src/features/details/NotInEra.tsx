@@ -2,10 +2,12 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { paths } from "@/app/routes";
 import {
+  BattleActions,
   BattleScreen,
-  MENU_ITEM,
-  MenuCursor,
+  BattleText,
+  BattleTitle,
 } from "@/components/BattleScreen";
+import { MENU_ITEM, MenuCursor } from "@/components/menu";
 import { DEFAULT_ERA } from "@/domain/era";
 import { useEra } from "@/era/context";
 import { useNotInEraText } from "@/features/shared/useNotInEraText";
@@ -38,12 +40,10 @@ export const NotInEra = ({ pokemon }: { pokemon: Pokemon }) => {
       name={name.toUpperCase()}
       level={String(pokemon.id)}
     >
-      <h1 className="text-sm leading-relaxed md:text-base">
-        {t("era.wild", { name: name.toUpperCase() })}
-      </h1>
-      <p className="mt-3 text-sm leading-relaxed md:text-base">{notInEra(pokemon)}</p>
+      <BattleTitle>{t("era.wild", { name: name.toUpperCase() })}</BattleTitle>
+      <BattleText>{notInEra(pokemon)}</BattleText>
 
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-12">
+      <BattleActions>
         {/* Two eras, so "leave retro" is unambiguous. A third would have to
             name the one it drops back to. */}
         <button
@@ -58,7 +58,7 @@ export const NotInEra = ({ pokemon }: { pokemon: Pokemon }) => {
           <MenuCursor />
           {t("notFound.pokedex")}
         </Link>
-      </div>
+      </BattleActions>
     </BattleScreen>
   );
 };

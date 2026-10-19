@@ -2,14 +2,16 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { pokemonPath } from "@/app/routes";
-import { HpBar } from "@/components/BattleScreen";
+import { BATTLE_SLOT, GlitchSlot, HpBar, StatusBox } from "@/components/BattleScreen";
+import { SkeletonBlock } from "@/components/Skeleton";
+import { TypeBadge } from "@/components/badges";
+import { GbBox } from "@/components/layout";
 import { statsInEra, typingInEra } from "@/domain/pokemonView";
 import { battleSprite, type SpriteView } from "@/domain/sprites";
 import { STAT, barPercent, statValue } from "@/domain/stats";
 import { useEra } from "@/era/context";
 import { humanize } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
-import { TypeChip } from "./Matchup";
 
 /** `a` is the trainer's side, bottom left; `b` the opponent's, top right. */
 export type Side = "a" | "b";
@@ -30,9 +32,8 @@ export interface Known {
 
 export type Fighter = Idle | Known;
 
-const SIZE = "h-20 w-20 md:h-28 md:w-28";
 /** Showdown's sprites run to twice Crystal's size, so the modern slot is bigger. */
-const MODERN_SIZE = "h-24 w-24 md:h-40 md:w-40";
+const MODERN_SLOT = "h-24 w-24 md:h-40 md:w-40";
 
 /** The Game Boy's battle layout with two real Pokémon in it. */
 export const BattleField = ({
@@ -48,7 +49,7 @@ export const BattleField = ({
   const rows = era.pixelArt ? "mt-6" : "md:-mt-12";
 
   return (
-    <div className="border-4 border-black bg-white p-4 md:p-6">
+    <GbBox>
       <div className="flex items-start justify-between gap-4">
         <FighterBox fighter={foe} />
         <Slot fighter={foe} view="front" />
@@ -57,14 +58,14 @@ export const BattleField = ({
         <Slot fighter={yours} view="back" />
         <FighterBox fighter={yours} />
       </div>
-    </div>
+    </GbBox>
   );
 };
 
 const Slot = ({ fighter, view }: { fighter: Fighter; view: SpriteView }) => {
   const { era } = useEra();
   const modern = !era.pixelArt;
-  const size = modern ? MODERN_SIZE : SIZE;
+  const size = modern ? MODERN_SLOT : BATTLE_SLOT;
 
   switch (fighter.status) {
     case "empty":
@@ -77,9 +78,7 @@ const Slot = ({ fighter, view }: { fighter: Fighter; view: SpriteView }) => {
         </span>
       );
     case "loading":
-      return (
-        <span aria-hidden="true" className={`${size} bg-gray-200 animate-pulse`} />
-      );
+      return <SkeletonBlock className={size} />;
     case "ready": {
       const showdown = modern ? showdownSprite(fighter.pokemon, view) : null;
       if (showdown) {
@@ -111,14 +110,7 @@ const Slot = ({ fighter, view }: { fighter: Fighter; view: SpriteView }) => {
     }
     default:
       // Not found, or not in this era: the slot tears the way the 404's does.
-      return (
-        <span
-          aria-hidden="true"
-          className={`${size} glitch flex items-center justify-center text-2xl md:text-4xl`}
-        >
-          ???
-        </span>
-      );
+      return <GlitchSlot className={size}>???</GlitchSlot>;
   }
 };
 
@@ -182,33 +174,28 @@ const FighterBox = ({ fighter }: { fighter: Fighter }) => {
   const ready = fighter.status === "ready" ? fighter.pokemon : null;
   const hp = ready ? statValue(statsInEra(ready, era), STAT.hp) : 0;
 
+  const name = ready ? (
+    <Link to={pokemonPath(ready.name)} className="uppercase hover:text-dex-red">
+      {humanize(ready.name)}
+    </Link>
+  ) : (
+    <span className="uppercase text-gray-400">
+      {fighter.name
+        ? humanize(fighter.name)
+        : t(fighter.side === "a" ? "versus.yours" : "versus.foe")}
+    </span>
+  );
+
   return (
-    <div className="min-w-40 border-2 border-black bg-white px-2 py-1 md:px-3 md:py-2">
-      <div className="flex items-baseline gap-4 text-[10px] md:text-xs">
-        {ready ? (
-          <Link
-            to={pokemonPath(ready.name)}
-            className="uppercase hover:text-dex-red"
-          >
-            {humanize(ready.name)}
-          </Link>
-        ) : (
-          <span className="uppercase text-gray-400">
-            {fighter.name
-              ? humanize(fighter.name)
-              : t(fighter.side === "a" ? "versus.yours" : "versus.foe")}
-          </span>
-        )}
-        {ready && <span className="ml-auto">#{ready.id}</span>}
-      </div>
+    <StatusBox className="min-w-40" name={name} aside={ready ? `#${ready.id}` : undefined}>
       <HpBar percent={barPercent(hp)} value={ready ? hp : undefined} />
       {ready && (
         <div className="mt-2 flex flex-wrap gap-1">
           {typingInEra(ready, era).map((type) => (
-            <TypeChip key={type} type={type} />
+            <TypeBadge key={type} type={type} />
           ))}
         </div>
       )}
-    </div>
+    </StatusBox>
   );
 };

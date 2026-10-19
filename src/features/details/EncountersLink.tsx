@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { encountersQuery } from "@/api/queries";
 import { encountersPath } from "@/app/routes";
-import { ACTION } from "@/components/chips";
+import { ACTION } from "@/components/buttons";
 import { hasPlacesInEra } from "@/domain/encounters";
 import { useEra } from "@/era/context";
 import type { Pokemon } from "@/types/pokemon";

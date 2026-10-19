@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { readOrigin, returnState } from "@/app/listOrigin";
 import { paths } from "@/app/routes";
+import { ACTION_LG } from "@/components/buttons";
 
 /**
  * Back to wherever the list was. The origin and the scroll offset ride along in
@@ -21,7 +22,7 @@ export const BackButton = () => {
   return (
     <button
       onClick={handleBack}
-      className="inline-block text-black bg-dex-yellow hover:bg-dex-red hover:text-white px-4 py-2 cursor-pointer"
+      className={`inline-block ${ACTION_LG}`}
     >
       {t("details.back")}
     </button>

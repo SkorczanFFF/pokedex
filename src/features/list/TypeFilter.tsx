@@ -1,9 +1,6 @@
 import { useTranslation } from "react-i18next";
-import {
-  MAX_TYPES,
-  typeClass,
-  typesAvailableIn,
-} from "@/domain/pokemonTypes";
+import { typeBadgeClass } from "@/components/typeBadge";
+import { MAX_TYPES, typesAvailableIn } from "@/domain/pokemonTypes";
 import { useEra } from "@/era/context";
 import { useTypeLabel } from "@/i18n/labels";
 
@@ -46,7 +43,7 @@ export const TypeFilter = ({ active, onToggle, onClear }: TypeFilterProps) => {
             disabled={isDisabled}
             aria-pressed={isActive}
             title={isDisabled ? t("filters.maxTypes", { max: MAX_TYPES }) : undefined}
-            className={`px-3 py-1 text-xs ${typeClass(type)} ${
+            className={`${typeBadgeClass(type, "sm")} ${
               isActive ? "ring-2 ring-black ring-offset-1" : ""
             } ${
               isDisabled

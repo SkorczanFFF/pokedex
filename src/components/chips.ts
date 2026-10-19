@@ -31,18 +31,3 @@ export const chipClass = (kind: ChipKind, active: boolean): string =>
   `px-2 py-1 text-[10px] leading-none cursor-pointer ${
     active ? ACCENTS[kind].on : ACCENTS[kind].off
   }`;
-
-/**
- * Yellow is something to press about this Pokémon: a cry, a reading, the page
- * of where it is met, Versus with it already picked — and Versus' swap.
- */
-export const ACTION =
-  "text-xs px-2 py-1 bg-dex-yellow hover:bg-dex-red hover:text-white cursor-pointer";
-
-/**
- * A framed link is a reference page that is about no Pokémon in particular:
- * the chart. Framed like a menu box, so it
- * is neither a picker's wash nor an action's yellow.
- */
-export const PAGE_LINK =
-  "inline-block px-3 py-1 text-xs border-2 border-black bg-white text-black hover:bg-dex-yellow cursor-pointer";

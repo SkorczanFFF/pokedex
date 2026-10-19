@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { moveQuery } from "@/api/queries";
+import { SkeletonMoveBody } from "@/components/Skeleton";
+import { ClassBadge, LangMarker, TypeBadge } from "@/components/badges";
 import { moveInGame, moveMethodAccent } from "@/domain/moves";
-import { typeClass } from "@/domain/pokemonTypes";
-import { useDamageClassLabel, useGameLabel, useTypeLabel } from "@/i18n/labels";
+import { useGameLabel } from "@/i18n/labels";
 import { useLocale } from "@/i18n/locale";
 import { useTranslatedMoveText } from "@/i18n/translated";
 
@@ -32,14 +33,12 @@ export const MoveDetails = ({
 }) => {
   const { t } = useTranslation();
   const locale = useLocale();
-  const typeLabel = useTypeLabel();
-  const damageClassLabel = useDamageClassLabel();
   const gameLabel = useGameLabel();
   const translatedText = useTranslatedMoveText();
 
   const { data, isLoading, error } = useQuery(moveQuery(name));
 
-  if (isLoading) return <MoveSkeleton />;
+  if (isLoading) return <SkeletonMoveBody />;
   // A move is a detail on a page that already works; losing one is not worth
   // replacing anything with an error.
   if (error || !data) return null;
@@ -49,12 +48,8 @@ export const MoveDetails = ({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        <span className={`px-2 py-1 text-[10px] ${typeClass(move.type)}`}>
-          {typeLabel(move.type)}
-        </span>
-        <span className="px-2 py-1 text-[10px] bg-gray-200">
-          {damageClassLabel(move.damageClass)}
-        </span>
+        <TypeBadge type={move.type} />
+        <ClassBadge damageClass={move.damageClass} />
       </div>
 
       {/* Three numbers read as three numbers when they are given their own
@@ -79,13 +74,7 @@ export const MoveDetails = ({
               now means the translation had no entry reaching back this far
               rather than that none exists at all. */}
           {move.textLanguage !== locale && (
-            <span
-              title={t("details.englishMoveText")}
-              className="ml-2 align-middle bg-gray-200 text-gray-600 text-[10px] px-1 py-[2px]"
-            >
-              <span aria-hidden="true">{t("details.englishEntryShort")}</span>
-              <span className="sr-only">{t("details.englishMoveText")}</span>
-            </span>
+            <LangMarker title={t("details.englishMoveText")} />
           )}
           {/* The text came from whichever game had one; say so when that is not
               the game the rest of the section is quoting. */}
@@ -120,18 +109,3 @@ const MoveStat = ({
     </div>
   );
 };
-
-const MoveSkeleton = () => (
-  <div className="space-y-4" aria-hidden="true">
-    <div className="flex gap-2">
-      <div className="h-6 w-24 bg-gray-200 animate-pulse" />
-      <div className="h-6 w-20 bg-gray-200 animate-pulse" />
-    </div>
-    <div className="grid grid-cols-3 gap-2">
-      <div className="h-16 bg-gray-200 animate-pulse" />
-      <div className="h-16 bg-gray-200 animate-pulse" />
-      <div className="h-16 bg-gray-200 animate-pulse" />
-    </div>
-    <div className="h-8 bg-gray-200 animate-pulse" />
-  </div>
-);

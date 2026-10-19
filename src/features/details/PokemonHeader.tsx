@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { LangMarker } from "@/components/badges";
 import { genRoman } from "@/domain/dex";
 import { getDescription, getGeneration, getGenus } from "@/domain/species";
 import type { SpriteSetId } from "@/domain/sprites";
@@ -64,15 +65,7 @@ export const PokemonHeader = ({
             text={description.text}
             lang={description.language}
           />
-          {showEnglishMarker && (
-            <span
-              title={t("details.englishEntry")}
-              className="ml-2 align-middle bg-gray-200 text-gray-600 text-[10px] px-1 py-[2px]"
-            >
-              <span aria-hidden="true">{t("details.englishEntryShort")}</span>
-              <span className="sr-only">{t("details.englishEntry")}</span>
-            </span>
-          )}
+          {showEnglishMarker && <LangMarker title={t("details.englishEntry")} />}
         </p>
       )}
     </>

@@ -4,8 +4,10 @@ import { useTranslation } from "react-i18next";
 import { NotFoundError } from "@/api/client";
 import { pokemonQuery } from "@/api/queries";
 import { Arrow } from "@/components/Arrow";
-import { MENU_ITEM } from "@/components/BattleScreen";
-import { ACTION } from "@/components/chips";
+import { InlineError } from "@/components/ErrorView";
+import { ACTION } from "@/components/buttons";
+import { GbBox } from "@/components/layout";
+import { MENU_ITEM, MenuCursor } from "@/components/menu";
 import { abilityRule, defaultAbility, hasAbility } from "@/domain/abilities";
 import { genRoman } from "@/domain/dex";
 import { isInEra, type DexEra } from "@/domain/era";
@@ -117,7 +119,7 @@ export const VersusPage = () => {
 
       <BattleField yours={yours} foe={foe} />
 
-      <div className="mt-4 border-4 border-black bg-white p-4 md:p-6">
+      <GbBox className="mt-4">
         <Message
           yours={yours}
           foe={foe}
@@ -130,7 +132,7 @@ export const VersusPage = () => {
           onMove={params.setMove}
           onLevel={params.setLevel}
         />
-      </div>
+      </GbBox>
 
       {/* Last, as the chart page ends on Versus: the way back to all of it. */}
       {chart && (
@@ -208,13 +210,7 @@ const Message = ({
   );
   const rule = (side: Side) => abilityRule(abilities[side]);
 
-  if (chartError) {
-    return (
-      <p role="alert" className="text-xs text-dex-red">
-        {t("error.types")}
-      </p>
-    );
-  }
+  if (chartError) return <InlineError>{t("error.types")}</InlineError>;
   if (!chart || fighters.some((fighter) => fighter.status === "loading")) {
     return <p className="text-xs text-gray-500">{t("loader.loading")}</p>;
   }
@@ -332,12 +328,7 @@ const TabButton = ({
       active ? "bg-dex-yellow text-black hover:text-black" : ""
     }`}
   >
-    <span
-      aria-hidden="true"
-      className={active ? "" : "opacity-0 group-hover:opacity-50"}
-    >
-      {">"}
-    </span>
+    <MenuCursor className={active ? "" : "opacity-0 group-hover:opacity-50"} />
     {children}
   </button>
 );

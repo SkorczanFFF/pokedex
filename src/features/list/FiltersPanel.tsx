@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { ACTION_LG, GHOST } from "@/components/buttons";
+import { useEscape } from "@/features/shared/useEscape";
 import { ListOptions } from "./ListOptions";
 import { TypeFilter } from "./TypeFilter";
 
@@ -41,24 +43,21 @@ export const FiltersPanel = ({
   const { t } = useTranslation();
   const closeRef = useRef<HTMLButtonElement>(null);
 
+  useEscape(onClose);
+
+  // Focus moves into the sheet and back out; the page behind it stops scrolling.
   useEffect(() => {
     const opener = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKeyDown);
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
       opener?.focus();
     };
-  }, [onClose]);
+  }, []);
 
   return (
     <div className="fixed inset-0 z-[60] md:hidden">
@@ -109,17 +108,10 @@ export const FiltersPanel = ({
         </div>
 
         <div className="flex gap-2 p-4 bg-white shrink-0">
-          <button
-            onClick={onClearAll}
-            disabled={!hasActiveFilters}
-            className="px-4 py-2 bg-gray-300 text-sm cursor-pointer hover:bg-dex-yellow disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
-          >
+          <button onClick={onClearAll} disabled={!hasActiveFilters} className={GHOST}>
             {t("filters.clearAll")}
           </button>
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2 bg-dex-yellow text-black text-sm cursor-pointer hover:bg-dex-red hover:text-white"
-          >
+          <button onClick={onClose} className={`flex-1 text-sm ${ACTION_LG}`}>
             {resultCount === null
               ? t("filters.showResults")
               : t("filters.showResultsCount", { count: resultCount })}

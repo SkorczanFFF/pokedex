@@ -2,6 +2,10 @@ import { useId, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { moveQuery } from "@/api/queries";
+import { InlineError } from "@/components/ErrorView";
+import { SkeletonBlock } from "@/components/Skeleton";
+import { ClassBadge, EffectChip, TypeBadge } from "@/components/badges";
+import { phraseKey } from "@/components/effectiveness";
 import { abilityRule } from "@/domain/abilities";
 import {
   MAX_LEVEL,
@@ -13,24 +17,14 @@ import {
   hitsToKo,
 } from "@/domain/damage";
 import { learnsetInEra, moveInGame, uniqueMoves } from "@/domain/moves";
-import { typeClass } from "@/domain/pokemonTypes";
 import { statsInEra, typingInEra } from "@/domain/pokemonView";
 import { STAT, statValue, type StatInEra } from "@/domain/stats";
 import type { TypeChart } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
-import {
-  humanize,
-  useDamageClassLabel,
-  useMoveLabel,
-  useMoveMethodLabel,
-  useStatLabel,
-  useTypeLabel,
-} from "@/i18n/labels";
-import { phraseKey } from "@/features/types/effectiveness";
+import { humanize, useMoveLabel, useMoveMethodLabel, useStatLabel } from "@/i18n/labels";
 import { useLocale } from "@/i18n/locale";
 import { useTranslatedMoveText } from "@/i18n/translated";
 import type { Known, Side } from "./BattleField";
-import { EffectChip } from "./Matchup";
 import type { SideParams } from "./useVersusParams";
 
 /** Every box a number or a move goes in: one height, one size of type. */
@@ -356,23 +350,13 @@ const Result = ({
   const { era } = useEra();
   const locale = useLocale();
   const moveLabel = useMoveLabel();
-  const typeLabel = useTypeLabel();
-  const damageClassLabel = useDamageClassLabel();
   const translatedText = useTranslatedMoveText();
   const [edits, edit] = useEdited(`${move}|${era.maxGen}`);
 
   const { data, isLoading, error } = useQuery(moveQuery(move));
 
-  if (isLoading) {
-    return <div aria-hidden="true" className="h-24 bg-gray-200 animate-pulse" />;
-  }
-  if (error || !data) {
-    return (
-      <p role="alert" className="text-xs text-dex-red">
-        {t("error.details")}
-      </p>
-    );
-  }
+  if (isLoading) return <SkeletonBlock className="h-24" />;
+  if (error || !data) return <InlineError>{t("error.details")}</InlineError>;
 
   const inGame = moveInGame(data, game, locale, translatedText(move));
   const power = edits.power ?? inGame.power;
@@ -402,12 +386,8 @@ const Result = ({
       </p>
 
       <div className="flex flex-wrap items-center gap-2">
-        <span className={`px-2 py-1 text-[10px] leading-none ${typeClass(type)}`}>
-          {typeLabel(type)}
-        </span>
-        <span className="bg-gray-200 px-2 py-1 text-[10px] leading-none">
-          {damageClassLabel(cls)}
-        </span>
+        <TypeBadge type={type} />
+        <ClassBadge damageClass={cls} />
         {stab && (
           <span className="bg-dex-yellow px-2 py-1 text-[10px] leading-none">
             {t("versus.stab")}

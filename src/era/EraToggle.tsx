@@ -1,6 +1,4 @@
-import { useTranslation } from "react-i18next";
-import { DEFAULT_ERA } from "@/domain/era";
-import { useEra } from "./context";
+import { useEraToggle } from "@/features/shared/useEraToggle";
 
 /**
  * One button rather than a pair like the language switch: retro is a mode you
@@ -8,15 +6,12 @@ import { useEra } from "./context";
  * state carries which way it is, so the label never has to change.
  */
 const EraToggle = () => {
-  const { t } = useTranslation();
-  const { name, setEra } = useEra();
-  const isRetro = name === "retro";
-  const description = t(isRetro ? "era.disable" : "era.enable");
+  const { isRetro, toggle, description, label } = useEraToggle();
 
   return (
     <button
       type="button"
-      onClick={() => setEra(isRetro ? DEFAULT_ERA : "retro")}
+      onClick={toggle}
       aria-pressed={isRetro}
       aria-label={description}
       title={description}
@@ -29,7 +24,7 @@ const EraToggle = () => {
           : "border-white/60 text-white hover:bg-dex-red-dark"
       }`}
     >
-      {t("era.retro")}
+      {label}
     </button>
   );
 };

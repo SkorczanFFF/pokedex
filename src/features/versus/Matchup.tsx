@@ -1,37 +1,16 @@
 import { useTranslation } from "react-i18next";
+import { EffectChip, TypeBadge } from "@/components/badges";
+import { phraseKey } from "@/components/effectiveness";
 import {
   defensiveProfile,
   matchup,
-  type Effectiveness,
   type MatchupAbilities,
 } from "@/domain/matchup";
-import { typeClass, type PokemonType } from "@/domain/pokemonTypes";
 import { typingInEra } from "@/domain/pokemonView";
 import type { TypeChart } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
-import { effectClass, phraseKey, printed } from "@/features/types/effectiveness";
-import { humanize, useTypeLabel } from "@/i18n/labels";
+import { humanize } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
-
-export const TypeChip = ({ type }: { type: PokemonType }) => {
-  const typeLabel = useTypeLabel();
-  return (
-    <span className={`px-2 py-1 text-[10px] leading-none ${typeClass(type)}`}>
-      {typeLabel(type)}
-    </span>
-  );
-};
-
-export const EffectChip = ({ value }: { value: Effectiveness }) => (
-  <span
-    className={`inline-flex h-6 min-w-6 items-center justify-center border border-gray-300 px-1 text-[10px] ${effectClass(
-      value,
-      true,
-    )}`}
-  >
-    ×{printed(value)}
-  </span>
-);
 
 /** What each of the attacker's types does to the defender. */
 export const Attacks = ({
@@ -66,7 +45,7 @@ export const Attacks = ({
             key={hit.attack}
             className="flex flex-wrap items-center gap-2 text-[10px]"
           >
-            <TypeChip type={hit.attack} />
+            <TypeBadge type={hit.attack} />
             <EffectChip value={hit.value} />
             <span className={hit.value === 1 ? "text-gray-500" : ""}>
               {t(phraseKey(hit.value), { name })}
@@ -102,7 +81,7 @@ export const Profile = ({
           <li key={group.value} className="flex flex-wrap items-center gap-2">
             <EffectChip value={group.value} />
             {group.attacks.map((type) => (
-              <TypeChip key={type} type={type} />
+              <TypeBadge key={type} type={type} />
             ))}
           </li>
         ))}

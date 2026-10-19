@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { GbBox } from "./layout";
 
 /**
  * Red's original battle back sprite: 32×32, four shades, 256 bytes, lifted from
@@ -9,19 +10,8 @@ import type { ReactNode } from "react";
  */
 const TRAINER_SPRITE = "/trainer-back.png";
 
-/** A menu line the way the games drew them, cursor and all. */
-export const MENU_ITEM =
-  "group flex items-center gap-2 text-sm cursor-pointer hover:text-dex-red focus-ring-dark";
-
-/** The `>` in front of it, dim until the line is hovered or focused. */
-export const MenuCursor = () => (
-  <span
-    aria-hidden="true"
-    className="opacity-50 group-hover:opacity-100 group-focus-visible:opacity-100"
-  >
-    {">"}
-  </span>
-);
+/** The square a sprite stands in, on this screen and on Versus' field. */
+export const BATTLE_SLOT = "h-20 w-20 md:h-28 md:w-28";
 
 /** The panel's HP line: the label, the bar filled to `percent`, and a number if given. */
 export const HpBar = ({ percent, value }: { percent: number; value?: number }) => (
@@ -36,23 +26,59 @@ export const HpBar = ({ percent, value }: { percent: number; value?: number }) =
   </div>
 );
 
-/** Gen 1 status panel: name and level on one line, HP bar under it. */
-const StatusBox = ({
+/**
+ * Gen 1 status panel: a name and what stands beside it — a level, a dex
+ * number — on one line, the HP bar and anything else under it.
+ */
+export const StatusBox = ({
   name,
-  level,
-  hp,
+  aside,
+  className = "",
+  children,
 }: {
-  name: string;
-  level: string;
-  hp: number;
+  name: ReactNode;
+  aside?: ReactNode;
+  className?: string;
+  children?: ReactNode;
 }) => (
-  <div className="border-2 border-black bg-white px-2 py-1 md:px-3 md:py-2">
+  <div className={`border-2 border-black bg-white px-2 py-1 md:px-3 md:py-2 ${className}`}>
     <div className="flex items-baseline gap-4 text-[10px] md:text-xs">
-      <span>{name}</span>
-      <span className="ml-auto">:L{level}</span>
+      {name}
+      {aside !== undefined && <span className="ml-auto">{aside}</span>}
     </div>
-    <HpBar percent={hp} />
+    {children}
   </div>
+);
+
+/** The slot of something that is not really there: it tears sideways in steps. */
+export const GlitchSlot = ({
+  className = BATTLE_SLOT,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) => (
+  <span
+    aria-hidden="true"
+    className={`${className} glitch flex items-center justify-center text-2xl md:text-4xl`}
+  >
+    {children}
+  </span>
+);
+
+/** The first line of the text box: what happened. */
+export const BattleTitle = ({ children }: { children: ReactNode }) => (
+  <h1 className="text-sm leading-relaxed md:text-base">{children}</h1>
+);
+
+/** The lines under it. */
+export const BattleText = ({ children }: { children: ReactNode }) => (
+  <p className="mt-3 text-sm leading-relaxed md:text-base">{children}</p>
+);
+
+/** The way out: menu lines side by side, stacked on a phone. */
+export const BattleActions = ({ children }: { children: ReactNode }) => (
+  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-12">{children}</div>
 );
 
 /**
@@ -81,30 +107,27 @@ export const BattleScreen = ({
   children: ReactNode;
 }) => (
   <div className="mx-auto w-full max-w-xl px-4 py-8">
-    <div className="border-4 border-black bg-white p-4 md:p-6">
+    <GbBox>
       <div className="flex items-start justify-between gap-4">
-        <StatusBox name={name} level={level} hp={0} />
-        <span
-          aria-hidden="true"
-          className="glitch flex h-20 w-20 items-center justify-center text-2xl md:h-28 md:w-28 md:text-4xl"
-        >
-          {opponent}
-        </span>
+        <StatusBox name={<span>{name}</span>} aside={`:L${level}`}>
+          <HpBar percent={0} />
+        </StatusBox>
+        <GlitchSlot>{opponent}</GlitchSlot>
       </div>
 
       <div className="mt-6 flex items-end justify-between gap-4">
         <img
           src={TRAINER_SPRITE}
           alt=""
-          className="h-20 w-20 [image-rendering:pixelated] md:h-28 md:w-28"
+          className={`${BATTLE_SLOT} [image-rendering:pixelated]`}
         />
         {/* :L200 against the opponent's level — the panels carry the joke. */}
-        <StatusBox name="ASH" level="200" hp={100} />
+        <StatusBox name={<span>ASH</span>} aside=":L200">
+          <HpBar percent={100} />
+        </StatusBox>
       </div>
-    </div>
+    </GbBox>
 
-    <div className="mt-4 border-4 border-black bg-white p-4 md:p-6">
-      {children}
-    </div>
+    <GbBox className="mt-4">{children}</GbBox>
   </div>
 );

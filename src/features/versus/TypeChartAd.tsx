@@ -3,7 +3,7 @@ import { paths } from "@/app/routes";
 import { AdAction, AdBox, StadiumTitle } from "@/components/AdBox";
 import { typeClass, type PokemonType } from "@/domain/pokemonTypes";
 import type { TypeChart } from "@/domain/typeChart";
-import { effectClass, printed } from "@/features/types/effectiveness";
+import { effectClass, printed } from "@/components/effectiveness";
 import { useTypeLabel } from "@/i18n/labels";
 
 /** The starters' triangle: the corner of the chart every player knows by heart. */

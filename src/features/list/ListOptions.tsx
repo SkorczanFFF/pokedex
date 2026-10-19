@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
+import { INPUT } from "@/components/buttons";
 import { gensUpTo } from "@/domain/dex";
 import { useEra } from "@/era/context";
 import { PER_PAGE_OPTIONS } from "@/domain/pagination";
@@ -41,7 +42,7 @@ export const ListOptions = ({
           onChange={(e) =>
             onGenerationChange(e.target.value === "" ? null : e.target.value)
           }
-          className="h-9 border-2 px-2 text-sm bg-white"
+          className={INPUT}
         >
           <option value="">{t("gen.any")}</option>
           {gensUpTo(era.maxGen).map((slug) => (
@@ -65,7 +66,7 @@ export const ListOptions = ({
           id={perPageId}
           value={itemsPerPage}
           onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
-          className="h-9 border-2 px-2 text-sm bg-white"
+          className={INPUT}
         >
           {PER_PAGE_OPTIONS.map((option) => (
             <option key={option} value={option}>

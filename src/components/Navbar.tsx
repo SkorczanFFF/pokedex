@@ -2,12 +2,12 @@ import { useEffect, useId, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { paths } from "@/app/routes";
-import { DEFAULT_ERA } from "@/domain/era";
 import EraToggle from "@/era/EraToggle";
-import { useEra } from "@/era/context";
-import { SUPPORTED_LANGUAGES, useLocale } from "@/i18n/locale";
+import { useEraToggle } from "@/features/shared/useEraToggle";
+import { useEscape } from "@/features/shared/useEscape";
+import { useLanguageSwitch } from "@/features/shared/useLanguageSwitch";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { MENU_ITEM, MenuCursor } from "./BattleScreen";
+import { MENU_ITEM, MenuCursor } from "./menu";
 
 const PAGES = [
   { to: paths.types, label: "types.link" },
@@ -30,14 +30,7 @@ const Navbar = () => {
     setOpen(false);
   }, [location.pathname, location.search]);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  useEscape(() => setOpen(false), open);
 
   const pageLink = ({ isActive }: { isActive: boolean }) =>
     `px-2 py-1 text-xs whitespace-nowrap focus-ring ${
@@ -94,10 +87,9 @@ const Navbar = () => {
  * setting; the two pages are plain lines that go somewhere.
  */
 const GameBoyMenu = () => {
-  const { t, i18n } = useTranslation();
-  const { name, setEra } = useEra();
-  const isRetro = name === "retro";
-  const current = useLocale();
+  const { t } = useTranslation();
+  const era = useEraToggle();
+  const language = useLanguageSwitch();
 
   return (
     <div className="border-4 border-black bg-white p-4 text-black">
@@ -105,14 +97,14 @@ const GameBoyMenu = () => {
         <li>
           <button
             type="button"
-            onClick={() => setEra(isRetro ? DEFAULT_ERA : "retro")}
-            aria-pressed={isRetro}
-            aria-label={t(isRetro ? "era.disable" : "era.enable")}
+            onClick={era.toggle}
+            aria-pressed={era.isRetro}
+            aria-label={era.description}
             className={`${MENU_ITEM} w-full`}
           >
             <MenuCursor />
-            {t("era.retro")}
-            <span className="ml-auto">{isRetro ? ":ON" : ":OFF"}</span>
+            {era.label}
+            <span className="ml-auto">{era.isRetro ? ":ON" : ":OFF"}</span>
           </button>
         </li>
         <li>
@@ -121,22 +113,18 @@ const GameBoyMenu = () => {
             aria-label={t("nav.language")}
             className="flex items-center gap-2 text-sm"
           >
-            <span aria-hidden="true" className="opacity-50">
-              {">"}
-            </span>
+            <MenuCursor className="opacity-50" />
             {t("nav.language")}
             <span className="ml-auto flex items-center gap-1">
-              {SUPPORTED_LANGUAGES.map((lng) => {
-                const isActive = current === lng;
+              {language.languages.map((lng) => {
+                const isActive = language.current === lng;
                 return (
                   <button
                     key={lng}
                     type="button"
-                    onClick={() => i18n.changeLanguage(lng)}
+                    onClick={() => language.switchTo(lng)}
                     aria-pressed={isActive}
-                    aria-label={t("nav.switchTo", {
-                      language: t(`language.${lng}`),
-                    })}
+                    aria-label={language.switchLabel(lng)}
                     className={`px-2 py-1 text-xs cursor-pointer focus-ring-dark ${
                       isActive ? "bg-dex-yellow" : "hover:text-dex-red"
                     }`}

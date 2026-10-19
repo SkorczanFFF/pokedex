@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Chip } from "@/components/Chip";
+import { Chip, ChipRow } from "@/components/Chip";
 import { abilitiesInOrder } from "@/domain/abilities";
 import { useEra } from "@/era/context";
 import { useAbilityLabel } from "@/i18n/labels";
@@ -28,11 +28,7 @@ export const AbilityPicker = ({
   const abilities = abilitiesInOrder(pokemon);
 
   return (
-    <div
-      role="group"
-      aria-label={t("versus.ability")}
-      className="flex flex-wrap items-center gap-1"
-    >
+    <ChipRow label={t("versus.ability")} className="items-center">
       <span className="mr-1 text-[10px] text-gray-500">{t("versus.ability")}:</span>
       {abilities.map((entry) => {
         const name = abilityLabel(entry.ability.name);
@@ -53,6 +49,6 @@ export const AbilityPicker = ({
           </Chip>
         );
       })}
-    </div>
+    </ChipRow>
   );
 };

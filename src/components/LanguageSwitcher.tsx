@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { SUPPORTED_LANGUAGES, useLocale } from "@/i18n/locale";
+import { useLanguageSwitch } from "@/features/shared/useLanguageSwitch";
 
 const LanguageSwitcher = () => {
-  const { t, i18n } = useTranslation();
-  const current = useLocale();
+  const { t } = useTranslation();
+  const { languages, current, switchTo, switchLabel } = useLanguageSwitch();
 
   return (
     <div
@@ -12,7 +12,7 @@ const LanguageSwitcher = () => {
       aria-label={t("nav.language")}
       className="flex items-center gap-1"
     >
-      {SUPPORTED_LANGUAGES.map((lng, index) => {
+      {languages.map((lng, index) => {
         const isActive = current === lng;
         return (
           <Fragment key={lng}>
@@ -23,9 +23,9 @@ const LanguageSwitcher = () => {
             )}
             <button
               type="button"
-              onClick={() => i18n.changeLanguage(lng)}
+              onClick={() => switchTo(lng)}
               aria-pressed={isActive}
-              aria-label={t("nav.switchTo", { language: t(`language.${lng}`) })}
+              aria-label={switchLabel(lng)}
               className={`px-2 py-1 text-xs cursor-pointer focus-ring ${
                 isActive
                   ? "bg-dex-yellow text-black"

@@ -2,10 +2,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { paths } from "@/app/routes";
 import {
+  BattleActions,
   BattleScreen,
-  MENU_ITEM,
-  MenuCursor,
+  BattleText,
+  BattleTitle,
 } from "@/components/BattleScreen";
+import { MENU_ITEM, MenuCursor } from "@/components/menu";
 
 export const NotFound = () => {
   const { t } = useTranslation();
@@ -13,14 +15,10 @@ export const NotFound = () => {
 
   return (
     <BattleScreen opponent="404">
-      <h1 className="text-sm leading-relaxed md:text-base">
-        {t("notFound.wild")}
-      </h1>
-      <p className="mt-3 text-sm leading-relaxed md:text-base">
-        {t("notFound.missingPage")}
-      </p>
+      <BattleTitle>{t("notFound.wild")}</BattleTitle>
+      <BattleText>{t("notFound.missingPage")}</BattleText>
 
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-12">
+      <BattleActions>
         <Link to={paths.list} className={MENU_ITEM}>
           <MenuCursor />
           {t("notFound.pokedex")}
@@ -29,7 +27,7 @@ export const NotFound = () => {
           <MenuCursor />
           {t("notFound.run")}
         </button>
-      </div>
+      </BattleActions>
     </BattleScreen>
   );
 };

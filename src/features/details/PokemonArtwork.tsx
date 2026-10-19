@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Chip } from "@/components/Chip";
+import { Chip, ChipRow } from "@/components/Chip";
 import { GEN_SLUGS, genRoman, type GenSlug } from "@/domain/dex";
 import { cryForSet } from "@/domain/pokemonView";
 import {
@@ -132,11 +132,7 @@ export const PokemonArtwork = ({
       </div>
 
       {sets.length > 1 && (
-        <div
-          role="group"
-          aria-label={t("details.spriteSet")}
-          className="mt-4 flex flex-wrap gap-1 justify-center"
-        >
+        <ChipRow label={t("details.spriteSet")} className="mt-4 justify-center">
           <Chip
             kind="gen"
             active={activeGen === null}
@@ -156,15 +152,11 @@ export const PokemonArtwork = ({
               {genRoman(gen)}
             </Chip>
           ))}
-        </div>
+        </ChipRow>
       )}
 
       {games.length > 1 && (
-        <div
-          role="group"
-          aria-label={t("details.spriteGame")}
-          className="mt-2 flex flex-wrap gap-1 justify-center"
-        >
+        <ChipRow label={t("details.spriteGame")} className="mt-2 justify-center">
           {games.map((set) => {
             const name = spriteGameName(set);
             return (
@@ -179,15 +171,11 @@ export const PokemonArtwork = ({
               </Chip>
             );
           })}
-        </div>
+        </ChipRow>
       )}
 
       {variants.length > 1 && (
-        <div
-          role="group"
-          aria-label={t("details.spritePicture")}
-          className="mt-2 flex flex-wrap gap-1 justify-center"
-        >
+        <ChipRow label={t("details.spritePicture")} className="mt-2 justify-center">
           {variants.map((v) => (
             <Chip
               key={v.key}
@@ -201,7 +189,7 @@ export const PokemonArtwork = ({
               {t(PICTURE_LABEL[`${v.view}/${v.palette}`])}
             </Chip>
           ))}
-        </div>
+        </ChipRow>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { NotFoundError } from "@/api/client";
 import { pokemonQuery, speciesQuery } from "@/api/queries";
 import { isInEra } from "@/domain/era";
@@ -8,7 +9,9 @@ import { formSuffix } from "@/domain/evolution";
 import { activeSpriteSet, type SpriteSetId } from "@/domain/sprites";
 import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
+import { PageContainer } from "@/components/layout";
 import { NotFound } from "@/features/not-found/NotFound";
+import { useScrollTopOn } from "@/features/shared/useScrollTopOn";
 import { useEra } from "@/era/context";
 import { AbilityList } from "./AbilityList";
 import { BackButton } from "./BackButton";
@@ -24,6 +27,7 @@ import { TypeBadges } from "./TypeBadges";
 
 export const PokemonDetailsPage = () => {
   const { name } = useParams<{ name: string }>();
+  const { t } = useTranslation();
   const { era } = useEra();
   // Which picture is up: the reader's pick, or the era's opening shot. Held
   // here rather than in the column because the cry follows it too, and the
@@ -33,9 +37,7 @@ export const PokemonDetailsPage = () => {
 
   // Evolution links stay on this route with a different param, so the component
   // is reused rather than remounted — the reset has to follow the name.
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [name]);
+  useScrollTopOn(name);
 
   const {
     data: pokemon,
@@ -57,13 +59,13 @@ export const PokemonDetailsPage = () => {
 
   if (isLoading) return <Loader />;
   if (error instanceof NotFoundError) return <NotFound />;
-  if (error || !pokemon) return <ErrorView errorType="details" />;
+  if (error || !pokemon) return <ErrorView message={t("error.details")} />;
   if (outOfEra) return <NotInEra pokemon={pokemon} />;
 
   const spriteSet = activeSpriteSet(pokemon, era, pickedSet);
 
   return (
-    <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
+    <PageContainer>
       {/* Narrow, the row stacks and the steps centre under the button. A
           column rather than a wrapped row, because `justify-content` applies to
           a whole flex line and a wrapped row cannot start its first line and
@@ -119,6 +121,6 @@ export const PokemonDetailsPage = () => {
       <div className="mt-8 flex justify-center">
         <DexNeighbours id={pokemon.id} />
       </div>
-    </div>
+    </PageContainer>
   );
 };

@@ -1,5 +1,6 @@
 import { useEffect, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { DANGER, INPUT } from "@/components/buttons";
 
 interface SearchBoxProps {
   initialQuery: string;
@@ -65,9 +66,7 @@ export const SearchBox = ({
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={handleKeyPress}
         placeholder={t("filters.searchPlaceholder")}
-        className={`h-9 border-2 px-2 text-sm bg-white ${
-          compact ? "flex-1 min-w-0" : "w-40"
-        }`}
+        className={`${INPUT} ${compact ? "flex-1 min-w-0" : "w-40"}`}
       />
       <div className="flex items-center gap-2 justify-center">
         <button
@@ -82,7 +81,7 @@ export const SearchBox = ({
           <button
             onClick={handleClearSearch}
             aria-label={t("filters.clearSearch")}
-            className="h-9 px-3 bg-dex-red text-white text-sm hover:bg-red-700 cursor-pointer"
+            className={DANGER}
           >
             X
           </button>

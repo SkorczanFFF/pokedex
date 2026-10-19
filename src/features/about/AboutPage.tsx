@@ -1,11 +1,14 @@
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { LINKS } from "@/app/links";
 import { encountersPath, paths, pokemonPath } from "@/app/routes";
+import { GbBox } from "@/components/layout";
+import { MenuCursor } from "@/components/menu";
 import { lastDexId } from "@/domain/dex";
 import { RETRO } from "@/domain/era";
 import { typesUpTo } from "@/domain/pokemonTypes";
+import { useScrollTopOn } from "@/features/shared/useScrollTopOn";
 import plAbilities from "@/i18n/locales/pl/abilities.json";
 import plMoves from "@/i18n/locales/pl/moves.json";
 
@@ -55,15 +58,13 @@ const Ext = ({ href, children }: { href: string; children?: ReactNode }) => (
 
 /** One Gen I text box per subject, headed like a menu line. */
 const Box = ({ heading, children }: { heading: string; children: ReactNode }) => (
-  <section className="border-4 border-black bg-white p-4 md:p-6">
+  <GbBox>
     <h2 className="mb-4 flex items-center gap-2 text-sm">
-      <span aria-hidden="true" className="opacity-50">
-        {">"}
-      </span>
+      <MenuCursor className="opacity-50" />
       {heading}
     </h2>
     <div className="space-y-3 text-xs leading-relaxed">{children}</div>
-  </section>
+  </GbBox>
 );
 
 const Bullets = ({ items }: { items: string[] }) => (
@@ -95,9 +96,7 @@ export const AboutPage = () => {
   const { t } = useTranslation();
 
   // Reached from the footer, so the reader arrives from the bottom of a page.
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useScrollTopOn();
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8">

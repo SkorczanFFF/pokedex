@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { MenuCursor } from "./BattleScreen";
+import { MenuCursor } from "./menu";
 
 /**
  * A small ad for another page, in the Gen II frame: a black line, a white one,

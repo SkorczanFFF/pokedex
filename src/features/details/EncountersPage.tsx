@@ -5,9 +5,11 @@ import { useTranslation } from "react-i18next";
 import { NotFoundError } from "@/api/client";
 import { encountersQuery, pokemonQuery } from "@/api/queries";
 import { pokemonPath } from "@/app/routes";
-import { Chip } from "@/components/Chip";
+import { Chip, ChipRow } from "@/components/Chip";
 import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
+import { ACTION_LG, MORE } from "@/components/buttons";
+import { EmptyState, PageContainer } from "@/components/layout";
 import {
   gamesInEra,
   placesInEra,
@@ -19,6 +21,7 @@ import { isInEra } from "@/domain/era";
 import { spriteUrl } from "@/domain/sprites";
 import { useEra } from "@/era/context";
 import { NotFound } from "@/features/not-found/NotFound";
+import { useScrollTopOn } from "@/features/shared/useScrollTopOn";
 import {
   humanize,
   useEncounterConditionLabel,
@@ -51,8 +54,8 @@ export const EncountersPage = () => {
   // The route keeps this component mounted across a change of `:name`, so
   // everything that belongs to one Pokémon has to be put back by hand —
   // otherwise Magikarp's expanded list and picked game carry over to the next.
+  useScrollTopOn(name);
   useEffect(() => {
-    window.scrollTo(0, 0);
     setGame(null);
     setShowAll(false);
   }, [name]);
@@ -69,7 +72,7 @@ export const EncountersPage = () => {
 
   if (isLoading || loadingPlaces) return <Loader />;
   if (error instanceof NotFoundError) return <NotFound />;
-  if (error || !pokemon) return <ErrorView errorType="details" />;
+  if (error || !pokemon) return <ErrorView message={t("error.details")} />;
   if (!isInEra(pokemon.id, era)) return <NotInEra pokemon={pokemon} />;
 
   const games = encounters ? gamesInEra(encounters, era) : [];
@@ -83,11 +86,11 @@ export const EncountersPage = () => {
   const sprite = spriteUrl(pokemon, era.sprites) ?? spriteUrl(pokemon, "artwork");
 
   return (
-    <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
+    <PageContainer>
       <Link
         to={pokemonPath(pokemon.name)}
         state={location.state}
-        className="inline-block mb-8 text-black bg-dex-yellow hover:bg-dex-red hover:text-white px-4 py-2 cursor-pointer"
+        className={`inline-block mb-8 ${ACTION_LG}`}
       >
         {t("encounters.back", { name: humanize(pokemon.name) })}
       </Link>
@@ -112,12 +115,12 @@ export const EncountersPage = () => {
         </div>
 
         {places.length === 0 ? (
-          <div className="border border-dashed border-gray-300 p-8 text-center">
+          <EmptyState>
             <p className="text-xs leading-relaxed">{t("encounters.none")}</p>
             <p className="mt-3 text-[10px] leading-relaxed text-gray-500">
               {t("encounters.noneHint")}
             </p>
-          </div>
+          </EmptyState>
         ) : (
           <>
             {games.length > 1 && (
@@ -135,7 +138,7 @@ export const EncountersPage = () => {
                 type="button"
                 onClick={() => setShowAll(!showAll)}
                 aria-expanded={showAll}
-                className="mt-8 px-3 py-1 bg-gray-200 text-black text-xs cursor-pointer hover:bg-dex-yellow"
+                className={`mt-8 ${MORE}`}
               >
                 {showAll
                   ? t("encounters.showLess")
@@ -145,7 +148,7 @@ export const EncountersPage = () => {
           </>
         )}
       </section>
-    </div>
+    </PageContainer>
   );
 };
 
@@ -162,11 +165,7 @@ const GamePicker = ({
   const gameLabel = useGameLabel();
 
   return (
-    <div
-      role="group"
-      aria-label={t("encounters.title")}
-      className="mb-6 flex flex-wrap gap-1"
-    >
+    <ChipRow label={t("encounters.title")} className="mb-6">
       <Chip kind="game" active={picked === null} onClick={() => onPick(null)}>
         {t("encounters.allGames")}
       </Chip>
@@ -180,7 +179,7 @@ const GamePicker = ({
           {gameLabel(game)}
         </Chip>
       ))}
-    </div>
+    </ChipRow>
   );
 };
 
