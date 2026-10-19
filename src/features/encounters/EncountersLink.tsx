@@ -5,7 +5,7 @@ import { encountersQuery } from "@/api/queries";
 import { encountersPath } from "@/app/routes";
 import { ACTION } from "@/components/buttons";
 import { hasPlacesInEra } from "@/domain/encounters";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import type { Pokemon } from "@/types/pokemon";
 
 /**

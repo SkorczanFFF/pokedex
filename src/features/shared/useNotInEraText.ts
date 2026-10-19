@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { genRoman, generationFromId } from "@/domain/dex";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { humanize } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 

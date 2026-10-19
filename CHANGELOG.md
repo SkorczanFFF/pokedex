@@ -16,6 +16,30 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `refactor: files move to where they are looked for, and the lint keeps the layers apart`
+
+- **Changed** — The domain is pure again: the type colours move to `components/typeStyles.ts`,
+  the move-method accents to `features/details/moveAccents.ts`, the type filter's query
+  parsing to `features/list/typeParam.ts`, and the sprite repository's URLs join the rest of
+  the sprite logic in `domain/sprites.ts`, which also takes `showdownSprite` off the battle
+  field. `domain/resource.ts` keeps only the id a PokéAPI URL ends in.
+- **Changed** — `src/media/` holds what plays sounds and reads pictures — the cry, the voice,
+  the GIF parser and the bytes it reads, the sprite's measured bounds, the one-pass animation
+  and the frame that crops to it — which had sat among the details page's regions. The
+  encounters page and its link are a feature of their own under `features/encounters/`; the
+  404 and the not-in-era screens, shared by three pages, are components; the era's provider
+  and context live under `app/era/` beside the query client, and the retro toggle beside the
+  language switch in `components/`. `useTypeChart` is an `api/` hook, read by the chart and
+  by Versus alike; `types/damage.ts`, which held the `/type` resource and nothing about
+  damage, is `types/typeResource.ts`; Versus' `Side` and `Fighter` are a `model.ts` rather
+  than exports of a component.
+- **Added** — Each layer's imports are checked by `no-restricted-imports` in
+  `eslint.config.js`: the domain imports no React and no UI, the api layer no UI, media no
+  pages, and a feature reaches another only through its `index.ts` — `features/versus` and
+  `features/encounters` each export the one link the details page shows. The two
+  `tailwindcss` packages move to `devDependencies`, where a build tool belongs. Phase 5 of
+  the plan in `REVIEW.md`.
+
 ### `refactor: the badges, boxes, buttons and menu lines the pages had each drawn become components`
 
 - **Changed** — `components/badges.tsx`: `TypeBadge`, which six places had each drawn with

@@ -1,7 +1,27 @@
 import type { Pokemon, SpriteSheet } from "@/types/pokemon";
 import { GEN_SLUGS, genApiName, isGenSlug, type GenSlug } from "./dex";
 import { gameName } from "./games";
-import { gameSprite, officialArtwork } from "./resource";
+
+/** Everything the sprite repo serves hangs off one root. */
+const SPRITE_ROOT =
+  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon";
+
+/**
+ * Official artwork is served straight from the sprite repo, keyed by national
+ * dex id — and a species id is that same number. So endpoints that hand back
+ * nothing but a species URL (evolution chains) can still show art without
+ * spending a request per entry on `/pokemon/{name}`.
+ */
+const officialArtwork = (id: number): string =>
+  `${SPRITE_ROOT}/other/official-artwork/${id}.png`;
+
+/** The same trick for a game's sprites, which sit under `generation-ii/crystal`. */
+const gameSprite = (id: number, path: string): string =>
+  `${SPRITE_ROOT}/versions/${path}/${id}.png`;
+
+/** Crystal's front sprites in motion: 56px GIFs on white, Gen I and II only. */
+export const crystalAnimated = (id: number): string =>
+  `${SPRITE_ROOT}/versions/generation-ii/crystal/animated/${id}.gif`;
 
 /**
  * The picture column shows the modern artwork or one game's sprite sheet,
@@ -270,4 +290,22 @@ export const battleSprite = (
   if (view === "back" && back) return { url: back, mirrored: false };
   const fallback = front || spriteUrl(pokemon, "artwork");
   return fallback ? { url: fallback, mirrored: view === "back" } : null;
+};
+
+/**
+ * Showdown's animated GIF for the view, or its front turned round where only
+ * the back is missing — one style in both slots beats a mix. Null sends the
+ * slot back to the static sprites.
+ */
+export const showdownSprite = (
+  pokemon: Pokemon,
+  view: SpriteView,
+): { url: string; mirrored: boolean } | null => {
+  const sheet = pokemon.sprites.other.showdown;
+  if (view === "back" && sheet?.back_default) {
+    return { url: sheet.back_default, mirrored: false };
+  }
+  return sheet?.front_default
+    ? { url: sheet.front_default, mirrored: view === "back" }
+    : null;
 };

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { versusPath } from "@/app/routes";
 import { AdAction, AdBox, StadiumTitle } from "@/components/AdBox";
-import { crystalAnimated } from "@/domain/resource";
+import { crystalAnimated } from "@/domain/sprites";
 import { humanize } from "@/i18n/labels";
 
 /** Both Gen I, so Crystal drew them both. */

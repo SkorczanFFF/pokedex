@@ -1,6 +1,6 @@
 import { statsInEra } from "@/domain/pokemonView";
 import { barPercent, statValue } from "@/domain/stats";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { humanize, useStatLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 

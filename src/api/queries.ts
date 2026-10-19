@@ -17,7 +17,7 @@ import {
   getPokemonList,
 } from "./pokemon";
 import { getPokemonSpecies } from "./species";
-import { getType } from "./types";
+import { getType } from "./typeResource";
 
 /**
  * Every resource the app reads, defined once.

@@ -15,8 +15,8 @@ import {
   type SpriteView,
 } from "@/domain/sprites";
 import type { Pokemon } from "@/types/pokemon";
-import { SpriteFrame } from "./SpriteFrame";
-import { useAnimatedOnce } from "./useAnimatedOnce";
+import { SpriteFrame } from "@/media/SpriteFrame";
+import { useAnimatedOnce } from "@/media/useAnimatedOnce";
 
 /** How wide a sprite is drawn: the same 240 px the column always gave it. */
 const SPRITE_WIDTH = 240;

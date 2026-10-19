@@ -7,30 +7,11 @@ import { SkeletonBlock } from "@/components/Skeleton";
 import { TypeBadge } from "@/components/badges";
 import { GbBox } from "@/components/layout";
 import { statsInEra, typingInEra } from "@/domain/pokemonView";
-import { battleSprite, type SpriteView } from "@/domain/sprites";
+import { battleSprite, showdownSprite, type SpriteView } from "@/domain/sprites";
 import { STAT, barPercent, statValue } from "@/domain/stats";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { humanize } from "@/i18n/labels";
-import type { Pokemon } from "@/types/pokemon";
-
-/** `a` is the trainer's side, bottom left; `b` the opponent's, top right. */
-export type Side = "a" | "b";
-
-interface Idle {
-  side: Side;
-  status: "empty" | "loading" | "notFound" | "error";
-  name: string | null;
-  pokemon: null;
-}
-
-export interface Known {
-  side: Side;
-  status: "ready" | "outOfEra";
-  name: string;
-  pokemon: Pokemon;
-}
-
-export type Fighter = Idle | Known;
+import type { Fighter } from "./model";
 
 /** Showdown's sprites run to twice Crystal's size, so the modern slot is bigger. */
 const MODERN_SLOT = "h-24 w-24 md:h-40 md:w-40";
@@ -112,24 +93,6 @@ const Slot = ({ fighter, view }: { fighter: Fighter; view: SpriteView }) => {
       // Not found, or not in this era: the slot tears the way the 404's does.
       return <GlitchSlot className={size}>???</GlitchSlot>;
   }
-};
-
-/**
- * Showdown's animated GIF for the view, or its front turned round where only
- * the back is missing — one style in both slots beats a mix. Null sends the
- * slot back to the static sprites.
- */
-const showdownSprite = (
-  pokemon: Pokemon,
-  view: SpriteView,
-): { url: string; mirrored: boolean } | null => {
-  const sheet = pokemon.sprites.other.showdown;
-  if (view === "back" && sheet?.back_default) {
-    return { url: sheet.back_default, mirrored: false };
-  }
-  return sheet?.front_default
-    ? { url: sheet.front_default, mirrored: view === "back" }
-    : null;
 };
 
 /**

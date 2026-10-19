@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { DamageRelations, TypeResource } from "@/types/damage";
+import type { DamageRelations, TypeResource } from "@/types/typeResource";
 import { chartChanges, relationsIn, typeChart } from "./typeChart";
 
 const relations = (partial: Partial<DamageRelations> = {}): DamageRelations => ({

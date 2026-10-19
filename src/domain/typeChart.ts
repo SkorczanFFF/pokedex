@@ -1,4 +1,4 @@
-import type { DamageRelations, TypeResource } from "@/types/damage";
+import type { DamageRelations, TypeResource } from "@/types/typeResource";
 import { GEN_SLUGS, genOrder, genOrderOf, genSlugOf, type GenSlug } from "./dex";
 import { inForceAt } from "./era";
 import { typesUpTo, type PokemonType } from "./pokemonTypes";

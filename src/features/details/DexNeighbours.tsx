@@ -5,7 +5,7 @@ import { dexWindowQuery } from "@/api/queries";
 import { pokemonPath } from "@/app/routes";
 import { dexNeighbourIds, lastDexId } from "@/domain/dex";
 import { resourceIdFromUrl } from "@/domain/resource";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 
 /**
  * The two steps along the dex, kept in names because the route is.

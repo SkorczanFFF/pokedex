@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Chip, ChipRow } from "@/components/Chip";
 import { abilitiesInOrder } from "@/domain/abilities";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { useAbilityLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 

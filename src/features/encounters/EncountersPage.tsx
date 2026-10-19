@@ -19,8 +19,8 @@ import {
 } from "@/domain/encounters";
 import { isInEra } from "@/domain/era";
 import { spriteUrl } from "@/domain/sprites";
-import { useEra } from "@/era/context";
-import { NotFound } from "@/features/not-found/NotFound";
+import { useEra } from "@/app/era/context";
+import { NotFound } from "@/components/NotFound";
 import { useScrollTopOn } from "@/features/shared/useScrollTopOn";
 import {
   humanize,
@@ -28,7 +28,7 @@ import {
   useEncounterMethodLabel,
   useGameLabel,
 } from "@/i18n/labels";
-import { NotInEra } from "./NotInEra";
+import { NotInEra } from "@/components/NotInEra";
 
 /** Kept short so the first screen is places rather than a wall of them. */
 const PLACES_SHOWN = 12;

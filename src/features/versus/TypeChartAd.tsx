@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { paths } from "@/app/routes";
 import { AdAction, AdBox, StadiumTitle } from "@/components/AdBox";
-import { typeClass, type PokemonType } from "@/domain/pokemonTypes";
+import type { PokemonType } from "@/domain/pokemonTypes";
+import { typeClass } from "@/components/typeStyles";
 import type { TypeChart } from "@/domain/typeChart";
 import { effectClass, printed } from "@/components/effectiveness";
 import { useTypeLabel } from "@/i18n/labels";

@@ -4,7 +4,7 @@ import { listPath, paths } from "@/app/routes";
 import { typeBadgeClass } from "@/components/typeBadge";
 import { PAGE_LINK } from "@/components/buttons";
 import { typesInEra } from "@/domain/pokemonView";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { useTypeLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 

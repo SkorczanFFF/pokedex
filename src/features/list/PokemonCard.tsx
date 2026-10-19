@@ -6,7 +6,7 @@ import type { Pokemon } from "@/types/pokemon";
 import { TypeBadge } from "@/components/badges";
 import { typesInEra } from "@/domain/pokemonView";
 import { spriteUrl } from "@/domain/sprites";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { genRoman, generationFromId } from "@/domain/dex";
 
 interface PokemonCardProps {

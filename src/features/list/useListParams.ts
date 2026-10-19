@@ -2,13 +2,9 @@ import { useEffect, useMemo } from "react";
 import { LIST_PARAMS } from "@/app/routes";
 import { isGenSlug, type GenSlug } from "@/domain/dex";
 import { DEFAULT_PER_PAGE, isPerPage, type PerPage } from "@/domain/pagination";
-import {
-  MAX_TYPES,
-  parseTypes,
-  serializeTypes,
-  type PokemonType,
-} from "@/domain/pokemonTypes";
+import { MAX_TYPES, type PokemonType } from "@/domain/pokemonTypes";
 import { useSearchParamsPatch, type ParamPatch } from "@/features/shared/useSearchParamsPatch";
+import { parseTypes, serializeTypes } from "./typeParam";
 
 /** The whole list view, read out of the query string. */
 export interface ListParams {

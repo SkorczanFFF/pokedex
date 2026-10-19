@@ -1,4 +1,4 @@
-import type { TypeResource } from "@/types/damage";
+import type { TypeResource } from "@/types/typeResource";
 import { get } from "./client";
 
 /**

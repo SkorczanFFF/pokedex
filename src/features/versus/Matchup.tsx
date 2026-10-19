@@ -8,7 +8,7 @@ import {
 } from "@/domain/matchup";
 import { typingInEra } from "@/domain/pokemonView";
 import type { TypeChart } from "@/domain/typeChart";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { humanize } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 

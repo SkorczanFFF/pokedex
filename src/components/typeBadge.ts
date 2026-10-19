@@ -1,4 +1,4 @@
-import { typeClass } from "@/domain/pokemonTypes";
+import { typeClass } from "@/components/typeStyles";
 
 /** How big a badge is: the chip beside a number, the badge on a card, the badge that is a link. */
 export type BadgeSize = "xs" | "sm" | "md";

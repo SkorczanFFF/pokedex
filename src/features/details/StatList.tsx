@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { statsInEra } from "@/domain/pokemonView";
 import { barPercent } from "@/domain/stats";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { useStatLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 

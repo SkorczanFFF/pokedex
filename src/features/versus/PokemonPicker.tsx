@@ -6,7 +6,7 @@ import { DANGER, INPUT } from "@/components/buttons";
 import { MenuCursor } from "@/components/menu";
 import { resourceIdFromUrl } from "@/domain/resource";
 import { matchNames } from "@/domain/search";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { humanize } from "@/i18n/labels";
 
 /**

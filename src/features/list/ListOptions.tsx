@@ -2,7 +2,7 @@ import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { INPUT } from "@/components/buttons";
 import { gensUpTo } from "@/domain/dex";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { PER_PAGE_OPTIONS } from "@/domain/pagination";
 
 interface ListOptionsProps {

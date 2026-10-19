@@ -1,35 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { RETRO } from "./era";
-import {
-  MAX_TYPES,
-  isPokemonType,
-  parseTypes,
-  serializeTypes,
-  typeClass,
-  typesAvailableIn,
-  typesUpTo,
-} from "./pokemonTypes";
-
-describe("the type filter's query parameter", () => {
-  it("reads known slugs, drops unknown ones and duplicates", () => {
-    expect(parseTypes("grass,poison")).toEqual(["grass", "poison"]);
-    expect(parseTypes("steel,unicorn")).toEqual(["steel"]);
-    expect(parseTypes("grass,grass,water")).toEqual(["grass", "water"]);
-    expect(parseTypes(" grass , poison ")).toEqual(["grass", "poison"]);
-    expect(parseTypes(null)).toEqual([]);
-    expect(parseTypes("")).toEqual([]);
-  });
-
-  it("caps at the two types a Pokémon can have", () => {
-    expect(MAX_TYPES).toBe(2);
-    expect(parseTypes("grass,poison,fire")).toEqual(["grass", "poison"]);
-  });
-
-  it("writes back the same shape", () => {
-    expect(serializeTypes(["grass", "poison"])).toBe("grass,poison");
-    expect(serializeTypes([])).toBeNull();
-  });
-});
+import { MAX_TYPES, isPokemonType, typesAvailableIn, typesUpTo } from "./pokemonTypes";
 
 describe("the types an era has", () => {
   it("hides Dark and Steel before Gen II and Fairy before Gen VI", () => {
@@ -55,8 +26,7 @@ describe("type helpers", () => {
     expect(isPokemonType(null)).toBe(false);
   });
 
-  it("colours a known type and greys an unknown one", () => {
-    expect(typeClass("fire")).toMatch(/^bg-/);
-    expect(typeClass("shadow")).toBe("bg-gray-200 text-black");
+  it("caps a typing at two", () => {
+    expect(MAX_TYPES).toBe(2);
   });
 });

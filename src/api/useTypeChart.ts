@@ -3,7 +3,7 @@ import { typeQuery } from "@/api/queries";
 import type { GenSlug } from "@/domain/dex";
 import { typesUpTo } from "@/domain/pokemonTypes";
 import { typeChart, type TypeChart } from "@/domain/typeChart";
-import type { TypeResource } from "@/types/damage";
+import type { TypeResource } from "@/types/typeResource";
 
 /**
  * The chart as of a generation, out of one request per type that existed by

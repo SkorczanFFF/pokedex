@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { ACTION } from "@/components/buttons";
 import { cryForSet } from "@/domain/pokemonView";
 import type { SpriteSetId } from "@/domain/sprites";
-import { playCry } from "./cry";
+import { playCry } from "@/media/cry";
 import type { Pokemon } from "@/types/pokemon";
 
 /**

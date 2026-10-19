@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { readGif } from "@/domain/gif";
-import { playCry } from "./cry";
+import { readGif } from "./gif";
+import { playCry } from "@/media/cry";
 import { gifBytes } from "./gifBytes";
 
 /** When the bytes say nothing about the length: about one Crystal pass. */

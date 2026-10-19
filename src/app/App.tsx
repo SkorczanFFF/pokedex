@@ -8,15 +8,15 @@ import {
 } from "react-router-dom";
 import { PokemonListPage } from "@/features/list/PokemonListPage";
 import { PokemonDetailsPage } from "@/features/details/PokemonDetailsPage";
-import { EncountersPage } from "@/features/details/EncountersPage";
-import { NotFound } from "@/features/not-found/NotFound";
+import { EncountersPage } from "@/features/encounters/EncountersPage";
+import { NotFound } from "@/components/NotFound";
 import { TypeChartPage } from "@/features/types/TypeChartPage";
 import { VersusPage } from "@/features/versus/VersusPage";
 import { AboutPage } from "@/features/about/AboutPage";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
-import { EraProvider } from "@/era/EraProvider";
+import { EraProvider } from "@/app/era/EraProvider";
 import { queryClient } from "./queryClient";
 import { paths } from "./routes";
 

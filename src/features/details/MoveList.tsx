@@ -2,12 +2,9 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MORE } from "@/components/buttons";
 import { EmptyState, SectionCard } from "@/components/layout";
-import {
-  learnsetInEra,
-  moveMethodAccent,
-  type LearnedMove,
-} from "@/domain/moves";
-import { useEra } from "@/era/context";
+import { learnsetInEra, type LearnedMove } from "@/domain/moves";
+import { moveMethodAccent } from "./moveAccents";
+import { useEra } from "@/app/era/context";
 import { useGameLabel, useMoveLabel, useMoveMethodLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 import { MoveDetails } from "./MoveDetails";

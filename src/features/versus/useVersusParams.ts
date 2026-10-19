@@ -1,7 +1,7 @@
 import { VERSUS_PARAMS } from "@/app/routes";
 import { DEFAULT_LEVEL, clampLevel } from "@/domain/damage";
 import { useSearchParamsPatch, type ParamPatch } from "@/features/shared/useSearchParamsPatch";
-import type { Side } from "./BattleField";
+import type { Side } from "./model";
 
 /** One side of the matchup as the URL has it. */
 export interface SideParams {

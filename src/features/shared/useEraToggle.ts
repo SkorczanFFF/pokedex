@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { DEFAULT_ERA } from "@/domain/era";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 
 /**
  * What both retro switches share — the one in the navbar and the line in the

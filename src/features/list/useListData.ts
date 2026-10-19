@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { pokemonListQuery, pokemonQuery } from "@/api/queries";
 import { pageCount, pageSlice } from "@/domain/pagination";
 import type { Pokemon } from "@/types/pokemon";

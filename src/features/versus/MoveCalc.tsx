@@ -20,11 +20,11 @@ import { learnsetInEra, moveInGame, uniqueMoves } from "@/domain/moves";
 import { statsInEra, typingInEra } from "@/domain/pokemonView";
 import { STAT, statValue, type StatInEra } from "@/domain/stats";
 import type { TypeChart } from "@/domain/typeChart";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { humanize, useMoveLabel, useMoveMethodLabel, useStatLabel } from "@/i18n/labels";
 import { useLocale } from "@/i18n/locale";
 import { useTranslatedMoveText } from "@/i18n/translated";
-import type { Known, Side } from "./BattleField";
+import type { Known, Side } from "./model";
 import type { SideParams } from "./useVersusParams";
 
 /** Every box a number or a move goes in: one height, one size of type. */

@@ -2,7 +2,7 @@ import { useEffect, useId, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { paths } from "@/app/routes";
-import EraToggle from "@/era/EraToggle";
+import EraToggle from "./EraToggle";
 import { useEraToggle } from "@/features/shared/useEraToggle";
 import { useEscape } from "@/features/shared/useEscape";
 import { useLanguageSwitch } from "@/features/shared/useLanguageSwitch";

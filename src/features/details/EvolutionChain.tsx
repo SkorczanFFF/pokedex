@@ -12,7 +12,7 @@ import {
   treeDepth,
   type EvolutionNode,
 } from "@/domain/evolution";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { spriteUrlById } from "@/domain/sprites";
 import { resourceIdFromUrl } from "@/domain/resource";
 import { useEvolutionCondition } from "@/i18n/evolutionCondition";

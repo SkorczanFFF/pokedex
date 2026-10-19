@@ -9,7 +9,7 @@ import {
 } from "@/components/BattleScreen";
 import { MENU_ITEM, MenuCursor } from "@/components/menu";
 import { DEFAULT_ERA } from "@/domain/era";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { useNotInEraText } from "@/features/shared/useNotInEraText";
 import { humanize } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";

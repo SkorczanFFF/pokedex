@@ -3,13 +3,13 @@ import { LangMarker } from "@/components/badges";
 import { genRoman } from "@/domain/dex";
 import { getDescription, getGeneration, getGenus } from "@/domain/species";
 import type { SpriteSetId } from "@/domain/sprites";
-import { useEra } from "@/era/context";
-import { VersusLink } from "@/features/versus/VersusLink";
+import { useEra } from "@/app/era/context";
+import { VersusLink } from "@/features/versus";
 import { useLocale } from "@/i18n/locale";
 import { useTranslatedSpeciesText } from "@/i18n/translated";
 import type { Pokemon, PokemonSpecies } from "@/types/pokemon";
 import { CryButton } from "./CryButton";
-import { EncountersLink } from "./EncountersLink";
+import { EncountersLink } from "@/features/encounters";
 import { ReadButton } from "./ReadButton";
 
 /**

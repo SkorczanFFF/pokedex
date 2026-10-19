@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { typeBadgeClass } from "@/components/typeBadge";
 import { MAX_TYPES, typesAvailableIn } from "@/domain/pokemonTypes";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { useTypeLabel } from "@/i18n/labels";
 
 interface TypeFilterProps {

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { Move, Pokemon } from "@/types/pokemon";
 import { makePokemon } from "./__fixtures__/pokemon";
 import { MODERN, RETRO } from "./era";
-import { learnsetInEra, moveInGame, moveMethodAccent, uniqueMoves } from "./moves";
+import { learnsetInEra, moveInGame, uniqueMoves } from "./moves";
 
 const learns = (
   move: string,
@@ -66,13 +66,6 @@ describe("learnsetInEra", () => {
     });
     expect(learnsetInEra(onlyChampions, RETRO)).toEqual({ game: null, groups: [] });
     expect(learnsetInEra(makePokemon({ moves: [] }), MODERN)).toEqual({ game: null, groups: [] });
-  });
-});
-
-describe("moveMethodAccent", () => {
-  it("colours the four methods the games use and greys the rest", () => {
-    expect(moveMethodAccent("level-up").fill).not.toBe(moveMethodAccent("machine").fill);
-    expect(moveMethodAccent("train")).toEqual(moveMethodAccent("stadium-surfing-pikachu"));
   });
 });
 

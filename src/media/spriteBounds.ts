@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { readGif, type GifRect } from "@/domain/gif";
+import { readGif, type GifRect } from "./gif";
 import { gifBytes } from "./gifBytes";
 
 /** Where a sprite's drawn pixels lie on its canvas. */

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ACTION } from "@/components/buttons";
-import { useEra } from "@/era/context";
-import { hush, say } from "./pokedexVoice";
+import { useEra } from "@/app/era/context";
+import { hush, say } from "@/media/pokedexVoice";
 
 /** Reads the entry aloud in the dex's own robot voice; a second press stops it. */
 export const ReadButton = ({

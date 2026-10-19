@@ -6,12 +6,13 @@ import Loader from "@/components/Loader";
 import { effectClass, printed } from "@/components/effectiveness";
 import { PageContainer } from "@/components/layout";
 import { GEN_SLUGS, genOrder, genRoman } from "@/domain/dex";
-import { typeClass, type PokemonType } from "@/domain/pokemonTypes";
+import type { PokemonType } from "@/domain/pokemonTypes";
+import { typeClass } from "@/components/typeStyles";
 import { chartChanges, type Multiplier } from "@/domain/typeChart";
-import { useEra } from "@/era/context";
+import { useEra } from "@/app/era/context";
 import { useTypeLabel } from "@/i18n/labels";
 import { VersusAd } from "./VersusAd";
-import { useTypeChart } from "./useTypeChart";
+import { useTypeChart } from "@/api/useTypeChart";
 
 /**
  * The type chart as of the era: what an attack of each type does to a Pokémon
