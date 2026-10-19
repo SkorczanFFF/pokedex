@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LINKS } from "@/app/links";
+import { paths } from "@/app/routes";
 
 const FOOTER_LINK = "hover:text-dex-yellow";
 
@@ -14,7 +16,7 @@ const Footer = () => {
             <p>
               &copy; {new Date().getFullYear()}{" "}
               <a
-                href="https://www.skoftware.pl"
+                href={LINKS.author}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={FOOTER_LINK}
@@ -26,11 +28,11 @@ const Footer = () => {
 
           <div className="flex space-x-8">
             {/* PokéAPI used to be linked here; the About page now credits it with the rest. */}
-            <Link to="/about" className={FOOTER_LINK}>
+            <Link to={paths.about} className={FOOTER_LINK}>
               {t("about.link")}
             </Link>
             <a
-              href="https://github.com/SkorczanFFF/pokedex"
+              href={LINKS.repo}
               target="_blank"
               rel="noopener noreferrer"
               className={FOOTER_LINK}

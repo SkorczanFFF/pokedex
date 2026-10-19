@@ -6,7 +6,7 @@ import {
   type LearnedMove,
 } from "@/domain/moves";
 import { useEra } from "@/era/context";
-import { humanize, useMoveLabel, useMoveMethodLabel } from "@/i18n/labels";
+import { useGameLabel, useMoveLabel, useMoveMethodLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 import { MoveDetails } from "./MoveDetails";
 
@@ -41,6 +41,7 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
   const { era } = useEra();
   const moveLabel = useMoveLabel();
   const methodLabel = useMoveMethodLabel();
+  const gameLabel = useGameLabel();
   const [showRest, setShowRest] = useState(false);
   const [picked, setPicked] = useState<PickedMove[]>([]);
 
@@ -86,7 +87,7 @@ export const MoveList = ({ pokemon }: { pokemon: Pokemon }) => {
     <section className="bg-white p-6 mt-6">
       <h2 className="text-lg mb-2">{t("details.moves")}</h2>
       <p className="text-xs text-gray-500 mb-6">
-        {t("details.movesFrom", { game: humanize(game) })}
+        {t("details.movesFrom", { game: gameLabel(game) })}
       </p>
 
       <div className="lg:grid lg:grid-cols-2 lg:gap-8">

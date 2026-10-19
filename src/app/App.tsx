@@ -18,11 +18,12 @@ import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { EraProvider } from "@/era/EraProvider";
 import { queryClient } from "./queryClient";
+import { paths } from "./routes";
 
 /** Versus first shipped at `/compare`; links to it still land, picks and all. */
 const FormerVersusAddress = () => {
   const { search } = useLocation();
-  return <Navigate to={`/versus${search}`} replace />;
+  return <Navigate to={`${paths.versus}${search}`} replace />;
 };
 
 function App() {
@@ -34,18 +35,13 @@ function App() {
             <Navbar />
             <main className="flex-grow pt-nav">
               <Routes>
-                <Route path="/" element={<PokemonListPage />} />
-                <Route path="/pokemon/:name" element={<PokemonDetailsPage />} />
-                {/* PokéAPI's own shape for the same question, and a page of its
-                    own because the answer runs to dozens of places. */}
-                <Route
-                  path="/pokemon/:name/encounters"
-                  element={<EncountersPage />}
-                />
-                <Route path="/types" element={<TypeChartPage />} />
-                <Route path="/versus" element={<VersusPage />} />
-                <Route path="/compare" element={<FormerVersusAddress />} />
-                <Route path="/about" element={<AboutPage />} />
+                <Route path={paths.list} element={<PokemonListPage />} />
+                <Route path={paths.pokemon} element={<PokemonDetailsPage />} />
+                <Route path={paths.encounters} element={<EncountersPage />} />
+                <Route path={paths.types} element={<TypeChartPage />} />
+                <Route path={paths.versus} element={<VersusPage />} />
+                <Route path={paths.formerVersus} element={<FormerVersusAddress />} />
+                <Route path={paths.about} element={<AboutPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

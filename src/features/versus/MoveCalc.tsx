@@ -27,6 +27,7 @@ import {
   useTypeLabel,
 } from "@/i18n/labels";
 import { phraseKey } from "@/features/types/effectiveness";
+import { useLocale } from "@/i18n/locale";
 import { useTranslatedMoveText } from "@/i18n/translated";
 import type { Known, Side } from "./BattleField";
 import { EffectChip } from "./Matchup";
@@ -351,8 +352,9 @@ const Result = ({
   abilities: Record<Side, string | null>;
   chart: TypeChart;
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { era } = useEra();
+  const locale = useLocale();
   const moveLabel = useMoveLabel();
   const typeLabel = useTypeLabel();
   const damageClassLabel = useDamageClassLabel();
@@ -372,7 +374,6 @@ const Result = ({
     );
   }
 
-  const locale = i18n.resolvedLanguage ?? "en";
   const inGame = moveInGame(data, game, locale, translatedText(move));
   const power = edits.power ?? inGame.power;
   const hit = computeHit({

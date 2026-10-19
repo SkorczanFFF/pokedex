@@ -1,6 +1,5 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { hydratePokemon } from "@/api/hydrate";
-import { pokemonListQuery } from "@/api/queries";
+import { useQuery } from "@tanstack/react-query";
+import { pageDetailsQuery, pokemonListQuery } from "@/api/queries";
 import { isInEra, type DexEra } from "@/domain/era";
 import { resourceIdFromUrl } from "@/domain/resource";
 import type { ListParams } from "./useListParams";
@@ -18,7 +17,6 @@ export const useDefaultPage = (
   { page, perPage, isSearchMode, isFilterMode }: ListParams,
   era: DexEra
 ) => {
-  const queryClient = useQueryClient();
   const enabled = !isSearchMode && !isFilterMode;
 
   const {
@@ -36,8 +34,7 @@ export const useDefaultPage = (
     isLoading: isDetailsLoading,
     error: detailsError,
   } = useQuery({
-    queryKey: ["pokemonDetails", page, perPage, era.maxDexId],
-    queryFn: () => hydratePokemon(queryClient, names),
+    ...pageDetailsQuery(page, perPage, era, names),
     enabled: !!list?.results && enabled,
   });
 

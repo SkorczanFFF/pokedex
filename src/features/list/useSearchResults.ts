@@ -1,8 +1,6 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { hydratePokemon } from "@/api/hydrate";
-import { allPokemonNamesQuery } from "@/api/queries";
+import { useQuery } from "@tanstack/react-query";
+import { allPokemonNamesQuery, searchQuery } from "@/api/queries";
 import type { DexEra } from "@/domain/era";
-import { matchNames } from "@/domain/search";
 import type { ListParams } from "./useListParams";
 
 /**
@@ -15,8 +13,6 @@ export const useSearchResults = (
   { query, isSearchMode }: ListParams,
   era: DexEra
 ) => {
-  const queryClient = useQueryClient();
-
   // Fetched once and kept for the session: it is the only thing standing
   // between a keystroke and a result.
   const {
@@ -30,14 +26,7 @@ export const useSearchResults = (
     isLoading: isSearchLoading,
     error: searchError,
   } = useQuery({
-    queryKey: ["search", query, era.maxDexId],
-    queryFn: () => {
-      const term = query.trim().toLowerCase();
-      if (!term) return [];
-      const matches = matchNames(allNames, term, era).slice(0, SEARCH_LIMIT);
-      // This query retries as a whole, so the records underneath must not.
-      return hydratePokemon(queryClient, matches, { retry: false });
-    },
+    ...searchQuery(query, era, allNames, SEARCH_LIMIT),
     enabled: isSearchMode && allNames.length > 0,
   });
 

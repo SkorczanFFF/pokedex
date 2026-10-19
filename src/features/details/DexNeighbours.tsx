@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { dexWindowQuery } from "@/api/queries";
+import { pokemonPath } from "@/app/routes";
 import { dexNeighbourIds, lastDexId } from "@/domain/dex";
 import { resourceIdFromUrl } from "@/domain/resource";
 import { useEra } from "@/era/context";
@@ -88,7 +89,7 @@ const Step = ({
 
   return (
     <Link
-      to={`/pokemon/${name}`}
+      to={pokemonPath(name)}
       aria-label={t(`details.${label}`, { name })}
       className={`${STEP} ${order} bg-gray-300 text-black cursor-pointer hover:bg-dex-yellow`}
     >

@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { SUPPORTED_LANGUAGES } from "@/i18n";
+import { SUPPORTED_LANGUAGES, useLocale } from "@/i18n/locale";
 
 const LanguageSwitcher = () => {
   const { t, i18n } = useTranslation();
-  const current = i18n.resolvedLanguage;
+  const current = useLocale();
 
   return (
     <div

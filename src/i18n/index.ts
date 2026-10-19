@@ -8,8 +8,7 @@ import plCommon from "./locales/pl/common.json";
 import plPokemon from "./locales/pl/pokemon.json";
 import plAbilities from "./locales/pl/abilities.json";
 import plMoves from "./locales/pl/moves.json";
-
-export const SUPPORTED_LANGUAGES = ["en", "pl"] as const;
+import { DEFAULT_LOCALE, SUPPORTED_LANGUAGES } from "./locale";
 
 // Keep the document locale in sync with the UI. Registered before init() so the
 // initial detection is picked up too.
@@ -35,7 +34,7 @@ i18n
     },
     ns: ["common", "pokemon", "abilities", "moves"],
     defaultNS: "common",
-    fallbackLng: "en",
+    fallbackLng: DEFAULT_LOCALE,
     supportedLngs: SUPPORTED_LANGUAGES,
     load: "languageOnly", // pl-PL -> pl
     detection: {
@@ -47,4 +46,4 @@ i18n
     interpolation: { escapeValue: false },
   });
 
-syncDocumentLang(i18n.resolvedLanguage ?? "en");
+syncDocumentLang(i18n.resolvedLanguage ?? DEFAULT_LOCALE);

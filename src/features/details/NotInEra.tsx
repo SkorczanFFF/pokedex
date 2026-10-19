@@ -1,13 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { paths } from "@/app/routes";
 import {
   BattleScreen,
   MENU_ITEM,
   MenuCursor,
 } from "@/components/BattleScreen";
-import { genRoman, generationFromId } from "@/domain/dex";
 import { DEFAULT_ERA } from "@/domain/era";
 import { useEra } from "@/era/context";
+import { useNotInEraText } from "@/features/shared/useNotInEraText";
 import { humanize } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
 
@@ -27,12 +28,9 @@ import type { Pokemon } from "@/types/pokemon";
  */
 export const NotInEra = ({ pokemon }: { pokemon: Pokemon }) => {
   const { t } = useTranslation();
-  const { era, setEra } = useEra();
+  const { setEra } = useEra();
+  const notInEra = useNotInEraText();
   const name = humanize(pokemon.name);
-  // From the id alone, so this costs nothing: the species payload is the one
-  // request the page deliberately skips for a card it will not show. Null above
-  // 1025, where PokéAPI numbers the alternate forms.
-  const generation = generationFromId(pokemon.id);
 
   return (
     <BattleScreen
@@ -43,14 +41,7 @@ export const NotInEra = ({ pokemon }: { pokemon: Pokemon }) => {
       <h1 className="text-sm leading-relaxed md:text-base">
         {t("era.wild", { name: name.toUpperCase() })}
       </h1>
-      <p className="mt-3 text-sm leading-relaxed md:text-base">
-        {t(generation ? "era.notHereBody" : "era.notHereBodyNoGen", {
-          name,
-          id: pokemon.id,
-          gen: generation ? genRoman(generation) : "",
-          max: era.maxDexId,
-        })}
-      </p>
+      <p className="mt-3 text-sm leading-relaxed md:text-base">{notInEra(pokemon)}</p>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-12">
         {/* Two eras, so "leave retro" is unambiguous. A third would have to
@@ -63,7 +54,7 @@ export const NotInEra = ({ pokemon }: { pokemon: Pokemon }) => {
           <MenuCursor />
           {t("era.turnOff")}
         </button>
-        <Link to="/" className={MENU_ITEM}>
+        <Link to={paths.list} className={MENU_ITEM}>
           <MenuCursor />
           {t("notFound.pokedex")}
         </Link>

@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { useTranslation } from "react-i18next";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import type { TranslatedSpeciesText } from "@/domain/species";
 import type { TranslatedText } from "@/domain/text";
+import { useLocale, type Locale } from "./locale";
 
 /**
  * The text PokéAPI does not carry in the reading language.
@@ -34,19 +34,21 @@ const POLISH = {
 } as const;
 
 /** Polish is the only language with a table, because it is the only gap. */
-const useTable = <T,>(which: keyof typeof POLISH) => {
-  const { i18n } = useTranslation();
-  const locale = i18n.resolvedLanguage ?? "en";
-  const translated = locale === "pl";
+const TRANSLATED: Locale = "pl";
 
-  const { data } = useQuery({
+/** One table, loaded once for the session; a local resource, so not in `api/queries`. */
+const translatedTableQuery = <T>(which: keyof typeof POLISH, locale: Locale) =>
+  queryOptions({
     queryKey: ["translated", which, locale],
     queryFn: POLISH[which] as () => Promise<Record<string, T>>,
-    enabled: translated,
+    enabled: locale === TRANSLATED,
     staleTime: Infinity,
   });
 
-  return (slug: string): T | null => (translated && data?.[slug]) || null;
+const useTable = <T,>(which: keyof typeof POLISH) => {
+  const locale = useLocale();
+  const { data } = useQuery(translatedTableQuery<T>(which, locale));
+  return (slug: string): T | null => (locale === TRANSLATED && data?.[slug]) || null;
 };
 
 /** A move's sentence in the reading language, or null when there is none. */

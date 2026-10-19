@@ -1,5 +1,6 @@
 import type { Pokemon, SpriteSheet } from "@/types/pokemon";
 import { GEN_SLUGS, genApiName, isGenSlug, type GenSlug } from "./dex";
+import { gameName } from "./games";
 import { gameSprite, officialArtwork } from "./resource";
 
 /**
@@ -9,16 +10,9 @@ import { gameSprite, officialArtwork } from "./resource";
  */
 export type SpriteSetId = "artwork" | `${GenSlug}/${string}`;
 
-interface SpriteGame {
-  /** PokéAPI's key under `sprites.versions["generation-…"]`. */
-  key: string;
-  /** The game's name, which is the same in every language. */
-  name: string;
-}
-
 interface GenSheets {
-  /** The sheets the picker offers, in the order they are listed. */
-  games: readonly SpriteGame[];
+  /** The sheets the picker offers, in the order they are listed: PokéAPI's keys under `sprites.versions["generation-…"]`. */
+  games: readonly string[];
   /** The sheet a generation opens on when picked by its numeral alone. */
   opensOn: string;
 }
@@ -36,46 +30,18 @@ interface GenSheets {
  * polished sheet everywhere else.
  */
 const SPRITE_GAMES: Record<GenSlug, GenSheets> = {
-  i: {
-    games: [
-      { key: "red-blue", name: "Red / Blue" },
-      { key: "yellow", name: "Yellow" },
-      { key: "red-green-japan", name: "Red / Green (JP)" },
-    ],
-    opensOn: "red-blue",
-  },
-  ii: {
-    games: [
-      { key: "gold", name: "Gold" },
-      { key: "silver", name: "Silver" },
-      { key: "crystal", name: "Crystal" },
-    ],
-    opensOn: "crystal",
-  },
-  iii: { games: [{ key: "emerald", name: "Emerald" }], opensOn: "emerald" },
-  iv: { games: [{ key: "platinum", name: "Platinum" }], opensOn: "platinum" },
-  v: {
-    games: [{ key: "black-white", name: "Black / White" }],
-    opensOn: "black-white",
-  },
-  vi: { games: [{ key: "x-y", name: "X / Y" }], opensOn: "x-y" },
-  vii: {
-    games: [{ key: "ultra-sun-ultra-moon", name: "Ultra Sun / Ultra Moon" }],
-    opensOn: "ultra-sun-ultra-moon",
-  },
+  i: { games: ["red-blue", "yellow", "red-green-japan"], opensOn: "red-blue" },
+  ii: { games: ["gold", "silver", "crystal"], opensOn: "crystal" },
+  iii: { games: ["emerald"], opensOn: "emerald" },
+  iv: { games: ["platinum"], opensOn: "platinum" },
+  v: { games: ["black-white"], opensOn: "black-white" },
+  vi: { games: ["x-y"], opensOn: "x-y" },
+  vii: { games: ["ultra-sun-ultra-moon"], opensOn: "ultra-sun-ultra-moon" },
   viii: {
-    games: [
-      {
-        key: "brilliant-diamond-shining-pearl",
-        name: "Brilliant Diamond / Shining Pearl",
-      },
-    ],
+    games: ["brilliant-diamond-shining-pearl"],
     opensOn: "brilliant-diamond-shining-pearl",
   },
-  ix: {
-    games: [{ key: "scarlet-violet", name: "Scarlet / Violet" }],
-    opensOn: "scarlet-violet",
-  },
+  ix: { games: ["scarlet-violet"], opensOn: "scarlet-violet" },
 };
 
 const gameSet = (gen: GenSlug, game: string): SpriteSetId =>
@@ -94,14 +60,10 @@ export const setGame = (
 export const genOpening = (gen: GenSlug): SpriteSetId =>
   gameSet(gen, SPRITE_GAMES[gen].opensOn);
 
-/** The game's name as printed on its box, or its key for one the table lacks. */
+/** The game's name as printed on its box; empty for the artwork. */
 export const spriteGameName = (set: SpriteSetId): string => {
   const picked = setGame(set);
-  if (!picked) return "";
-  return (
-    SPRITE_GAMES[picked.gen].games.find((g) => g.key === picked.game)?.name ??
-    picked.game
-  );
+  return picked ? gameName(picked.game) : "";
 };
 
 const sheetOf = (pokemon: Pokemon, set: SpriteSetId): SpriteSheet | null => {
@@ -159,7 +121,7 @@ export const spriteSets = (pokemon: Pokemon): SpriteSetId[] =>
   [
     "artwork" as const,
     ...GEN_SLUGS.flatMap((gen) =>
-      SPRITE_GAMES[gen].games.map((game) => gameSet(gen, game.key)),
+      SPRITE_GAMES[gen].games.map((game) => gameSet(gen, game)),
     ),
   ].filter((set) => spriteUrl(pokemon, set) !== null);
 

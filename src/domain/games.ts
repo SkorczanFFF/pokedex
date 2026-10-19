@@ -1,4 +1,5 @@
 import { GEN_SLUGS, type GenSlug } from "./dex";
+import { humanize } from "./text";
 
 /**
  * Which generation each game belongs to.
@@ -144,3 +145,95 @@ const VERSION_RANK = new Map<string, number>(
 
 export const versionRank = (version: string): number | null =>
   VERSION_RANK.get(version) ?? null;
+
+/** Every game and every version group this file knows, for the names table to be checked against. */
+export const KNOWN_GAMES: readonly string[] = [
+  ...new Set(GEN_SLUGS.flatMap((gen) => [...VERSIONS_BY_GEN[gen], ...GROUPS_BY_GEN[gen]])),
+];
+
+/**
+ * The games' names as printed on their boxes, the same in every language,
+ * keyed by version and by version group alike. A pair reads "Red / Blue"; the
+ * Japanese releases are marked rather than spelled out, because "Red Japan"
+ * reads like a mistake; a sheet's game on the details page and a learnset's
+ * game on the moves list read off the same entry.
+ */
+const GAME_NAMES: Record<string, string> = {
+  red: "Red",
+  blue: "Blue",
+  yellow: "Yellow",
+  "red-japan": "Red (JP)",
+  "green-japan": "Green (JP)",
+  "blue-japan": "Blue (JP)",
+  "red-blue": "Red / Blue",
+  "red-green-japan": "Red / Green (JP)",
+  gold: "Gold",
+  silver: "Silver",
+  crystal: "Crystal",
+  "gold-silver": "Gold / Silver",
+  ruby: "Ruby",
+  sapphire: "Sapphire",
+  emerald: "Emerald",
+  firered: "FireRed",
+  leafgreen: "LeafGreen",
+  colosseum: "Colosseum",
+  xd: "XD",
+  "ruby-sapphire": "Ruby / Sapphire",
+  "firered-leafgreen": "FireRed / LeafGreen",
+  diamond: "Diamond",
+  pearl: "Pearl",
+  platinum: "Platinum",
+  heartgold: "HeartGold",
+  soulsilver: "SoulSilver",
+  "diamond-pearl": "Diamond / Pearl",
+  "heartgold-soulsilver": "HeartGold / SoulSilver",
+  black: "Black",
+  white: "White",
+  "black-2": "Black 2",
+  "white-2": "White 2",
+  "black-white": "Black / White",
+  "black-2-white-2": "Black 2 / White 2",
+  x: "X",
+  y: "Y",
+  "omega-ruby": "Omega Ruby",
+  "alpha-sapphire": "Alpha Sapphire",
+  "x-y": "X / Y",
+  "omega-ruby-alpha-sapphire": "Omega Ruby / Alpha Sapphire",
+  sun: "Sun",
+  moon: "Moon",
+  "ultra-sun": "Ultra Sun",
+  "ultra-moon": "Ultra Moon",
+  "lets-go-pikachu": "Let's Go, Pikachu!",
+  "lets-go-eevee": "Let's Go, Eevee!",
+  "sun-moon": "Sun / Moon",
+  "ultra-sun-ultra-moon": "Ultra Sun / Ultra Moon",
+  "lets-go-pikachu-lets-go-eevee": "Let's Go, Pikachu! / Let's Go, Eevee!",
+  sword: "Sword",
+  shield: "Shield",
+  "the-isle-of-armor-sword": "Sword (The Isle of Armor)",
+  "the-isle-of-armor-shield": "Shield (The Isle of Armor)",
+  "the-crown-tundra-sword": "Sword (The Crown Tundra)",
+  "the-crown-tundra-shield": "Shield (The Crown Tundra)",
+  "brilliant-diamond": "Brilliant Diamond",
+  "shining-pearl": "Shining Pearl",
+  "legends-arceus": "Legends: Arceus",
+  "sword-shield": "Sword / Shield",
+  "the-isle-of-armor": "The Isle of Armor",
+  "the-crown-tundra": "The Crown Tundra",
+  "brilliant-diamond-shining-pearl": "Brilliant Diamond / Shining Pearl",
+  scarlet: "Scarlet",
+  violet: "Violet",
+  "the-teal-mask-scarlet": "Scarlet (The Teal Mask)",
+  "the-teal-mask-violet": "Violet (The Teal Mask)",
+  "the-indigo-disk-scarlet": "Scarlet (The Indigo Disk)",
+  "the-indigo-disk-violet": "Violet (The Indigo Disk)",
+  "legends-za": "Legends: Z-A",
+  "mega-dimension": "Mega Dimension",
+  champions: "Champions",
+  "scarlet-violet": "Scarlet / Violet",
+  "the-teal-mask": "The Teal Mask",
+  "the-indigo-disk": "The Indigo Disk",
+};
+
+/** A game's name as printed on its box; one this table lacks is read off its slug. */
+export const gameName = (slug: string): string => GAME_NAMES[slug] ?? humanize(slug);

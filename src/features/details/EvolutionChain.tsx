@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { evolutionChainQuery } from "@/api/queries";
+import { pokemonPath } from "@/app/routes";
 import {
   evolutionTreeInEra,
   treeDepth,
@@ -249,7 +250,7 @@ const NodeCard = ({
 
   return (
     <Link
-      to={`/pokemon/${node.name}`}
+      to={pokemonPath(node.name)}
       // Carries the list origin forward, so "Back to list" still lands on the
       // page and scroll position the user actually came from.
       state={location.state}

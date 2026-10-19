@@ -2,6 +2,7 @@ import type { Move, Pokemon } from "@/types/pokemon";
 import { genInEra, inForceAt, type DexEra } from "./era";
 import { generationOfVersionGroup, versionGroupRank } from "./games";
 import {
+  FALLBACK_LANGUAGE,
   cleanFlavorText,
   flattenTranslated,
   type PrintedText,
@@ -289,7 +290,7 @@ export const moveInGame = (
     translated ? flattenTranslated(translated) : spokenIn(locale),
     game
   );
-  const chosen = own ?? printedIn(spokenIn("en"), game);
+  const chosen = own ?? printedIn(spokenIn(FALLBACK_LANGUAGE), game);
 
   return {
     type: applies?.type?.name ?? move.type.name,
@@ -299,6 +300,6 @@ export const moveInGame = (
     pp: applies?.pp ?? move.pp,
     text: chosen?.text ?? "",
     textFromGame: chosen?.game ?? null,
-    textLanguage: own ? locale : "en",
+    textLanguage: own ? locale : FALLBACK_LANGUAGE,
   };
 };

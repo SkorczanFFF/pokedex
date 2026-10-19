@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { pokemonPath } from "@/app/routes";
 import { HpBar } from "@/components/BattleScreen";
 import { statsInEra, typingInEra } from "@/domain/pokemonView";
 import { battleSprite, type SpriteView } from "@/domain/sprites";
@@ -186,7 +187,7 @@ const FighterBox = ({ fighter }: { fighter: Fighter }) => {
       <div className="flex items-baseline gap-4 text-[10px] md:text-xs">
         {ready ? (
           <Link
-            to={`/pokemon/${ready.name}`}
+            to={pokemonPath(ready.name)}
             className="uppercase hover:text-dex-red"
           >
             {humanize(ready.name)}

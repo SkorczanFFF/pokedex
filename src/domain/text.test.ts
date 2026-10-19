@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { cleanFlavorText, flattenTranslated, inLanguage } from "./text";
+import { cleanFlavorText, flattenTranslated, humanize, inLanguage } from "./text";
+
+describe("humanize", () => {
+  it("turns a slug into words", () => {
+    expect(humanize("special-attack")).toBe("Special Attack");
+    expect(humanize("mr-mime")).toBe("Mr Mime");
+    expect(humanize("xd")).toBe("Xd");
+    expect(humanize("")).toBe("");
+  });
+});
 
 describe("cleanFlavorText", () => {
   it("turns the games' breaks and soft hyphens into spaces", () => {

@@ -16,6 +16,38 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `refactor: the routes, the list's origin, the query keys and the language are each named once`
+
+- **Changed** — `app/routes.ts` declares every address and query key: the router reads
+  `paths`, and the sixteen links that spelled `/pokemon/${name}`, `/versus?a=` or `/types`
+  by hand now call `pokemonPath`, `encountersPath`, `versusPath` and `listPath`. The list's
+  and Versus' URL hooks read their keys from the same file, and both edit the query string
+  through one `useSearchParamsPatch` rather than two copies that disagreed on whether an
+  empty string removes a key.
+- **Changed** — `app/listOrigin.ts` is the one reader of what rides in history state
+  between the list and a details page: the card writes `leaveList`, Back reads `readOrigin`
+  and answers `returnState`, the list reads `readRestore`. Three files had each cast the
+  state to a shape of their own.
+- **Changed** — `api/queries.ts` now holds every PokéAPI query, the composite ones included:
+  a page of records, a filtered page, the selected types' lists and the search, each read
+  through the per-record queries by the client React Query hands the query function. The
+  list's three hooks keep no `queryKey` of their own. The one query that is not PokéAPI's —
+  the Polish tables — stays in `i18n/translated.ts`, as `queryOptions` too. `api/hydrate.ts`,
+  which the phase before had given the names-into-records policy, folds in as `hydratePokemon`.
+- **Changed** — `i18n/locale.ts` owns the languages: `SUPPORTED_LANGUAGES`, `DEFAULT_LOCALE`
+  and `useLocale`, where five components had written `resolvedLanguage ?? "en"` and the
+  voice's table was keyed by any string. `app/links.ts` owns every outside address, so the
+  footer and the About page cannot drift apart; the About page's own sources list is read
+  from it rather than typed a second time into its `<Trans>` components. The sentence that
+  says a Pokémon postdates the era is one hook, `useNotInEraText`, for the details screen and
+  Versus' text box alike.
+- **Changed** — `domain/games.ts` names every version and version group as the box prints
+  it, and `useGameLabel` reads it: the sprite picker, the moves list, a move's "from" note
+  and the encounters page agree on "Red / Blue", "Let's Go, Pikachu!" and "Red (JP)", where
+  two of them had humanized the slug into "Red Blue" and "Lets Go Pikachu". `humanize` and
+  the English fallback move to `domain/text.ts`, which the domain had been importing from
+  `i18n`. Phase 3 of the plan in `REVIEW.md`.
+
 ### `refactor: the era answers its own questions, and the domain spells each rule once`
 
 - **Changed** — `domain/era.ts` gains the questions every payload reader had been asking in

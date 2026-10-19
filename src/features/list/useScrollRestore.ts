@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { readRestore } from "@/app/listOrigin";
 
 /**
  * Puts the list back where the user left it when they return from a detail
@@ -17,9 +18,8 @@ export const useScrollRestore = (hasData: boolean) => {
 
   useLayoutEffect(() => {
     if (restoredRef.current || !hasData) return;
-    const y = (location.state as { restoreScroll?: number } | null)
-      ?.restoreScroll;
-    if (typeof y !== "number") return;
+    const y = readRestore(location.state);
+    if (y === null) return;
 
     window.scrollTo(0, y);
     restoredRef.current = true;

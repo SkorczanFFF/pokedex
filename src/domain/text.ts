@@ -1,5 +1,20 @@
 // The games' text as PokéAPI hands it over, and the text PokéAPI does not have.
 
+/** PokéAPI writes every entry in English whatever else it carries: the last resort of every fallback. */
+export const FALLBACK_LANGUAGE = "en";
+
+/**
+ * Turns a PokéAPI slug into readable English: `special-attack` -> `Special
+ * Attack`, `solar-power` -> `Solar Power`. The fallback for every label without
+ * a translation, so an untranslated entry renders as proper English rather
+ * than a raw slug or a blank.
+ */
+export const humanize = (slug: string): string =>
+  slug
+    .split("-")
+    .map((word) => (word ? word[0].toUpperCase() + word.slice(1) : word))
+    .join(" ");
+
 /** Flavour text carries the games' own line breaks, form feeds and soft hyphens; one space each. */
 export const cleanFlavorText = (text: string): string =>
   text.replace(/[\f\n\r­]/g, " ").trim();
@@ -16,7 +31,7 @@ export const inLanguage = <T>(
   languageOf: (entry: T) => string,
   locale: string,
 ): T[] => {
-  for (const language of [locale, "en"]) {
+  for (const language of [locale, FALLBACK_LANGUAGE]) {
     const hits = entries.filter((entry) => languageOf(entry) === language);
     if (hits.length > 0) return hits;
   }

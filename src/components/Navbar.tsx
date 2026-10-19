@@ -1,16 +1,17 @@
 import { useEffect, useId, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { paths } from "@/app/routes";
 import { DEFAULT_ERA } from "@/domain/era";
 import EraToggle from "@/era/EraToggle";
 import { useEra } from "@/era/context";
-import { SUPPORTED_LANGUAGES } from "@/i18n";
+import { SUPPORTED_LANGUAGES, useLocale } from "@/i18n/locale";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { MENU_ITEM, MenuCursor } from "./BattleScreen";
 
 const PAGES = [
-  { to: "/types", label: "types.link" },
-  { to: "/versus", label: "nav.versus" },
+  { to: paths.types, label: "types.link" },
+  { to: paths.versus, label: "nav.versus" },
 ] as const;
 
 /**
@@ -50,7 +51,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-nav">
-          <Link to="/">
+          <Link to={paths.list}>
             <span className="text-xl font-bold">Pokédex</span>
           </Link>
 
@@ -96,7 +97,7 @@ const GameBoyMenu = () => {
   const { t, i18n } = useTranslation();
   const { name, setEra } = useEra();
   const isRetro = name === "retro";
-  const current = i18n.resolvedLanguage;
+  const current = useLocale();
 
   return (
     <div className="border-4 border-black bg-white p-4 text-black">

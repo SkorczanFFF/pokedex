@@ -4,6 +4,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { NotFoundError } from "@/api/client";
 import { encountersQuery, pokemonQuery } from "@/api/queries";
+import { pokemonPath } from "@/app/routes";
 import { Chip } from "@/components/Chip";
 import ErrorView from "@/components/ErrorView";
 import Loader from "@/components/Loader";
@@ -22,6 +23,7 @@ import {
   humanize,
   useEncounterConditionLabel,
   useEncounterMethodLabel,
+  useGameLabel,
 } from "@/i18n/labels";
 import { NotInEra } from "./NotInEra";
 
@@ -83,7 +85,7 @@ export const EncountersPage = () => {
   return (
     <div className="container mx-auto px-4 pt-8 lg:max-w-7xl pb-12">
       <Link
-        to={`/pokemon/${pokemon.name}`}
+        to={pokemonPath(pokemon.name)}
         state={location.state}
         className="inline-block mb-8 text-black bg-dex-yellow hover:bg-dex-red hover:text-white px-4 py-2 cursor-pointer"
       >
@@ -147,16 +149,6 @@ export const EncountersPage = () => {
   );
 };
 
-/**
- * `red-japan` is a game of its own — the Japanese release, where the Celadon
- * prize corner sold Pikachu for 620 coins rather than Crystal's 2222 — but
- * "Red Japan" reads like a mistake, so it is marked rather than spelled out.
- */
-const gameLabel = (game: string): string =>
-  game.endsWith("-japan")
-    ? `${humanize(game.slice(0, -"-japan".length))} (JP)`
-    : humanize(game);
-
 const GamePicker = ({
   games,
   picked,
@@ -167,6 +159,7 @@ const GamePicker = ({
   onPick: (game: string | null) => void;
 }) => {
   const { t } = useTranslation();
+  const gameLabel = useGameLabel();
 
   return (
     <div
@@ -217,6 +210,7 @@ const Row = ({ row }: { row: EncounterRow }) => {
   const { t } = useTranslation();
   const methodLabel = useEncounterMethodLabel();
   const conditionLabel = useEncounterConditionLabel();
+  const gameLabel = useGameLabel();
 
   const levels =
     row.minLevel === row.maxLevel

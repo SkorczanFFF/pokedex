@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { versusPath } from "@/app/routes";
 import { ACTION } from "@/components/chips";
 import type { Pokemon } from "@/types/pokemon";
 
@@ -8,10 +9,7 @@ export const VersusLink = ({ pokemon }: { pokemon: Pokemon }) => {
   const { t } = useTranslation();
 
   return (
-    <Link
-      to={`/versus?a=${pokemon.name}`}
-      className={ACTION}
-    >
+    <Link to={versusPath({ a: pokemon.name })} className={ACTION}>
       {t("versus.link")}
     </Link>
   );

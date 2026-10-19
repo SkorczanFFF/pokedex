@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { paths } from "@/app/routes";
 import {
   BattleScreen,
   MENU_ITEM,
@@ -20,7 +21,7 @@ export const NotFound = () => {
       </p>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-12">
-        <Link to="/" className={MENU_ITEM}>
+        <Link to={paths.list} className={MENU_ITEM}>
           <MenuCursor />
           {t("notFound.pokedex")}
         </Link>

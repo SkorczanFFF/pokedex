@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { leaveList } from "@/app/listOrigin";
+import { pokemonPath } from "@/app/routes";
 import type { Pokemon } from "@/types/pokemon";
 import { typeClass } from "@/domain/pokemonTypes";
 import { typesInEra } from "@/domain/pokemonView";
@@ -18,7 +20,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   const { t } = useTranslation();
   const typeLabel = useTypeLabel();
   const { era } = useEra();
-  const target = `/pokemon/${pokemon.name}`;
+  const target = pokemonPath(pokemon.name);
   const gen = generationFromId(pokemon.id);
   const genBadge = gen ? t("gen.badge", { roman: genRoman(gen) }) : null;
   const types = typesInEra(pokemon, era);
@@ -38,12 +40,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
       return;
     }
     e.preventDefault();
-    navigate(target, {
-      state: {
-        from: `${location.pathname}${location.search}`,
-        scrollY: window.scrollY,
-      },
-    });
+    navigate(target, { state: leaveList(location) });
   };
 
   return (

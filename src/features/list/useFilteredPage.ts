@@ -1,7 +1,6 @@
 import { useMemo } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { hydratePokemon } from "@/api/hydrate";
-import { genListQuery, typeQuery } from "@/api/queries";
+import { useQuery } from "@tanstack/react-query";
+import { filteredDetailsQuery, genListQuery, typeListsQuery } from "@/api/queries";
 import { isInEra, type DexEra } from "@/domain/era";
 import { intersectByName } from "@/domain/intersect";
 import { pageSlice } from "@/domain/pagination";
@@ -37,21 +36,11 @@ export const useFilteredPage = (
   era: DexEra,
   { deferDetails }: { deferDetails: boolean }
 ) => {
-  const queryClient = useQueryClient();
-
-  // One request per selected type, each under the type's own key, so toggling
-  // one type reuses what the other selection — or the chart page — already got.
   const {
     data: typeLists,
     isLoading: isTypeListLoading,
     error: typeError,
-  } = useQuery({
-    queryKey: ["typeLists", typeKey],
-    queryFn: () =>
-      Promise.all(types.map((type) => queryClient.fetchQuery(typeQuery(type)))),
-    enabled: isTypeMode,
-    staleTime: Infinity,
-  });
+  } = useQuery({ ...typeListsQuery(types), enabled: isTypeMode });
 
   const {
     data: genData,
@@ -90,17 +79,7 @@ export const useFilteredPage = (
     isLoading: isDetailsLoading,
     error: detailsError,
   } = useQuery({
-    queryKey: [
-      "filteredDetails",
-      typeKey,
-      gen,
-      page,
-      perPage,
-      era.maxDexId,
-    ],
-    // Species names that are not Pokémon names (deoxys, wormadam) drop out
-    // inside `hydratePokemon`; anything else that fails is this page's error.
-    queryFn: () => hydratePokemon(queryClient, pageNames),
+    ...filteredDetailsQuery({ typeKey, gen, page, perPage }, era, pageNames),
     // Cards hydrate for the selection the user settles on, not for every tap
     // along the way. The URL, the heading and the panel's result count all
     // update live off the cached name lists — this only holds back the per-card

@@ -1,5 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
+import { readOrigin, returnState } from "@/app/listOrigin";
+import { paths } from "@/app/routes";
 
 /**
  * Back to wherever the list was. The origin and the scroll offset ride along in
@@ -11,16 +13,9 @@ export const BackButton = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const navState =
-    (location.state as { from?: string; scrollY?: number } | null) ?? null;
-
   const handleBack = () => {
-    navigate(navState?.from ?? "/", {
-      state:
-        typeof navState?.scrollY === "number"
-          ? { restoreScroll: navState.scrollY }
-          : null,
-    });
+    const origin = readOrigin(location.state);
+    navigate(origin?.from ?? paths.list, { state: returnState(origin) });
   };
 
   return (

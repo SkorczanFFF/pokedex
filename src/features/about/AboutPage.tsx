@@ -1,6 +1,8 @@
 import { useEffect, type ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { LINKS } from "@/app/links";
+import { encountersPath, paths, pokemonPath } from "@/app/routes";
 import { lastDexId } from "@/domain/dex";
 import { RETRO } from "@/domain/era";
 import { typesUpTo } from "@/domain/pokemonTypes";
@@ -30,19 +32,16 @@ const COUNTS = {
   plAbilities: Object.keys(plAbilities).length,
 };
 
-const REPO = "https://github.com/SkorczanFFF/pokedex";
-
 const SOURCES = [
-  { key: "api", name: "PokéAPI", href: "https://pokeapi.co" },
-  { key: "wiki", name: "Pokémon Wiki PL", href: "https://pokemon.fandom.com/pl" },
-  { key: "espeak", name: "eSpeak", href: "https://espeak.sourceforge.net/" },
-  {
-    key: "font",
-    name: "Press Start 2P",
-    href: "https://fonts.google.com/specimen/Press+Start+2P",
-  },
-  { key: "pokered", name: "pokered", href: "https://github.com/pret/pokered" },
+  { key: "api", name: "PokéAPI", href: LINKS.pokeapi },
+  { key: "wiki", name: "Pokémon Wiki PL", href: LINKS.wikiPl },
+  { key: "espeak", name: "eSpeak", href: LINKS.espeak },
+  { key: "font", name: "Press Start 2P", href: LINKS.font },
+  { key: "pokered", name: "pokered", href: LINKS.pokered },
 ] as const;
+
+/** A Pokémon every reader knows, to show the pages that are about one. */
+const EXAMPLE = "meowth";
 
 const POLISH_ROWS = ["dex", "genus", "moveNames", "moveTexts", "abilities"] as const;
 
@@ -112,13 +111,13 @@ export const AboutPage = () => {
 
         <Box heading={t("about.data.heading")}>
           <p>
-            <Trans i18nKey="about.data.lead" components={{ api: <Ext href="https://pokeapi.co" /> }} />
+            <Trans i18nKey="about.data.lead" components={{ api: <Ext href={LINKS.pokeapi} /> }} />
           </p>
           <Bullets items={t("about.data.items", { returnObjects: true })} />
           <p>
             <Trans
               i18nKey="about.data.sprites"
-              components={{ sprites: <Ext href="https://github.com/PokeAPI/sprites" /> }}
+              components={{ sprites: <Ext href={LINKS.sprites} /> }}
             />
           </p>
         </Box>
@@ -129,8 +128,8 @@ export const AboutPage = () => {
             <Trans
               i18nKey="about.polish.source"
               components={{
-                wiki: <Ext href="https://pokemon.fandom.com/pl" />,
-                cc: <Ext href="https://www.fandom.com/licensing" />,
+                wiki: <Ext href={LINKS.wikiPl} />,
+                cc: <Ext href={LINKS.wikiLicense} />,
               }}
             />
           </p>
@@ -155,19 +154,19 @@ export const AboutPage = () => {
 
         <Box heading={t("about.can.heading")}>
           <dl className="space-y-3">
-            <Page to="/" name={t("list.title")}>
+            <Page to={paths.list} name={t("list.title")}>
               {t("about.can.list")}
             </Page>
-            <Page to="/pokemon/meowth" name="Pokémon">
+            <Page to={pokemonPath(EXAMPLE)} name="Pokémon">
               {t("about.can.details")}
             </Page>
-            <Page to="/pokemon/meowth/encounters" name={t("encounters.title")}>
+            <Page to={encountersPath(EXAMPLE)} name={t("encounters.title")}>
               {t("about.can.encounters")}
             </Page>
-            <Page to="/types" name={t("types.title")}>
+            <Page to={paths.types} name={t("types.title")}>
               {t("about.can.types")}
             </Page>
-            <Page to="/versus" name={t("versus.title")}>
+            <Page to={paths.versus} name={t("versus.title")}>
               {t("about.can.versus")}
             </Page>
           </dl>
@@ -183,8 +182,8 @@ export const AboutPage = () => {
             <Trans
               i18nKey="about.how.body"
               components={{
-                gh: <Ext href={REPO} />,
-                log: <Ext href={`${REPO}/blob/master/CHANGELOG.md`} />,
+                gh: <Ext href={LINKS.repo} />,
+                log: <Ext href={LINKS.changelog} />,
               }}
             />
           </p>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { LIST_PARAMS } from "@/app/routes";
 import { isGenSlug, type GenSlug } from "@/domain/dex";
 import { DEFAULT_PER_PAGE, isPerPage, type PerPage } from "@/domain/pagination";
 import {
@@ -8,6 +8,7 @@ import {
   serializeTypes,
   type PokemonType,
 } from "@/domain/pokemonTypes";
+import { useSearchParamsPatch, type ParamPatch } from "@/features/shared/useSearchParamsPatch";
 
 /** The whole list view, read out of the query string. */
 export interface ListParams {
@@ -40,6 +41,8 @@ export interface ListActions {
 export const activeFilterCount = (params: ListParams): number =>
   params.types.length + (params.gen ? 1 : 0);
 
+const { page: PAGE, perPage: PER, query: Q, type: TYPE, gen: GEN } = LIST_PARAMS;
+
 /**
  * The list view lives in the URL, which makes it a shareable link and makes the
  * browser's own history the undo stack.
@@ -52,17 +55,17 @@ export const useListParams = ({
 }: {
   replaceHistory: boolean;
 }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, patch] = useSearchParamsPatch();
 
-  const page = Math.max(1, Number(searchParams.get("page")) || 1);
-  const perRaw = Number(searchParams.get("per"));
+  const page = Math.max(1, Number(searchParams.get(PAGE)) || 1);
+  const perRaw = Number(searchParams.get(PER));
   const perPage = isPerPage(perRaw) ? perRaw : DEFAULT_PER_PAGE;
-  const query = searchParams.get("q") ?? "";
+  const query = searchParams.get(Q) ?? "";
 
-  const genParam = searchParams.get("gen");
+  const genParam = searchParams.get(GEN);
   const gen = isGenSlug(genParam) ? genParam : null;
 
-  const typeParam = searchParams.get("type");
+  const typeParam = searchParams.get(TYPE);
   const types = useMemo(() => parseTypes(typeParam), [typeParam]);
 
   const isSearchMode = query.length > 0;
@@ -82,31 +85,19 @@ export const useListParams = ({
     isFilterMode: isTypeMode || isGenMode,
   };
 
-  const update = (patch: Record<string, string | null>) => {
-    setSearchParams(
-      (prev) => {
-        const next = new URLSearchParams(prev);
-        for (const [k, v] of Object.entries(patch)) {
-          if (v === null || v === "") next.delete(k);
-          else next.set(k, v);
-        }
-        return next;
-      },
-      { replace: replaceHistory }
-    );
-  };
+  const update = (changes: ParamPatch) => patch(changes, { replace: replaceHistory });
 
   /** Changing what is on screen also means going back to the top of it. */
-  const updateFromTop = (patch: Record<string, string | null>) => {
-    update(patch);
+  const updateFromTop = (changes: ParamPatch) => {
+    update(changes);
     window.scrollTo(0, 0);
   };
 
   const actions: ListActions = {
-    setPage: (n) => updateFromTop({ page: String(n) }),
-    setPerPage: (n) => updateFromTop({ per: String(n), page: "1" }),
-    search: (q) => update({ q, type: null, gen: null, page: null }),
-    clearSearch: () => update({ q: null, page: "1" }),
+    setPage: (n) => updateFromTop({ [PAGE]: String(n) }),
+    setPerPage: (n) => updateFromTop({ [PER]: String(n), [PAGE]: "1" }),
+    search: (q) => update({ [Q]: q, [TYPE]: null, [GEN]: null, [PAGE]: null }),
+    clearSearch: () => update({ [Q]: null, [PAGE]: "1" }),
 
     // Types combine with AND and cap at MAX_TYPES; gen combines on top of them,
     // and clearing one never touches the other.
@@ -115,23 +106,23 @@ export const useListParams = ({
         ? types.filter((active) => active !== type)
         : [...types, type];
       if (next.length > MAX_TYPES) return;
-      updateFromTop({ type: serializeTypes(next), q: null, page: "1" });
+      updateFromTop({ [TYPE]: serializeTypes(next), [Q]: null, [PAGE]: "1" });
     },
     clearTypes: () => {
       if (types.length === 0) return;
-      updateFromTop({ type: null, page: "1" });
+      updateFromTop({ [TYPE]: null, [PAGE]: "1" });
     },
     setGen: (g) => {
       if (g === null) {
         if (gen === null) return;
-        updateFromTop({ gen: null, page: "1" });
+        updateFromTop({ [GEN]: null, [PAGE]: "1" });
       } else {
-        updateFromTop({ gen: g, q: null, page: "1" });
+        updateFromTop({ [GEN]: g, [Q]: null, [PAGE]: "1" });
       }
     },
     clearAll: () => {
       if (types.length === 0 && gen === null) return;
-      updateFromTop({ type: null, gen: null, page: "1" });
+      updateFromTop({ [TYPE]: null, [GEN]: null, [PAGE]: "1" });
     },
   };
 
@@ -139,7 +130,7 @@ export const useListParams = ({
    * For the caller's out-of-range clamp. Sets the page without scrolling,
    * because a correction is not a navigation the user asked for.
    */
-  const clampPage = (lastPage: number) => update({ page: String(lastPage) });
+  const clampPage = (lastPage: number) => update({ [PAGE]: String(lastPage) });
 
   return { params, actions, clampPage };
 };

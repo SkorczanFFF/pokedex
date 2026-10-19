@@ -1,18 +1,12 @@
 import { useTranslation } from "react-i18next";
+import { gameName } from "@/domain/games";
+import { humanize } from "@/domain/text";
 
-/**
- * Turns a PokéAPI slug into a readable English label:
- * `special-attack` -> `Special Attack`, `solar-power` -> `Solar Power`.
- *
- * Also the fallback for every lookup here and in `evolutionCondition`, so an
- * untranslated entry renders as proper English rather than a raw slug or a
- * blank.
- */
-export const humanize = (slug: string): string =>
-  slug
-    .split("-")
-    .map((word) => (word ? word[0].toUpperCase() + word.slice(1) : word))
-    .join(" ");
+// Display labels for PokéAPI's slugs. Each looks the slug up in its
+// dictionary and falls back to `humanize`, so an untranslated entry renders
+// as proper English rather than a raw slug or a blank.
+
+export { humanize };
 
 /** Display label for a type slug. The slug stays the URL/style key. */
 export const useTypeLabel = () => {
@@ -83,3 +77,9 @@ export const useAbilityLabel = () => {
   const { t } = useTranslation("abilities");
   return (slug: string) => t(slug, { defaultValue: humanize(slug) });
 };
+
+/**
+ * A game's name as printed on its box — a version or a version group alike,
+ * and the same in every language, so there is no dictionary to consult.
+ */
+export const useGameLabel = () => (slug: string) => gameName(slug);

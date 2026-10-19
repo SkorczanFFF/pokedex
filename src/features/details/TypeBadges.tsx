@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { listPath, paths } from "@/app/routes";
 import { PAGE_LINK } from "@/components/chips";
 import { typeClass } from "@/domain/pokemonTypes";
 import { typesInEra } from "@/domain/pokemonView";
@@ -18,7 +19,7 @@ export const TypeBadges = ({ pokemon }: { pokemon: Pokemon }) => {
       {typesInEra(pokemon, era).map((type) => (
         <Link
           key={type.type.name}
-          to={`/?type=${type.type.name}`}
+          to={listPath({ type: type.type.name })}
           aria-label={t("details.showType", {
             type: typeLabel(type.type.name),
           })}
@@ -33,7 +34,7 @@ export const TypeBadges = ({ pokemon }: { pokemon: Pokemon }) => {
           what the badges mean. Framed, not coloured: the colours are the types.
           Spaced by the row's gap alone: a margin of its own indented it once
           it wrapped onto a line of its own. */}
-      <Link to="/types" className={PAGE_LINK}>
+      <Link to={paths.types} className={PAGE_LINK}>
         {t("types.link")}
       </Link>
     </div>

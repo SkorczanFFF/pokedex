@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { moveQuery } from "@/api/queries";
 import { moveInGame, moveMethodAccent } from "@/domain/moves";
 import { typeClass } from "@/domain/pokemonTypes";
-import { humanize, useDamageClassLabel, useTypeLabel } from "@/i18n/labels";
+import { useDamageClassLabel, useGameLabel, useTypeLabel } from "@/i18n/labels";
+import { useLocale } from "@/i18n/locale";
 import { useTranslatedMoveText } from "@/i18n/translated";
 
 /**
@@ -29,9 +30,11 @@ export const MoveDetails = ({
   game: string;
   method: string;
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const locale = useLocale();
   const typeLabel = useTypeLabel();
   const damageClassLabel = useDamageClassLabel();
+  const gameLabel = useGameLabel();
   const translatedText = useTranslatedMoveText();
 
   const { data, isLoading, error } = useQuery(moveQuery(name));
@@ -41,7 +44,6 @@ export const MoveDetails = ({
   // replacing anything with an error.
   if (error || !data) return null;
 
-  const locale = i18n.resolvedLanguage ?? "en";
   const move = moveInGame(data, game, locale, translatedText(name));
 
   return (
@@ -90,7 +92,7 @@ export const MoveDetails = ({
           {move.textFromGame && move.textFromGame !== game && (
             <span className="ml-2 text-gray-500">
               {t("details.moveTextFrom", {
-                game: humanize(move.textFromGame),
+                game: gameLabel(move.textFromGame),
               })}
             </span>
           )}

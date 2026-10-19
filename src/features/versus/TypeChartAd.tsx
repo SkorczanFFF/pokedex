@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { paths } from "@/app/routes";
 import { AdAction, AdBox, StadiumTitle } from "@/components/AdBox";
 import { typeClass, type PokemonType } from "@/domain/pokemonTypes";
 import type { TypeChart } from "@/domain/typeChart";
@@ -18,7 +19,7 @@ export const TypeChartAd = ({ chart }: { chart: TypeChart }) => {
   const { t } = useTranslation();
 
   return (
-    <AdBox to="/types" label={t("versus.chartAd")}>
+    <AdBox to={paths.types} label={t("versus.chartAd")}>
       <MiniChart chart={chart} />
       <span className="min-w-0 flex-1 text-center">
         <StadiumTitle>{t("types.link")}</StadiumTitle>

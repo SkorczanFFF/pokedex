@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { versusPath } from "@/app/routes";
 import { AdAction, AdBox, StadiumTitle } from "@/components/AdBox";
 import { crystalAnimated } from "@/domain/resource";
 import { humanize } from "@/i18n/labels";
@@ -18,7 +19,7 @@ export const VersusAd = () => {
 
   return (
     <AdBox
-      to={`/versus?a=${YOURS.name}&b=${FOE.name}`}
+      to={versusPath({ a: YOURS.name, b: FOE.name })}
       label={t("types.versusAd")}
     >
       {/* Mirrored to face Jigglypuff; the GIFs' white is the box's white. */}

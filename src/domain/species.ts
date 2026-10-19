@@ -2,7 +2,13 @@ import type { PokemonSpecies } from "@/types/pokemon";
 import { genSlugOf, type GenSlug } from "./dex";
 import { newestInEra, type DexEra } from "./era";
 import { generationOfVersion } from "./games";
-import { cleanFlavorText, flattenTranslated, inLanguage, type TranslatedText } from "./text";
+import {
+  FALLBACK_LANGUAGE,
+  cleanFlavorText,
+  flattenTranslated,
+  inLanguage,
+  type TranslatedText,
+} from "./text";
 
 // Reading a species payload: which language wins, which game's text wins, and
 // what the raw fields mean. Fetching one is `api/species.ts` — choosing what to
@@ -67,14 +73,14 @@ export const getDescription = (
   return {
     text: entry ? cleanFlavorText(entry.flavor_text) : "",
     // `inLanguage` answers in `locale` when it can and in English otherwise.
-    language: entry?.language.name ?? "en",
+    language: entry?.language.name ?? FALLBACK_LANGUAGE,
   };
 };
 
 /** The "Seed Pokémon" line. Genera carry no version, so the era has no say. */
 export const getGenus = (
   species: PokemonSpecies,
-  locale = "en",
+  locale = FALLBACK_LANGUAGE,
   translated: TranslatedSpeciesText | null = null
 ): string =>
   translated?.genus ||

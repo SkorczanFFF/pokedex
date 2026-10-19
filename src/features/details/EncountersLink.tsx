@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { encountersQuery } from "@/api/queries";
+import { encountersPath } from "@/app/routes";
 import { ACTION } from "@/components/chips";
 import { hasPlacesInEra } from "@/domain/encounters";
 import { useEra } from "@/era/context";
@@ -28,7 +29,7 @@ export const EncountersLink = ({ pokemon }: { pokemon: Pokemon }) => {
 
   return (
     <Link
-      to={`/pokemon/${pokemon.name}/encounters`}
+      to={encountersPath(pokemon.name)}
       // Carries the list origin forward, so the chain back to the list survives
       // the detour.
       state={location.state}

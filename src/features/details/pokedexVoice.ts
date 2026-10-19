@@ -1,4 +1,5 @@
 import type { DexEra } from "@/domain/era";
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/i18n/locale";
 import configUrl from "mespeak/src/mespeak_config.json?url";
 import enUrl from "mespeak/voices/en/en-us.json?url";
 import plUrl from "mespeak/voices/pl.json?url";
@@ -11,7 +12,8 @@ const STYLES = {
   "8-bit": { pitch: 50, speed: 150, rate: 8000, bits: 5 },
 } satisfies Record<DexEra["voice"], unknown>;
 
-const VOICES: Record<string, string> = { pl: "pl", en: "en/en-us" };
+/** meSpeak's voice file for each language the UI reads in. */
+const VOICES: Record<Locale, string> = { pl: "pl", en: "en/en-us" };
 
 // ~1 MB gzipped, so it is fetched on the first read rather than with the page.
 let engine: Promise<MeSpeak> | null = null;
@@ -100,7 +102,7 @@ export const say = (
       if (active !== stop) return;
       const { pitch, speed, rate, bits } = STYLES[style];
       const wav = meSpeak.speak(utf8(text), {
-        voice: VOICES[lang] ?? VOICES.en,
+        voice: VOICES[isLocale(lang) ? lang : DEFAULT_LOCALE],
         pitch,
         speed,
         rawdata: "arraybuffer",

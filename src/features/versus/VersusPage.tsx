@@ -7,10 +7,11 @@ import { Arrow } from "@/components/Arrow";
 import { MENU_ITEM } from "@/components/BattleScreen";
 import { ACTION } from "@/components/chips";
 import { abilityRule, defaultAbility, hasAbility } from "@/domain/abilities";
-import { genRoman, generationFromId } from "@/domain/dex";
+import { genRoman } from "@/domain/dex";
 import { isInEra, type DexEra } from "@/domain/era";
 import type { TypeChart } from "@/domain/typeChart";
 import { useEra } from "@/era/context";
+import { useNotInEraText } from "@/features/shared/useNotInEraText";
 import { useTypeChart } from "@/features/types/useTypeChart";
 import { humanize } from "@/i18n/labels";
 import { AbilityPicker } from "./AbilityPicker";
@@ -292,20 +293,13 @@ const Message = ({
 
 const Problem = ({ fighter }: { fighter: Fighter }) => {
   const { t } = useTranslation();
-  const { era } = useEra();
-  const name = fighter.name ? humanize(fighter.name) : "";
+  const notInEra = useNotInEraText();
 
   let text: string;
   if (fighter.status === "outOfEra") {
-    const gen = generationFromId(fighter.pokemon.id);
-    text = t(gen ? "era.notHereBody" : "era.notHereBodyNoGen", {
-      name,
-      id: fighter.pokemon.id,
-      gen: gen ? genRoman(gen) : "",
-      max: era.maxDexId,
-    });
+    text = notInEra(fighter.pokemon);
   } else if (fighter.status === "notFound") {
-    text = t("versus.notFound", { name });
+    text = t("versus.notFound", { name: fighter.name ? humanize(fighter.name) : "" });
   } else {
     text = t("error.details");
   }

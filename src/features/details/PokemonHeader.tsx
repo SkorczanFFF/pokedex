@@ -4,6 +4,7 @@ import { getDescription, getGeneration, getGenus } from "@/domain/species";
 import type { SpriteSetId } from "@/domain/sprites";
 import { useEra } from "@/era/context";
 import { VersusLink } from "@/features/versus/VersusLink";
+import { useLocale } from "@/i18n/locale";
 import { useTranslatedSpeciesText } from "@/i18n/translated";
 import type { Pokemon, PokemonSpecies } from "@/types/pokemon";
 import { CryButton } from "./CryButton";
@@ -25,10 +26,9 @@ export const PokemonHeader = ({
   /** The picture up in the column beside, which the cry follows. */
   spriteSet: SpriteSetId;
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { era } = useEra();
-
-  const locale = i18n.resolvedLanguage ?? "en";
+  const locale = useLocale();
   // PokéAPI has no Polish species text; `translated` is where it comes from
   // instead, and is null for every language PokéAPI does answer for.
   const translated = useTranslatedSpeciesText()(pokemon.species.name);
