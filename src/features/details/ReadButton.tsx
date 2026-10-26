@@ -4,7 +4,7 @@ import { ACTION } from "@/components/buttons";
 import { useEra } from "@/app/era/context";
 import { hush, say } from "@/media/pokedexVoice";
 
-/** Reads the entry aloud in the dex's own robot voice; a second press stops it. */
+/** Reads the entry aloud in the dex's voice; a second press stops it. */
 export const ReadButton = ({
   name,
   text,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cleanFlavorText, flattenTranslated, humanize, inLanguage } from "./text";
+import { cleanFlavorText, flattenTranslated, humanize, inLanguage, speakable } from "./text";
 
 describe("humanize", () => {
   it("turns a slug into words", () => {
@@ -11,12 +11,23 @@ describe("humanize", () => {
 });
 
 describe("cleanFlavorText", () => {
-  it("turns the games' breaks and soft hyphens into spaces", () => {
+  it("turns the games' breaks into spaces and joins words a soft hyphen split", () => {
     expect(cleanFlavorText("A strange seed was\nplanted on its\fback at birth.")).toBe(
       "A strange seed was planted on its back at birth.",
     );
     expect(cleanFlavorText("  trailing\r\n")).toBe("trailing");
-    expect(cleanFlavorText("soft­hyphen")).toBe("soft hyphen");
+    expect(cleanFlavorText("draws en­\nergy")).toBe("draws energy");
+    expect(cleanFlavorText("soft­hyphen")).toBe("softhyphen");
+  });
+});
+
+describe("speakable", () => {
+  it("quiets shouted words and leaves short ones to be spelled", () => {
+    expect(speakable("This POKéMON hits BULBASAUR for 10 HP.")).toBe(
+      "This Pokémon hits Bulbasaur for 10 HP.",
+    );
+    expect(speakable("Ten POKéMON żyje w GÓRACH.")).toBe("Ten Pokémon żyje w Górach.");
+    expect(speakable("A Pokémon.")).toBe("A Pokémon.");
   });
 });
 

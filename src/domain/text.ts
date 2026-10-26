@@ -15,9 +15,23 @@ export const humanize = (slug: string): string =>
     .map((word) => (word ? word[0].toUpperCase() + word.slice(1) : word))
     .join(" ");
 
-/** Flavour text carries the games' own line breaks, form feeds and soft hyphens; one space each. */
+/**
+ * Flavour text carries the games' own line breaks and form feeds, one space each. A soft
+ * hyphen splits a word across lines, so it goes with the break after it.
+ */
 export const cleanFlavorText = (text: string): string =>
-  text.replace(/[\f\n\r­]/g, " ").trim();
+  text.replace(/­[\f\n\r]*/g, "").replace(/[\f\n\r]/g, " ").trim();
+
+/**
+ * Old entries shout ("POKéMON", "BULBASAUR"), which a speech engine spells out letter by
+ * letter. Their "é" stayed small, so it counts as a capital.
+ */
+export const speakable = (text: string): string =>
+  text.replace(/\p{L}{3,}/gu, (word) =>
+    word.replace(/é/g, "É") === word.toUpperCase()
+      ? word[0] + word.slice(1).toLowerCase()
+      : word,
+  );
 
 /**
  * Every entry in the best available language: the one asked for, else English.

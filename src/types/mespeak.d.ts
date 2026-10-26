@@ -2,6 +2,7 @@
 declare module "mespeak" {
   interface SpeakOptions {
     voice?: string;
+    variant?: string;
     pitch?: number;
     speed?: number;
     rawdata?: "arraybuffer";
