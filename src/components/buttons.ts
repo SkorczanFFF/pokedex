@@ -30,6 +30,9 @@ export const INPUT = "h-9 border-2 px-2 text-sm bg-white";
 /** The closed box of a dropdown, the height of the buttons beside it. */
 export const SELECT = "h-9 border-2 pl-2 bg-white";
 
+/** A link inside running text: About's sources, a Stadium cup's banned Pokémon. */
+export const TEXT_LINK = "underline underline-offset-2 hover:text-dex-red";
+
 /**
  * A framed link is a reference page that is about no Pokémon in particular:
  * the chart. Framed like a menu box, so it is neither a picker's wash nor an

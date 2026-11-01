@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { MenuCursor } from "./menu";
 
 /** The Gen I text box: a thick black frame on white, with room inside. */
 export const GbBox = ({
@@ -11,6 +12,17 @@ export const GbBox = ({
   <div className={`border-4 border-black bg-white p-4 md:p-6 ${className}`}>
     {children}
   </div>
+);
+
+/** One Gen I text box per subject, headed like a menu line: About's, a Stadium cup's. */
+export const GbSection = ({ heading, children }: { heading: string; children: ReactNode }) => (
+  <GbBox>
+    <h2 className="mb-4 flex items-center gap-2 text-sm">
+      <MenuCursor className="opacity-50" />
+      {heading}
+    </h2>
+    <div className="space-y-3 text-xs leading-relaxed">{children}</div>
+  </GbBox>
 );
 
 /**

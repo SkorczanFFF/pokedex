@@ -332,5 +332,109 @@
       },
       "trademark": "Pokémon i nazwy Pokémonów są znakami towarowymi Nintendo, Game Freak i The Pokémon Company. To projekt fanowski, niekomercyjny i niezwiązany z żadną z tych firm."
     }
+  },
+  "stadium": {
+    "title": "Pokémon Stadium",
+    "intro": "Puchary obu Stadionów z Nintendo 64 i to, czego Pokémon potrzebuje, żeby go do nich wpuszczono.",
+    "switch": "Gry Stadium",
+    "general": "W każdym pucharze",
+    "source": "Zasady według <bp>Bulbapedii</bp>, sprawdzone z <serebii>Serebii</serebii>.",
+    "games": {
+      "1": {
+        "name": "Pokémon Stadium",
+        "line": "Gen I: Pokémony z Red, Blue i Yellow w czterech pucharach, Gym Leader Castle i walce z Mewtwo.",
+        "intro": "Nintendo 64, poza Japonią w 2000 roku. W Japonii była to Pokémon Stadium 2: pierwszy Stadium, z ledwie 40 Pokémonami, nigdy nie wyjechał z kraju.",
+        "rules": [
+          "Zgłaszasz {{entered}} Pokémonów, własne z Red, Blue albo Yellow przez Transfer Pak lub wypożyczone, a do każdej walki wysyłasz {{battle}} z nich.",
+          "Żadne dwa nie mogą być tego samego gatunku.",
+          "Sleep Clause: dopóki któryś Pokémon drużyny śpi, także po Odpoczynku, ruchy usypiające wymierzone w tę drużynę zawodzą.",
+          "Freeze Clause: zamrożony może być naraz tylko jeden Pokémon drużyny.",
+          "Self-KO Clause: gdy Samozniszczenie albo Eksplozja ostatniego Pokémona powali obie strony, przegrywa jego strona.",
+          "Puchar to {{trainers}} trenerów pod rząd. Wygrana bez omdlenia daje Continue, kolejną próbę po porażce.",
+          "Ukończenie wszystkich pucharów, Gym Leader Castle i Mewtwo otwiera Round 2: te same zasady przeciw silniejszym drużynom."
+        ]
+      },
+      "2": {
+        "name": "Pokémon Stadium 2",
+        "line": "Gen II: Pokémony z Gold, Silver i Crystal oraz z gier Gen I w czterech pucharach, Gym Leader Castle i walce z rywalem.",
+        "intro": "Nintendo 64, poza Japonią w 2001 roku; w Japonii Pokémon Stadium Gold and Silver.",
+        "rules": [
+          "Zgłaszasz {{entered}} Pokémonów, własne z Gold, Silver, Crystal albo gier Gen I przez Transfer Pak lub wypożyczone, a do każdej walki wysyłasz {{battle}} z nich.",
+          "Żadne dwa nie mogą być tego samego gatunku ani trzymać tego samego przedmiotu.",
+          "Sleep Clause: dopóki któryś Pokémon drużyny śpi, także po Odpoczynku, ruchy usypiające wymierzone w tę drużynę zawodzą.",
+          "Freeze Clause: zamrożony może być naraz tylko jeden Pokémon drużyny.",
+          "Self-KO Clause: gdy Samozniszczenie albo Eksplozja ostatniego Pokémona powali obie strony, przegrywa jego strona. Więź losu i Pieśń zguby użyte przez ostatniego Pokémona zawodzą.",
+          "Puchar to {{trainers}} trenerów pod rząd. Wygrana bez omdlenia daje Continue, kolejną próbę po porażce.",
+          "Ukończenie wszystkich pucharów, Gym Leader Castle i walki z rywalem otwiera Round 2: te same zasady przeciw silniejszym drużynom."
+        ]
+      }
+    },
+    "cups": {
+      "pika": "Pika Cup",
+      "petit": "Petit Cup",
+      "poke": "Poké Cup",
+      "prime": "Prime Cup",
+      "little": "Little Cup",
+      "challenge": "Challenge Cup",
+      "castle": "Gym Leader Castle",
+      "mewtwo": "Vs. Mewtwo",
+      "rival": "Vs. Rival"
+    },
+    "balls": {
+      "poke-ball": "Poké Ball",
+      "great-ball": "Great Ball",
+      "ultra-ball": "Ultra Ball",
+      "master-ball": "Master Ball"
+    },
+    "row": {
+      "level": "Poziom",
+      "total": "Suma poziomów",
+      "size": "Rozmiar",
+      "classes": "Klasy",
+      "banned": "Bez wstępu",
+      "moves": "Zakazane ruchy",
+      "eligible": "Mieści się",
+      "foes": "Przeciwnicy"
+    },
+    "totalValue": "najwyżej {{total}} dla {{battle}} walczących",
+    "sizeValue": "do {{height, number}} m i {{weight, number}} kg, włącznie",
+    "oneClass": "tylko jedna",
+    "classLevel": "{{ball}}: poz. {{level}}",
+    "nobody": "nikt",
+    "eligibleValue_one": "{{count}} gatunek",
+    "eligibleValue_few": "{{count}} gatunki",
+    "eligibleValue_many": "{{count}} gatunków",
+    "eligibleValue_other": "{{count}} gatunku",
+    "foesLevel": "poz. {{level}}",
+    "foesMatch": "poz. {{level}}, albo poziom Twojego najwyższego Pokémona, jeśli ten jest wyższy",
+    "notes": {
+      "1": {
+        "petit": [
+          "Tylko Pokémony, które nie ewoluowały — a więc także Farfetch'd i Ditto, które nie ewoluują wcale."
+        ],
+        "castle": [
+          "Osiem sal po cztery walki, trzech trenerów i lider; po nich Elitarna Czwórka i rywal."
+        ],
+        "mewtwo": [
+          "Otwiera się po ukończeniu wszystkich pucharów i Gym Leader Castle.",
+          "Do {{entered}} Twoich przeciw samemu Mewtwo."
+        ]
+      },
+      "2": {
+        "little": [
+          "Tylko Pokémony, które nie ewoluowały i mogą jeszcze ewoluować w Gen II: Pichu i Marill wchodzą, Pikachu nie, Tangela też nie, bo ewoluuje dopiero w Gen IV."
+        ],
+        "challenge": [
+          "Ani własnych Pokémonów, ani wybranych wypożyczonych: każde podejście rozdaje {{entered}} losowych wypożyczonych z losowymi ruchami, a drużyny przeciwników też są losowe."
+        ],
+        "castle": [
+          "Osiem sal Johto z Zespołem R po drodze, potem Elitarna Czwórka i Lance; po nich osiem sal Kanto, a na końcu Red."
+        ],
+        "rival": [
+          "Otwiera się po ukończeniu wszystkich pucharów i Gym Leader Castle.",
+          "Do {{entered}} Twoich przeciw jego trzem: Mewtwo, Lugii i Ho-Oh."
+        ]
+      }
+    }
   }
 }

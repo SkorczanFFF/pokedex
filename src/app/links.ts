@@ -13,4 +13,8 @@ export const LINKS = {
   espeak: "https://espeak.sourceforge.net/",
   font: "https://fonts.google.com/specimen/Press+Start+2P",
   pokered: "https://github.com/pret/pokered",
+  bulbapediaStadium: "https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Stadium",
+  bulbapediaStadium2: "https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_Stadium_2",
+  serebiiStadium: "https://www.serebii.net/stadium/",
+  serebiiStadium2: "https://www.serebii.net/stadium2/",
 } as const;

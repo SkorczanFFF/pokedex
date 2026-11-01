@@ -16,6 +16,32 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the two stadiums' cups and who may enter them, under /stadium for now`
+
+- **Added** — `/stadium` forks into the two Nintendo 64 games, `/stadium/1` and
+  `/stadium/2`. Each opens on the rules every one of its cups shares — six entered and three
+  sent out, no twin species (and in Stadium 2 no twin items), the Sleep, Freeze and Self-KO
+  Clauses, eight trainers in a row, Round 2 — and then gives a box per cup: Pika, Petit,
+  Poké and Prime Cup, the Gym Leader Castle and Mewtwo in the first; Little, Poké, Prime and
+  Challenge Cup, the Castle and the rival in the second. A box lists the levels, the level
+  total for the three in battle, the classes, Petit's height and weight caps, who is kept
+  out (each a link to its dex page), Little Cup's banned moves in the dex's own move names,
+  how many species fit where the rules leave a short list, and the opponents' level, with
+  the conditions that are sentences rather than numbers under the rows. An unknown game is
+  the 404. Nothing links here yet: the page is reached by its address until it goes in the
+  navbar.
+- **Changed** — About's text box with a menu-line heading, its bullet list and its link out
+  move to `components/` as `GbSection`, `Bullets`, `ExternalLink` and `TEXT_LINK`, so the
+  Stadium pages draw the same; About looks as it did.
+- **Checked** — The cup table in `domain/stadium.ts` was read from Bulbapedia's Stadium,
+  Stadium 2 and cup pages — through search excerpts, since Bulbapedia's Cloudflare turns
+  away a direct fetch — and set against Serebii's cup pages and WikiDex. Where they
+  disagree: Pika Cup keeps out Mewtwo and Mew as Bulbapedia says, not Mew alone (WikiDex) or
+  nobody (Serebii); Petit Cup's caps of 2 m and 20 kg are inclusive and take in Farfetch'd
+  and Ditto, because the 45 species all three count only come out so, with Ekans at exactly
+  2 m and Geodude at exactly 20 kg; the Stadium 2 rival battle keeps the Sleep and Freeze
+  Clauses, which Bulbapedia says hold in every mode and Serebii lists as off.
+
 ### `fix: the chart and Versus stand on one screen, and the names, numbers and selects draw alike everywhere`
 
 - **Fixed** — The two pages that end on an ad for each other were laid out as two different

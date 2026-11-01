@@ -13,6 +13,7 @@ import { NotFound } from "@/components/NotFound";
 import { TypeChartPage } from "@/features/types/TypeChartPage";
 import { VersusPage } from "@/features/versus/VersusPage";
 import { AboutPage } from "@/features/about/AboutPage";
+import { StadiumGamePage, StadiumPage } from "@/features/stadium/StadiumPage";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
@@ -42,6 +43,8 @@ function App() {
                 <Route path={paths.versus} element={<VersusPage />} />
                 <Route path={paths.formerVersus} element={<FormerVersusAddress />} />
                 <Route path={paths.about} element={<AboutPage />} />
+                <Route path={paths.stadium} element={<StadiumPage />} />
+                <Route path={paths.stadiumGame} element={<StadiumGamePage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

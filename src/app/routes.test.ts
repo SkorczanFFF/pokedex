@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { encountersPath, listPath, paths, pokemonPath, versusPath } from "./routes";
+import { encountersPath, listPath, paths, pokemonPath, stadiumPath, versusPath } from "./routes";
 
 describe("routes", () => {
   it("builds a Pokémon's addresses from the route patterns", () => {
@@ -19,5 +19,10 @@ describe("routes", () => {
     expect(versusPath({ a: "pikachu" })).toBe("/versus?a=pikachu");
     expect(versusPath({ a: "meowth", b: "jigglypuff" })).toBe("/versus?a=meowth&b=jigglypuff");
     expect(versusPath({ a: null, b: "gyarados" })).toBe("/versus?b=gyarados");
+  });
+
+  it("puts the Stadium game in the path", () => {
+    expect(stadiumPath("1")).toBe("/stadium/1");
+    expect(stadiumPath("2")).toBe("/stadium/2");
   });
 });

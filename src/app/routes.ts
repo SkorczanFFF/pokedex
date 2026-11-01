@@ -1,6 +1,8 @@
 // Every address in the app, and the query keys its pages read, named once:
 // the router declares `paths`, and every link is built by a function here.
 
+import type { StadiumGame } from "@/domain/stadium";
+
 export const paths = {
   list: "/",
   pokemon: "/pokemon/:name",
@@ -11,6 +13,9 @@ export const paths = {
   /** Versus first shipped here; links to it still land, picks and all. */
   formerVersus: "/compare",
   about: "/about",
+  /** The fork between the two N64 games; each game's cups live a step below it. */
+  stadium: "/stadium",
+  stadiumGame: "/stadium/:game",
 } as const;
 
 /** The list's query string: the page, its size, the search, and the two filters. */
@@ -45,6 +50,9 @@ export const pokemonPath = (name: string): string =>
 
 export const encountersPath = (name: string): string =>
   paths.encounters.replace(":name", name);
+
+export const stadiumPath = (game: StadiumGame): string =>
+  paths.stadiumGame.replace(":game", game);
 
 /** The list, narrowed to a type or a generation; bare, the whole dex. */
 export const listPath = (

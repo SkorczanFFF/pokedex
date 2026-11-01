@@ -319,5 +319,107 @@
       },
       "trademark": "Pokémon and Pokémon character names are trademarks of Nintendo, Game Freak and The Pokémon Company. This is a fan project, non-commercial and unaffiliated with any of them."
     }
+  },
+  "stadium": {
+    "title": "Pokémon Stadium",
+    "intro": "The cups of both Nintendo 64 Stadiums, and what a Pokémon needs to be let into each.",
+    "switch": "Stadium games",
+    "general": "Every cup",
+    "source": "The rules as <bp>Bulbapedia</bp> records them, checked against <serebii>Serebii</serebii>.",
+    "games": {
+      "1": {
+        "name": "Pokémon Stadium",
+        "line": "Gen I: Pokémon from Red, Blue and Yellow, in four cups, the Gym Leader Castle and a battle with Mewtwo.",
+        "intro": "Nintendo 64, 2000 outside Japan. In Japan it was Pokémon Stadium 2: the first Stadium, with only 40 Pokémon, never left the country.",
+        "rules": [
+          "You enter {{entered}} Pokémon, your own from Red, Blue or Yellow through the Transfer Pak or rentals, and send {{battle}} of them into each battle.",
+          "No two of the same species.",
+          "Sleep Clause: while one of a team's Pokémon is asleep, Rest included, sleep moves aimed at that team fail.",
+          "Freeze Clause: only one of a team's Pokémon can be frozen at a time.",
+          "Self-KO Clause: when a last Pokémon's Self-Destruct or Explosion knocks out both sides, its own side loses.",
+          "A cup is {{trainers}} trainers in a row. A win without a faint earns a Continue, another try after a loss.",
+          "Clearing every cup, the Gym Leader Castle and Mewtwo opens Round 2: the same rules against stronger teams."
+        ]
+      },
+      "2": {
+        "name": "Pokémon Stadium 2",
+        "line": "Gen II: Pokémon from Gold, Silver and Crystal, and from the Gen I games, in four cups, the Gym Leader Castle and a battle with the rival.",
+        "intro": "Nintendo 64, 2001 outside Japan, where it was Pokémon Stadium Gold and Silver.",
+        "rules": [
+          "You enter {{entered}} Pokémon, your own from Gold, Silver, Crystal or the Gen I games through the Transfer Pak or rentals, and send {{battle}} of them into each battle.",
+          "No two of the same species, and no two holding the same item.",
+          "Sleep Clause: while one of a team's Pokémon is asleep, Rest included, sleep moves aimed at that team fail.",
+          "Freeze Clause: only one of a team's Pokémon can be frozen at a time.",
+          "Self-KO Clause: when a last Pokémon's Self-Destruct or Explosion knocks out both sides, its own side loses. Destiny Bond and Perish Song fail when a last Pokémon uses them.",
+          "A cup is {{trainers}} trainers in a row. A win without a faint earns a Continue, another try after a loss.",
+          "Clearing every cup, the Gym Leader Castle and the rival opens Round 2: the same rules against stronger teams."
+        ]
+      }
+    },
+    "cups": {
+      "pika": "Pika Cup",
+      "petit": "Petit Cup",
+      "poke": "Poké Cup",
+      "prime": "Prime Cup",
+      "little": "Little Cup",
+      "challenge": "Challenge Cup",
+      "castle": "Gym Leader Castle",
+      "mewtwo": "Vs. Mewtwo",
+      "rival": "Vs. Rival"
+    },
+    "balls": {
+      "poke-ball": "Poké Ball",
+      "great-ball": "Great Ball",
+      "ultra-ball": "Ultra Ball",
+      "master-ball": "Master Ball"
+    },
+    "row": {
+      "level": "Level",
+      "total": "Level total",
+      "size": "Size",
+      "classes": "Classes",
+      "banned": "Kept out",
+      "moves": "Banned moves",
+      "eligible": "Who fits",
+      "foes": "Opponents"
+    },
+    "totalValue": "at most {{total}} for the {{battle}} in battle",
+    "sizeValue": "up to {{height, number}} m and {{weight, number}} kg, both included",
+    "oneClass": "just one",
+    "classLevel": "{{ball}}: Lv. {{level}}",
+    "nobody": "nobody",
+    "eligibleValue_one": "{{count}} species",
+    "eligibleValue_other": "{{count}} species",
+    "foesLevel": "Lv. {{level}}",
+    "foesMatch": "Lv. {{level}}, or your highest Pokémon's level when that is higher",
+    "notes": {
+      "1": {
+        "petit": [
+          "Only Pokémon that have not evolved, which takes in Farfetch'd and Ditto: they never do."
+        ],
+        "castle": [
+          "Eight gyms of four battles each, three trainers and then the leader; after them the Elite Four and the rival."
+        ],
+        "mewtwo": [
+          "Opens once every cup and the Castle are cleared.",
+          "Up to {{entered}} of yours against Mewtwo alone."
+        ]
+      },
+      "2": {
+        "little": [
+          "Only Pokémon that have not evolved and can still evolve in Gen II: Pichu and Marill can enter, Pikachu cannot, and neither can Tangela, which waits for Gen IV to evolve."
+        ],
+        "challenge": [
+          "No Pokémon of your own and no rentals of your choosing: each attempt deals out {{entered}} random rentals with random moves, and the opponents' teams are random too."
+        ],
+        "castle": [
+          "Johto's eight gyms with Team Rocket on the way, then the Elite Four and Lance; after them Kanto's eight gyms, and Red last."
+        ],
+        "rival": [
+          "Opens once every cup and the Castle are cleared.",
+          "Up to {{entered}} of yours against his three: Mewtwo, Lugia and Ho-Oh."
+        ]
+      }
+    }
   }
 }

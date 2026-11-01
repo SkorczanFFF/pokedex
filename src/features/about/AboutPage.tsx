@@ -3,8 +3,9 @@ import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { LINKS } from "@/app/links";
 import { encountersPath, paths, pokemonPath } from "@/app/routes";
-import { GbBox, Screen } from "@/components/layout";
-import { MenuCursor } from "@/components/menu";
+import { TEXT_LINK } from "@/components/buttons";
+import { GbSection as Box, Screen } from "@/components/layout";
+import { Bullets, ExternalLink as Ext } from "@/components/prose";
 import { lastDexId } from "@/domain/dex";
 import { RETRO } from "@/domain/era";
 import { typesUpTo } from "@/domain/pokemonTypes";
@@ -48,38 +49,11 @@ const EXAMPLE = "meowth";
 
 const POLISH_ROWS = ["dex", "genus", "moveNames", "moveTexts", "abilities"] as const;
 
-const LINK = "underline underline-offset-2 hover:text-dex-red";
-
-const Ext = ({ href, children }: { href: string; children?: ReactNode }) => (
-  <a href={href} target="_blank" rel="noopener noreferrer" className={LINK}>
-    {children}
-  </a>
-);
-
-/** One Gen I text box per subject, headed like a menu line. */
-const Box = ({ heading, children }: { heading: string; children: ReactNode }) => (
-  <GbBox>
-    <h2 className="mb-4 flex items-center gap-2 text-sm">
-      <MenuCursor className="opacity-50" />
-      {heading}
-    </h2>
-    <div className="space-y-3 text-xs leading-relaxed">{children}</div>
-  </GbBox>
-);
-
-const Bullets = ({ items }: { items: string[] }) => (
-  <ul className="list-disc space-y-1 pl-5">
-    {items.map((item) => (
-      <li key={item}>{item}</li>
-    ))}
-  </ul>
-);
-
 /** A page of the app and what it lets a reader do, the name being the way there. */
 const Page = ({ to, name, children }: { to: string; name: string; children: ReactNode }) => (
   <div>
     <dt>
-      <Link to={to} className={LINK}>
+      <Link to={to} className={TEXT_LINK}>
         {name}
       </Link>
     </dt>
