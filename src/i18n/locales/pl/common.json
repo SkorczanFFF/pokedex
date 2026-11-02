@@ -4,6 +4,7 @@
     "language": "Język",
     "switchTo": "Zmień język na {{language}}",
     "menu": "Menu",
+    "stadium": "Stadium",
     "versus": "Versus"
   },
   "types": {
@@ -294,6 +295,7 @@
         "sprite'y z Crystal zamiast artworku, głos z Game Boya zamiast dzisiejszego nagrania;",
         "tabela typów na {{retroTypes}} typów z Gen II, z przypisem o czterech dziwactwach Gen I;",
         "miejsca spotkań z Red, Blue, Yellow, Gold, Silver i Crystal;",
+        "Stadium w pasku nawigacji: obie gry z Nintendo 64 kończą się na Gen II, więc nowoczesny dex go pomija;",
         "robot czytający wpis zgnieciony do 8 kHz i 5 bitów."
       ],
       "note": "Każda z tych reguł to jedno pole w jednej tabeli w kodzie, więc era Gen I kosztowałaby jeden wpis więcej."
@@ -305,7 +307,7 @@
       "encounters": "Lokacje, poziomy i szanse, gra po grze; szansa jest sumowana w obrębie jednego zestawu warunków, bo własna suma PokéAPI przekracza czasem 100%.",
       "types": "Co atak każdego typu robi Pokémonowi każdego innego, według ery, z listą komórek, które kiedyś czytały się inaczej.",
       "versus": "Dwa Pokémony na ekranie walki: co typy jednego robią drugiemu — z iloczynem po dwóch typach, więc ×4 i ×¼ — statystyki bazowe plecami do siebie i zakładka Ruchy, która liczy trafienie: ruch dla każdej strony, poziom i statystyki pod ręką, obrażenia, procent HP i po ilu trafieniach pada. Jeden sam pokazuje swoje słabości. Para, umiejętności i ruchy siedzą w adresie, więc starcie jest linkiem.",
-      "stadium": "Puchary obu Stadionów z Nintendo 64 i to, kogo wpuszczają, Gym Leader Castle trener po trenerze, co każda gra odblokowuje i rozdaje, jej pozostałe tryby i czym jej walki różnią się od gier na Game Boya.",
+      "stadium": "Puchary obu Stadionów z Nintendo 64 i to, kogo wpuszczają, Gym Leader Castle trener po trenerze, co każda gra odblokowuje i rozdaje, jej pozostałe tryby i czym jej walki różnią się od gier na Game Boya. Navbar pokazuje go, gdy Retro jest włączone.",
       "settings": "Język i era to ustawienia, nie widoki: zapamiętane w przeglądarce, nie w adresie."
     },
     "not": {

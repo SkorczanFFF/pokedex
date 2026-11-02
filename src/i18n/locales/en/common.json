@@ -4,6 +4,7 @@
     "language": "Language",
     "switchTo": "Switch language to {{language}}",
     "menu": "Menu",
+    "stadium": "Stadium",
     "versus": "Versus"
   },
   "types": {
@@ -281,6 +282,7 @@
         "Crystal's sprites instead of the artwork, the Game Boy's cry instead of today's recording;",
         "a type chart of Gen II's {{retroTypes}} types, with Gen I's four quirks footnoted;",
         "encounters from Red, Blue, Yellow, Gold, Silver and Crystal;",
+        "Stadium in the navbar: both Nintendo 64 games stop at Gen II, so the modern dex leaves it out;",
         "the robot that reads the entry crushed to 8 kHz and 5 bits."
       ],
       "note": "Every one of these rules is a field on one table in the code, so a Gen I era would cost one more entry."
@@ -292,7 +294,7 @@
       "encounters": "Places, levels and chances, game by game; a chance is summed within one set of conditions, because PokéAPI's own total sometimes passes 100%.",
       "types": "What an attack of each type does to a Pokémon of each other, as of the era, with the cells that once read differently listed underneath.",
       "versus": "Two Pokémon on the battle screen: what each one's types do to the other — the product over two types, so ×4 and ×¼ — base stats back to back, and a Moves tab that calculates a hit: a move for each side, the level and the stats to hand, the damage, the share of HP and the hits to a knockout. One alone shows its weaknesses. The pair, the abilities and the moves live in the address, so a matchup is a link.",
-      "stadium": "The cups of both Nintendo 64 Stadiums and what each lets in, the Gym Leader Castles trainer by trainer, what each game unlocks and hands out, its other modes, and how its battles differ from the handheld games.",
+      "stadium": "The cups of both Nintendo 64 Stadiums and what each lets in, the Gym Leader Castles trainer by trainer, what each game unlocks and hands out, its other modes, and how its battles differ from the handheld games. The navbar shows it while Retro is on.",
       "settings": "The language and the era are settings, not views: remembered in the browser, not in the address."
     },
     "not": {

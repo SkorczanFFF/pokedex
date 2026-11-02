@@ -1,7 +1,9 @@
 import { useEffect, useId, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useEra } from "@/app/era/context";
 import { paths } from "@/app/routes";
+import { stadiumInEra } from "@/domain/stadium";
 import EraToggle from "./EraToggle";
 import { useEraToggle } from "@/features/shared/useEraToggle";
 import { useEscape } from "@/features/shared/useEscape";
@@ -9,20 +11,28 @@ import { useLanguageSwitch } from "@/features/shared/useLanguageSwitch";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { MENU_ITEM, MenuCursor } from "./menu";
 
+/** Versus stays last; Stadium shows only in an era the games cover. */
 const PAGES = [
   { to: paths.types, label: "types.link" },
+  { to: paths.stadium, label: "nav.stadium", inEra: stadiumInEra },
   { to: paths.versus, label: "nav.versus" },
 ] as const;
 
+const usePages = () => {
+  const { era } = useEra();
+  return PAGES.filter((page) => !("inEra" in page) || page.inEra(era));
+};
+
 /**
- * The logo on the left and, from `md`, everything else on the right: the era,
- * the language, the two pages. Under `md` the right side folds into one
- * hamburger button that drops the same four lines in a Game Boy menu box.
+ * From `md`: the logo with the language beside it on the left, the era and the
+ * pages on the right. Under `md` everything but the logo folds into a hamburger
+ * that drops the same lines in a Game Boy menu box.
  */
 const Navbar = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const menuId = useId();
+  const pages = usePages();
   const [open, setOpen] = useState(false);
 
   // A pick is a navigation, and the menu is not a page to come back to.
@@ -44,14 +54,18 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-nav">
-          <Link to={paths.list}>
-            <span className="text-xl font-bold">Pokédex</span>
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link to={paths.list}>
+              <span className="text-xl font-bold">Pokédex</span>
+            </Link>
+            <div className="hidden md:block">
+              <LanguageSwitcher />
+            </div>
+          </div>
 
           <div className="hidden md:flex items-center gap-3">
             <EraToggle />
-            <LanguageSwitcher />
-            {PAGES.map((page) => (
+            {pages.map((page) => (
               <NavLink key={page.to} to={page.to} className={pageLink}>
                 {t(page.label)}
               </NavLink>
@@ -95,6 +109,7 @@ const Navbar = () => {
 const GameBoyMenu = () => {
   const { t } = useTranslation();
   const era = useEraToggle();
+  const pages = usePages();
   const language = useLanguageSwitch();
 
   return (
@@ -142,7 +157,7 @@ const GameBoyMenu = () => {
             </span>
           </div>
         </li>
-        {PAGES.map((page) => (
+        {pages.map((page) => (
           <li key={page.to}>
             <NavLink
               to={page.to}

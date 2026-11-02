@@ -6,8 +6,10 @@ import {
   STADIUM_GAMES,
   STADIUM_TEAM,
   isStadiumGame,
+  stadiumInEra,
   type StadiumGame,
 } from "./stadium";
+import { MODERN, RETRO } from "./era";
 
 const cups = STADIUM_GAMES.flatMap((game) => STADIUM_CUPS[game].map((cup) => ({ game, cup })));
 
@@ -16,6 +18,11 @@ describe("stadium cups", () => {
     expect(STADIUM_GAMES.every(isStadiumGame)).toBe(true);
     expect(isStadiumGame("3")).toBe(false);
     expect(isStadiumGame(undefined)).toBe(false);
+  });
+
+  it("belongs to an era that stops by Gen II", () => {
+    expect(stadiumInEra(RETRO)).toBe(true);
+    expect(stadiumInEra(MODERN)).toBe(false);
   });
 
   it("names each cup once per game", () => {

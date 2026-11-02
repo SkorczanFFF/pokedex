@@ -16,6 +16,20 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the navbar puts the language beside the logo and Stadium among the pages in Retro, Versus last, and the footer keeps GitHub and About`
+
+- **Changed** — From `md` the language switch stands beside the Pokédex logo and the right
+  side holds Retro, Type chart, Stadium and Versus, Versus always last; it fits from 768 px
+  in Polish, the longer of the two. On a phone everything but the logo stays in the
+  hamburger, in the same order.
+- **Added** — `/stadium`, reached until now only by its address, is a page of the navbar —
+  while Retro is on: neither Nintendo 64 game goes past Gen II, which `stadiumInEra` in the
+  domain says once for the desktop row and the hamburger alike. The page itself still opens
+  by its address in either era, so switching eras on it does not end on a 404. About says so
+  under Stadium and in the list of what Retro changes.
+- **Changed** — The copyright line and the link to the author's site are gone from the
+  footer, and `LINKS.author` with them; GitHub and About stay, in that order, on the left.
+
 ### `feat: each Stadium page walks its castle trainer by trainer and says what the game unlocks, hands out, offers besides the cups and changes in battle`
 
 - **Added** — The Gym Leader Castle box lists every stop: in the first game Kanto's eight gyms

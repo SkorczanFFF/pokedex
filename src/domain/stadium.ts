@@ -1,12 +1,18 @@
 // The cups of the two N64 Stadiums and what each lets in. Hand-written: PokéAPI knows
 // neither game. Read from Bulbapedia, checked against Serebii and WikiDex.
 
+import { genOrder } from "./dex";
+import type { DexEra } from "./era";
+
 /** The two games, by the digit their address carries. */
 export const STADIUM_GAMES = ["1", "2"] as const;
 export type StadiumGame = (typeof STADIUM_GAMES)[number];
 
 export const isStadiumGame = (value: string | undefined): value is StadiumGame =>
   STADIUM_GAMES.some((game) => game === value);
+
+/** Whether the era is one the Stadiums cover: neither game goes past Gen II. */
+export const stadiumInEra = (era: DexEra): boolean => genOrder(era.maxGen) <= genOrder("ii");
 
 /** Pokémon entered, Pokémon sent into each battle, trainers beaten in a row; alike in both games. */
 export const STADIUM_TEAM = { entered: 6, battle: 3, trainers: 8 } as const;

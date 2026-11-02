@@ -3,7 +3,6 @@
  * the README point at the same places.
  */
 export const LINKS = {
-  author: "https://www.skoftware.pl",
   repo: "https://github.com/SkorczanFFF/pokedex",
   changelog: "https://github.com/SkorczanFFF/pokedex/blob/master/CHANGELOG.md",
   pokeapi: "https://pokeapi.co",
