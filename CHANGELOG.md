@@ -16,6 +16,22 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: a content security policy in report-only, the opener cut off, and env files kept out of git`
+
+- **Added** — A `Content-Security-Policy-Report-Only` header on every page, written from what
+  the app actually loads: its own scripts, styles, fonts and voice files; JSON from PokéAPI;
+  sprites, GIF bytes and cries from `raw.githubusercontent.com`; `blob:` for the GIF played
+  once and `data:` for the select's chevron. No `'unsafe-inline'` and no `'unsafe-eval'`:
+  the production build inlines no script and React sets styles through the CSSOM. Report-only
+  blocks nothing and logs each breach in the console, so it can run for a few days across
+  every page — the cry, the read-aloud, Versus — before the header is renamed to
+  `Content-Security-Policy` and `upgrade-insecure-requests`, which report-only ignores, is
+  added. On preview deployments it will report Vercel's toolbar, which is expected.
+- **Added** — `Cross-Origin-Opener-Policy: same-origin`, so a page this one opens, or that
+  opened it, gets no handle on its window.
+- **Changed** — `.gitignore` covers `.env*` besides `*.local`, with `.env.example` let
+  through. There is no env file yet; the rule is there before one is.
+
 ### `fix: a name from a link is checked before it reaches the API, and a page that throws shows an error instead of a blank screen`
 
 - **Fixed** — `/versus?a=../type/fire`, or `/pokemon/..%2Ftype%2Ffire`, put the name straight
