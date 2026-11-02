@@ -78,11 +78,14 @@ export const Profile = ({
       </h2>
       <ul className="space-y-3">
         {groups.map((group) => (
-          <li key={group.value} className="flex flex-wrap items-center gap-2">
+          // A row too long for the box wraps beside the multiplier, not under it.
+          <li key={group.value} className="flex items-baseline gap-2">
             <EffectChip value={group.value} />
-            {group.attacks.map((type) => (
-              <TypeBadge key={type} type={type} />
-            ))}
+            <div className="flex flex-wrap gap-2">
+              {group.attacks.map((type) => (
+                <TypeBadge key={type} type={type} />
+              ))}
+            </div>
           </li>
         ))}
       </ul>

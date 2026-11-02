@@ -32,11 +32,3 @@ export const SELECT = "h-9 border-2 pl-2 bg-white";
 
 /** A link inside running text: About's sources, a Stadium cup's banned Pokémon. */
 export const TEXT_LINK = "underline underline-offset-2 hover:text-dex-red";
-
-/**
- * A framed link is a reference page that is about no Pokémon in particular:
- * the chart. Framed like a menu box, so it is neither a picker's wash nor an
- * action's yellow.
- */
-export const PAGE_LINK =
-  "inline-block px-3 py-1 text-xs border-2 border-black bg-white text-black hover:bg-dex-yellow cursor-pointer";

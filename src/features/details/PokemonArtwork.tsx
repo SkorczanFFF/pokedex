@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useImperativeHandle, useState, type Ref } from "react";
 import { useTranslation } from "react-i18next";
 import { Chip, ChipRow } from "@/components/Chip";
 import { GEN_SLUGS, genRoman, type GenSlug } from "@/domain/dex";
@@ -20,6 +20,11 @@ const PICTURE_LABEL = {
   "back/shiny": "details.spriteBackShiny",
 } as const satisfies Record<`${SpriteView}/${SpritePalette}`, string>;
 
+export interface ArtworkHandle {
+  /** Runs the picture's motion with the cry under it; false when the picture does not move. */
+  animate: () => boolean;
+}
+
 /**
  * The picture column, and the choice of which picture.
  *
@@ -33,17 +38,20 @@ const PICTURE_LABEL = {
  *
  * A sheet that was drawn in motion — Crystal's — opens on its still, and a
  * click on the picture runs the animation through once with the cry under it,
- * the way the game played the two together when a Pokémon came out.
+ * the way the game played the two together when a Pokémon came out. The Cry
+ * button does the same through `ref`.
  */
 export const PokemonArtwork = ({
   pokemon,
   set: active,
   onPick: setPicked,
+  ref,
 }: {
   pokemon: Pokemon;
   /** The set up, already settled against what this Pokémon has. */
   set: SpriteSetId;
   onPick: (set: SpriteSetId) => void;
+  ref?: Ref<ArtworkHandle>;
 }) => {
   const { t } = useTranslation();
   const [pickedView, setPickedView] = useState<SpriteView>("front");
@@ -64,9 +72,19 @@ export const PokemonArtwork = ({
     variants[0] ??
     null;
 
-  const motion = useAnimatedOnce(
-    variant?.animated ?? null,
-    cryForSet(pokemon, active),
+  const gif = variant?.animated ?? null;
+  const { src: running, play } = useAnimatedOnce(gif, cryForSet(pokemon, active));
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      animate: () => {
+        if (!gif) return false;
+        play();
+        return true;
+      },
+    }),
+    [gif, play],
   );
 
   const gens = GEN_SLUGS.filter((gen) =>
@@ -90,7 +108,7 @@ export const PokemonArtwork = ({
   if (variant) {
     const frame = (
       <SpriteFrame
-        src={motion.src ?? variant.url}
+        src={running ?? variant.url}
         still={variant.url}
         animated={variant.animated}
         width={SPRITE_WIDTH}
@@ -100,7 +118,7 @@ export const PokemonArtwork = ({
     picture = variant.animated ? (
       <button
         type="button"
-        onClick={motion.play}
+        onClick={play}
         aria-label={t("details.playAnimation", { name: pokemon.name })}
         title={t("details.playAnimation", { name: pokemon.name })}
         className="cursor-pointer"

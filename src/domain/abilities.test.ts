@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { abilityRule, defaultAbility, hasAbility } from "./abilities";
+import { abilityInEra, abilityRule, defaultAbility, hasAbility } from "./abilities";
+import { MODERN, RETRO } from "./era";
 import { makePokemon } from "./__fixtures__/pokemon";
 
 describe("abilityRule", () => {
@@ -42,5 +43,12 @@ describe("a Pokémon's abilities", () => {
   it("checks a slug against the list", () => {
     expect(hasAbility(makePokemon(), "lightning-rod")).toBe(true);
     expect(hasAbility(makePokemon(), "levitate")).toBe(false);
+  });
+
+  it("reads a pick only when it is the Pokémon's own, and nothing in retro", () => {
+    expect(abilityInEra(makePokemon(), MODERN)).toBe("static");
+    expect(abilityInEra(makePokemon(), MODERN, "lightning-rod")).toBe("lightning-rod");
+    expect(abilityInEra(makePokemon(), MODERN, "levitate")).toBe("static");
+    expect(abilityInEra(makePokemon(), RETRO, "static")).toBeNull();
   });
 });

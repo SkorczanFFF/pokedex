@@ -16,6 +16,39 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: a Pokémon's page gathers its actions over the entry, runs a moving picture with its cry, and shows the types against it from a button`
+
+- **Changed** — On a Pokémon's page the name has only its number beside it. Read, Cry, Versus
+  and Where to find it, which were split between the title line and the end of the entry,
+  sit in that order in one row between the generation line and the entry, wrapping only
+  where the column is too narrow for all four. Where to find it, the one that shows up late
+  or not at all, is last, so nothing beside it moves when it does. Read goes with the entry
+  it reads, and is left out of the row while there is none.
+- **Changed** — While the picture showing is one drawn in motion — Crystal's, and Black and
+  White's — the Cry button runs it through once with the cry under it instead of playing
+  the cry beside a still, the same as a click on the picture. Anywhere else it plays the
+  cry alone, as before. The picture column hands its motion to the button through a `ref`.
+- **Added** — A Types against button at the end of the type badges, framed in a dashed line
+  so it reads as neither a type nor an action. It opens, over the page, the list Versus
+  shows for one Pokémon picked alone: every type of the era that does more or less than
+  normal to this one, grouped by multiplier, and read with its first ability where the era
+  has abilities — Levitate takes Ground out. The box is as wide as its longest row, so each
+  group keeps to one line beside its multiplier, but never wider than the screen: on a phone
+  a long group wraps, and the box moves left as far as it must to stay in view. A mouse over
+  the button shows it; a click or a tap holds it open until another, Escape or a click
+  elsewhere. The type requests behind it, the same the chart page and Versus make, go out on
+  the first opening, not with the page.
+- **Changed** — In that list, on Versus as well, a group too long for its box wraps beside
+  its multiplier rather than under it.
+- **Changed** — Which ability a Pokémon is read with — the picked one if it is its own,
+  else its first, and none in retro — is `abilityInEra` in the domain, read by Versus and
+  the button alike, where Versus had kept the rule to itself.
+- **Changed** — The Type chart link beside the badges is gone; the navbar still has it.
+  `PAGE_LINK`, which only that link used, goes with it.
+- **Fixed** — The pixel font has no `■`, so the Stop button's square came from a fallback
+  font and sat off the line of the word beside it. It is drawn as a box in the text's own
+  colour instead, centred on the word.
+
 ### `chore: the dependencies are pinned to exact versions, each at the newest of its major`
 
 - **Changed** — Every dependency in `package.json` is one exact version instead of a range,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { speciesQuery } from "@/api/queries";
@@ -16,7 +16,7 @@ import { DexNeighbours } from "./DexNeighbours";
 import { EvolutionChain } from "./EvolutionChain";
 import { Measurements } from "./Measurements";
 import { MoveList } from "./MoveList";
-import { PokemonArtwork } from "./PokemonArtwork";
+import { PokemonArtwork, type ArtworkHandle } from "./PokemonArtwork";
 import { PokemonHeader } from "./PokemonHeader";
 import { StatList } from "./StatList";
 import { TypeBadges } from "./TypeBadges";
@@ -29,6 +29,7 @@ export const PokemonDetailsPage = () => {
   // Cry button sits in the header. Local state all the same — a look at this
   // one Pokémon, not a preference to carry around.
   const [pickedSet, setPickedSet] = useState<SpriteSetId | null>(null);
+  const artwork = useRef<ArtworkHandle>(null);
 
   // Evolution links stay on this route with a different param, so the component
   // is reused rather than remounted — the reset has to follow the name.
@@ -66,10 +67,20 @@ export const PokemonDetailsPage = () => {
 
             <div className="bg-white p-6">
               <div className="grid md:grid-cols-2 gap-8">
-                <PokemonArtwork pokemon={pokemon} set={spriteSet} onPick={setPickedSet} />
+                <PokemonArtwork
+                  ref={artwork}
+                  pokemon={pokemon}
+                  set={spriteSet}
+                  onPick={setPickedSet}
+                />
 
                 <div>
-                  <PokemonHeader pokemon={pokemon} species={species} spriteSet={spriteSet} />
+                  <PokemonHeader
+                    pokemon={pokemon}
+                    species={species}
+                    spriteSet={spriteSet}
+                    animate={() => artwork.current?.animate() ?? false}
+                  />
                   <TypeBadges pokemon={pokemon} />
 
                   <div className="space-y-6">

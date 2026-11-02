@@ -36,11 +36,17 @@ export const ReadButton = ({
         state === "idle" ? t("details.readEntry", { name }) : t("details.stopReading")
       }
       aria-busy={state === "loading"}
-      className={`ml-2 align-middle whitespace-nowrap ${ACTION}`}
+      className={ACTION}
     >
       {state === "idle" && ` > ${t("details.read")}`}
       {state === "loading" && " ... "}
-      {state === "speaking" && ` ■ ${t("details.stopReading")}`}
+      {state === "speaking" && (
+        <span className="inline-flex items-center gap-2">
+          {/* The pixel font has no ■. */}
+          <span aria-hidden="true" className="size-2 bg-current" />
+          {t("details.stopReading")}
+        </span>
+      )}
     </button>
   );
 };

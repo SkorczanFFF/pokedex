@@ -1,14 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { listPath, paths } from "@/app/routes";
+import { listPath } from "@/app/routes";
 import { typeBadgeClass } from "@/components/typeBadge";
-import { PAGE_LINK } from "@/components/buttons";
 import { typesInEra } from "@/domain/pokemonView";
 import { useEra } from "@/app/era/context";
 import { useTypeLabel } from "@/i18n/labels";
 import type { Pokemon } from "@/types/pokemon";
+import { TypesAgainst } from "./TypesAgainst";
 
-/** The typing as of the current era, each type a link into the filtered list. */
+/** The typing as of the current era, each type a link into the filtered list, then what every type does to it. */
 export const TypeBadges = ({ pokemon }: { pokemon: Pokemon }) => {
   const { t } = useTranslation();
   const typeLabel = useTypeLabel();
@@ -28,13 +28,7 @@ export const TypeBadges = ({ pokemon }: { pokemon: Pokemon }) => {
           {typeLabel(type.type.name)}
         </Link>
       ))}
-      {/* The chart, a step from the types it is about, where a reader wonders
-          what the badges mean. Framed, not coloured: the colours are the types.
-          Spaced by the row's gap alone: a margin of its own indented it once
-          it wrapped onto a line of its own. */}
-      <Link to={paths.types} className={PAGE_LINK}>
-        {t("types.link")}
-      </Link>
+      <TypesAgainst pokemon={pokemon} />
     </div>
   );
 };

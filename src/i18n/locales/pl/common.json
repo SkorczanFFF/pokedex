@@ -142,6 +142,7 @@
     "back": "Powrót do listy",
     "playCry": "Odtwórz głos: {{name}}",
     "cry": "Głos",
+    "typesAgainst": "Typy przeciw",
     "readEntry": "Przeczytaj na głos wpis: {{name}}",
     "read": "Czytaj",
     "stopReading": "Stop",

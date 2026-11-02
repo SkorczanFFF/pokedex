@@ -4,6 +4,7 @@ import { cryForSet } from "@/domain/pokemonView";
 import type { SpriteSetId } from "@/domain/spriteSets";
 import { playCry } from "@/media/cry";
 import type { Pokemon } from "@/types/pokemon";
+import type { ArtworkHandle } from "./PokemonArtwork";
 
 /**
  * Plays the Pokémon's cry — the recording that goes with the picture showing,
@@ -13,9 +14,11 @@ import type { Pokemon } from "@/types/pokemon";
 export const CryButton = ({
   pokemon,
   set,
+  animate,
 }: {
   pokemon: Pokemon;
   set: SpriteSetId;
+  animate: ArtworkHandle["animate"];
 }) => {
   const { t } = useTranslation();
   const cry = cryForSet(pokemon, set);
@@ -24,7 +27,9 @@ export const CryButton = ({
 
   return (
     <button
-      onClick={() => playCry(cry)}
+      onClick={() => {
+        if (!animate()) playCry(cry);
+      }}
       aria-label={t("details.playCry", { name: pokemon.name })}
       className={ACTION}
     >

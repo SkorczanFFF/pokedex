@@ -6,7 +6,7 @@ import { Arrow } from "@/components/Arrow";
 import { InlineError } from "@/components/ErrorView";
 import { ACTION } from "@/components/buttons";
 import { GbBox, Screen } from "@/components/layout";
-import { defaultAbility, hasAbility } from "@/domain/abilities";
+import { abilityInEra } from "@/domain/abilities";
 import { genRoman } from "@/domain/dex";
 import type { DexEra } from "@/domain/era";
 import { AbilityPicker } from "./AbilityPicker";
@@ -19,13 +19,9 @@ import { useFighter } from "./useFighter";
 import { useVersusParams, type SideParams } from "./useVersusParams";
 import { VersusContext } from "./versusContext";
 
-/** The ability a fighter is read with: the URL's if it is one of its own, else its first. */
-const abilityOf = (fighter: Fighter, picked: string | null, era: DexEra): string | null => {
-  if (!era.hasAbilities || fighter.status !== "ready") return null;
-  return picked && hasAbility(fighter.pokemon, picked)
-    ? picked
-    : defaultAbility(fighter.pokemon);
-};
+/** The ability a fighter is read with, once it is known. */
+const abilityOf = (fighter: Fighter, picked: string | null, era: DexEra): string | null =>
+  fighter.status === "ready" ? abilityInEra(fighter.pokemon, era, picked) : null;
 
 /**
  * Two Pokémon on the Game Boy battle screen, and what the types of each do to

@@ -10,22 +10,26 @@ import { useTranslatedSpeciesText } from "@/i18n/translated";
 import type { Pokemon, PokemonSpecies } from "@/types/pokemon";
 import { CryButton } from "./CryButton";
 import { EncountersLink } from "@/features/encounters";
+import type { ArtworkHandle } from "./PokemonArtwork";
 import { ReadButton } from "./ReadButton";
 
 /**
- * Name, dex number and the species text under them. The species payload arrives
- * on a second request, so everything it feeds stays optional until it lands —
- * the name and the number are on screen either way.
+ * Name, dex number, a row of what to do with this Pokémon and the species text
+ * under them. The species payload arrives on a second request, so everything
+ * it feeds stays optional until it lands — the name and the number are on
+ * screen either way.
  */
 export const PokemonHeader = ({
   pokemon,
   species,
   spriteSet,
+  animate,
 }: {
   pokemon: Pokemon;
   species?: PokemonSpecies;
   /** The picture up in the column beside, which the cry follows. */
   spriteSet: SpriteSetId;
+  animate: ArtworkHandle["animate"];
 }) => {
   const { t } = useTranslation();
   const { era } = useEra();
@@ -50,21 +54,27 @@ export const PokemonHeader = ({
     <>
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <h1 className="text-2xl capitalize">{pokemon.name}</h1>
-        <CryButton pokemon={pokemon} set={spriteSet} />
-        <EncountersLink pokemon={pokemon} />
-        <VersusLink pokemon={pokemon} />
         <span className="text-gray-500">[{pokemon.id}]</span>
       </div>
 
       {meta && <p className="text-xs text-gray-500 mb-3">{meta}</p>}
-      {description?.text && (
-        <p className="text-xs leading-relaxed mb-6">
-          {description.text}
+
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        {description?.text && (
           <ReadButton
             name={pokemon.name}
             text={description.text}
             lang={description.language}
           />
+        )}
+        <CryButton pokemon={pokemon} set={spriteSet} animate={animate} />
+        <VersusLink pokemon={pokemon} />
+        <EncountersLink pokemon={pokemon} />
+      </div>
+
+      {description?.text && (
+        <p className="text-xs leading-relaxed mb-6">
+          {description.text}
           {showEnglishMarker && <LangMarker title={t("details.englishEntry")} />}
         </p>
       )}

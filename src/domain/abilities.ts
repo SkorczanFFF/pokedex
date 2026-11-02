@@ -1,4 +1,5 @@
 import type { Pokemon } from "@/types/pokemon";
+import type { DexEra } from "./era";
 import type { PokemonType } from "./pokemonTypes";
 
 /**
@@ -84,3 +85,13 @@ export const defaultAbility = (pokemon: Pokemon): string | null => {
 
 export const hasAbility = (pokemon: Pokemon, slug: string): boolean =>
   pokemon.abilities.some((entry) => entry.ability.name === slug);
+
+/** The ability a Pokémon is read with: `picked` if it is its own, else its first; none in an era without them. */
+export const abilityInEra = (
+  pokemon: Pokemon,
+  era: DexEra,
+  picked: string | null = null,
+): string | null => {
+  if (!era.hasAbilities) return null;
+  return picked && hasAbility(pokemon, picked) ? picked : defaultAbility(pokemon);
+};
