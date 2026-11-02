@@ -16,6 +16,19 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `chore: the dependencies are pinned to exact versions, each at the newest of its major`
+
+- **Changed** — Every dependency in `package.json` is one exact version instead of a range,
+  and `.npmrc` sets `save-exact`, so the next one added is written the same way. A version
+  now moves only when a commit moves it.
+- **Changed** — Each goes to the newest release of its major: React 19.1 to 19.3, React Query
+  5.83 to 5.105, Tailwind 4.1 to 4.3, i18next 26.4 to 26.7, react-i18next 17.0 to 17.1, ESLint
+  9.31 to 9.39, typescript-eslint 8.37 to 8.72 and the rest in step, and TypeScript 5.8 to
+  5.9, which the old `~` range held back. The majors wait for changes of their own: ESLint
+  10, Vite 8 with plugin-react 6, TypeScript 6 (7 is past what typescript-eslint supports)
+  and Vercel Analytics 2. The twelve moderate `minimatch` advisories under ESLint stay; the
+  fix is in minimatch 11, and neither ESLint 10 nor typescript-eslint has moved to it.
+
 ### `feat: a content security policy in report-only, the opener cut off, and env files kept out of git`
 
 - **Added** — A `Content-Security-Policy-Report-Only` header on every page, written from what
