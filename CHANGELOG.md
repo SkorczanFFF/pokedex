@@ -16,6 +16,23 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: the Types against bubble points at its button from whichever side it opens on, a Polish genus that is an adjective comes first, and About catches up`
+
+- **Added** — The Types against bubble has a point under the button's middle, drawn like the
+  Gen I frame it hangs from: a black triangle with a white one inside it over the frame. The
+  bubble opens below the button, or above it when it does not fit below and there is more
+  room above; the point follows to the side that faces the button.
+- **Fixed** — A Polish genus that Pokémon Wiki PL gives as a lone adjective comes before the
+  noun, as Polish puts it: Starmie is the “Tajemniczy Pokémon”, not the “Pokémon
+  Tajemniczy”. That is 158 species over 123 adjectives, changed in the table itself. A noun
+  stays after, “Pokémon Mysz”, and so do the words that end like adjectives and are not:
+  the genitives Destrukcji, Emocji, Obfitości, Wiedzy and Zorzy, Bonsai, Wąsy and Zaloty,
+  and the Psi of Abra's line, which is the psychic kind, not the canine adjective.
+- **Changed** — About catches up with the page: it names Black / White's animations beside
+  Crystal's, which the picture column has shown all along, says the cry runs with a moving
+  picture and the types against a Pokémon are a button away, and marks the word-order
+  change, as the wiki's CC BY-SA asks of a change.
+
 ### `feat: a Pokémon's page gathers its actions over the entry, runs a moving picture with its cry, and shows the types against it from a button`
 
 - **Changed** — On a Pokémon's page the name has only its number beside it. Read, Cry, Versus

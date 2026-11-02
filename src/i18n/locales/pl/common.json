@@ -260,12 +260,12 @@
         "tabelę efektywności typów, z datą każdej zmiany między generacjami;",
         "dawne wartości: typy, statystyki i liczby ruchów takie, jakie miały wcześniejsze generacje."
       ],
-      "sprites": "Obrazki — oficjalny artwork, sprite'y z każdej gry, animacje z Crystal — oraz głosy pochodzą z <sprites>repozytorium sprite'ów PokéAPI</sprites>. Jedyny wyjątek to plecy trenera na ekranie walki: oryginalny sprite Reda, 32×32 piksele, z dekompilacji Pokémon Red."
+      "sprites": "Obrazki — oficjalny artwork, sprite'y z każdej gry, animacje z Crystal i Black / White — oraz głosy pochodzą z <sprites>repozytorium sprite'ów PokéAPI</sprites>. Jedyny wyjątek to plecy trenera na ekranie walki: oryginalny sprite Reda, 32×32 piksele, z dekompilacji Pokémon Red."
     },
     "polish": {
       "heading": "Polski",
       "gap": "PokéAPI nie ma polskiego — na jego liście języków nie ma „pl”, bo gry nigdy nie zostały oficjalnie przełożone na polski. Polski tekst trzeba było wziąć skądinąd.",
-      "source": "Wpisy Pokédeksu, rodzaje, nazwy i opisy ruchów pochodzą z <wiki>Pokémon Wiki PL</wiki>, fanowskiej encyklopedii na licencji <cc>CC BY-SA</cc>. Wiki drukuje je tak jak PokéAPI — wpis osobno dla każdej gry, opis ruchu dla każdej serii gier — więc polski tekst przechodzi przez te same reguły co angielski: w retro czytasz zdanie z Crystal, w nowoczesnym z najnowszej gry.",
+      "source": "Wpisy Pokédeksu, rodzaje, nazwy i opisy ruchów pochodzą z <wiki>Pokémon Wiki PL</wiki>, fanowskiej encyklopedii na licencji <cc>CC BY-SA</cc>. Wiki drukuje je tak jak PokéAPI — wpis osobno dla każdej gry, opis ruchu dla każdej serii gier — więc polski tekst przechodzi przez te same reguły co angielski: w retro czytasz zdanie z Crystal, w nowoczesnym z najnowszej gry. Jedną zmianę wprowadziliśmy sami: rodzaj, który wiki podaje jako sam przymiotnik, stoi przed rzeczownikiem, jak w polszczyźnie — „Tajemniczy Pokémon”, nie „Pokémon Tajemniczy”; rzeczownik zostaje za nim: „Pokémon Mysz”.",
       "counts": {
         "dex": "Wpisy Pokédeksu",
         "dexValue": "{{plDex}} z {{species}} gatunków",
@@ -301,7 +301,7 @@
     "can": {
       "heading": "Co można zrobić",
       "list": "Przeglądać dex po 20, 40 albo 60 na stronę, szukać po fragmencie nazwy, filtrować po generacji i po najwyżej dwóch typach naraz (oba muszą pasować). Wszystko siedzi w adresie, więc filtr jest linkiem, a Wstecz w przeglądarce go cofa.",
-      "details": "Obejrzeć artwork i każdy sprite — Gen I i II gra po grze, przód, tył, lśniący, Crystal w ruchu — odtworzyć głos, kazać dexowi przeczytać wpis, przejrzeć statystyki, umiejętności, łańcuch ewolucji i ruchy tak, jak uczyła ich jedna gra; kliknięty ruch otwiera moc, celność, PP i zdanie z gry. Strzałki prowadzą do sąsiadów w dexie.",
+      "details": "Obejrzeć artwork i każdy sprite — Gen I i II gra po grze, przód, tył, lśniący, Crystal i Black / White w ruchu — odtworzyć głos, przy ruchomym obrazku razem z animacją, kazać dexowi przeczytać wpis, zobaczyć, co robi mu każdy typ, z jego pierwszą umiejętnością, jak w Versus, przejrzeć statystyki, umiejętności, łańcuch ewolucji i ruchy tak, jak uczyła ich jedna gra; kliknięty ruch otwiera moc, celność, PP i zdanie z gry. Strzałki prowadzą do sąsiadów w dexie.",
       "encounters": "Lokacje, poziomy i szanse, gra po grze; szansa jest sumowana w obrębie jednego zestawu warunków, bo własna suma PokéAPI przekracza czasem 100%.",
       "types": "Co atak każdego typu robi Pokémonowi każdego innego, według ery, z listą komórek, które kiedyś czytały się inaczej.",
       "versus": "Dwa Pokémony na ekranie walki: co typy jednego robią drugiemu — z iloczynem po dwóch typach, więc ×4 i ×¼ — statystyki bazowe plecami do siebie i zakładka Ruchy, która liczy trafienie: ruch dla każdej strony, poziom i statystyki pod ręką, obrażenia, procent HP i po ilu trafieniach pada. Jeden sam pokazuje swoje słabości. Para, umiejętności i ruchy siedzą w adresie, więc starcie jest linkiem.",

@@ -247,12 +247,12 @@
         "the type chart, with every change between generations dated;",
         "past values: the types, stats and move numbers as earlier generations had them."
       ],
-      "sprites": "The pictures — the official artwork, every game's sprites, Crystal's animations — and the cries come from <sprites>PokéAPI's sprite repository</sprites>. The one exception is the trainer's back on the battle screen: Red's original 32×32 sprite from the Pokémon Red disassembly."
+      "sprites": "The pictures — the official artwork, every game's sprites, Crystal's and Black / White's animations — and the cries come from <sprites>PokéAPI's sprite repository</sprites>. The one exception is the trainer's back on the battle screen: Red's original 32×32 sprite from the Pokémon Red disassembly."
     },
     "polish": {
       "heading": "Polish",
       "gap": "PokéAPI has no Polish — its language list has no “pl”, because the games were never officially translated into Polish. The Polish text had to come from somewhere else.",
-      "source": "The Pokédex entries, genera, move names and move descriptions come from <wiki>Pokémon Wiki PL</wiki>, a fan encyclopedia published under <cc>CC BY-SA</cc>. The wiki prints them the way PokéAPI does — an entry per game, a move description per run of games — so the Polish text goes through the same rules as the English: retro reads Crystal's sentence, modern the newest game's.",
+      "source": "The Pokédex entries, genera, move names and move descriptions come from <wiki>Pokémon Wiki PL</wiki>, a fan encyclopedia published under <cc>CC BY-SA</cc>. The wiki prints them the way PokéAPI does — an entry per game, a move description per run of games — so the Polish text goes through the same rules as the English: retro reads Crystal's sentence, modern the newest game's. One change is ours: a genus the wiki gives as a lone adjective comes before the noun, as Polish puts it — “Tajemniczy Pokémon”, not “Pokémon Tajemniczy”; a noun stays after it, “Pokémon Mysz”.",
       "counts": {
         "dex": "Pokédex entries",
         "dexValue": "{{plDex}} of {{species}} species",
@@ -288,7 +288,7 @@
     "can": {
       "heading": "What you can do",
       "list": "Browse the dex at 20, 40 or 60 a page, search by part of a name, filter by generation and by up to two types at once (both must match). All of it lives in the address, so a filter is a link and the browser's Back undoes it.",
-      "details": "See the artwork and every sprite — Gen I and II game by game, front, back, shiny, Crystal in motion — play the cry, have the dex read the entry aloud, read the stats, abilities, evolution chain and the moves as one game taught them; a move opens to its power, accuracy, PP and the game's sentence. Arrows step to the neighbours in the dex.",
+      "details": "See the artwork and every sprite — Gen I and II game by game, front, back, shiny, Crystal and Black / White in motion — play the cry, with the animation where the picture moves, have the dex read the entry aloud, see what every type does to it, counting its first ability as Versus does, read the stats, abilities, evolution chain and the moves as one game taught them; a move opens to its power, accuracy, PP and the game's sentence. Arrows step to the neighbours in the dex.",
       "encounters": "Places, levels and chances, game by game; a chance is summed within one set of conditions, because PokéAPI's own total sometimes passes 100%.",
       "types": "What an attack of each type does to a Pokémon of each other, as of the era, with the cells that once read differently listed underneath.",
       "versus": "Two Pokémon on the battle screen: what each one's types do to the other — the product over two types, so ×4 and ×¼ — base stats back to back, and a Moves tab that calculates a hit: a move for each side, the level and the stats to hand, the damage, the share of HP and the hits to a knockout. One alone shows its weaknesses. The pair, the abilities and the moves live in the address, so a matchup is a link.",

@@ -8,28 +8,44 @@ import { abilityInEra, abilityRule } from "@/domain/abilities";
 import { Profile } from "@/features/versus";
 import type { Pokemon } from "@/types/pokemon";
 
-/** How close the popup may come to the window's edge. */
+/** How close the bubble may come to the window's edge, and its point to the bubble's. */
 const EDGE = 16;
+
+interface Placement {
+  /** The bubble's left edge, from the button's. */
+  left: number;
+  /** The point's middle, from the bubble's left edge. */
+  tail: number;
+  above: boolean;
+}
 
 /** A button that opens, on hover or click, every type of the era against this Pokémon. */
 export const TypesAgainst = ({ pokemon }: { pokemon: Pokemon }) => {
   const { t } = useTranslation();
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [left, setLeft] = useState(0);
+  const [place, setPlace] = useState<Placement>({ left: 0, tail: 0, above: false });
   const panel = useRef<HTMLDivElement>(null);
   const id = useId();
   const open = hovered || clicked;
 
-  // Moved left as far as it takes to stay on screen, again whenever the list changes size.
+  // Moved left as far as it takes to stay on screen, and above the button when
+  // there is more room there; again whenever the list changes size.
   useLayoutEffect(() => {
     const box = panel.current;
     const anchor = box?.parentElement;
     if (!open || !box || !anchor) return;
     const fit = () => {
-      const from = anchor.getBoundingClientRect().left;
-      const room = document.documentElement.clientWidth - EDGE - box.offsetWidth;
-      setLeft(Math.max(EDGE - from, Math.min(0, room - from)));
+      const button = anchor.getBoundingClientRect();
+      const { clientWidth, clientHeight } = document.documentElement;
+      const width = box.offsetWidth;
+      const left = Math.max(EDGE - button.left, Math.min(0, clientWidth - EDGE - width - button.left));
+      const below = clientHeight - button.bottom;
+      setPlace({
+        left,
+        tail: Math.min(Math.max(button.width / 2 - left, EDGE), width - EDGE),
+        above: box.offsetHeight > below && button.top > below,
+      });
     };
     const observer = new ResizeObserver(fit);
     observer.observe(box);
@@ -65,20 +81,37 @@ export const TypesAgainst = ({ pokemon }: { pokemon: Pokemon }) => {
       >
         {t("details.typesAgainst")}
       </button>
-      {/* Padding rather than a margin, so the pointer crosses no gap on its way in. */}
+      {/* Padding rather than a margin, so the mouse crosses no gap on its way in; the point sits in it. */}
       {open && (
         <div
           ref={panel}
           id={id}
-          style={{ left }}
-          className="absolute top-full z-20 w-max max-w-[calc(100vw-2rem)] pt-2"
+          style={{ left: place.left }}
+          className={`absolute z-20 w-max max-w-[calc(100vw-2rem)] ${
+            place.above ? "bottom-full pb-4" : "top-full pt-4"
+          }`}
         >
           <GbBox>
             <AgainstList pokemon={pokemon} />
           </GbBox>
+          <Tail x={place.tail} above={place.above} />
         </div>
       )}
     </div>
+  );
+};
+
+/** The bubble's point, towards the button: a black triangle, and a white one inside it over the frame. */
+const Tail = ({ x, above }: { x: number; above: boolean }) => {
+  const [frame, fill] = above
+    ? ["bottom-1 border-t-[12px] border-t-black", "bottom-2.5 border-t-[10px] border-t-white"]
+    : ["top-1 border-b-[12px] border-b-black", "top-2.5 border-b-[10px] border-b-white"];
+  const at = "absolute -translate-x-1/2 border-x-transparent";
+  return (
+    <>
+      <span aria-hidden="true" style={{ left: x }} className={`${at} border-x-[12px] ${frame}`} />
+      <span aria-hidden="true" style={{ left: x }} className={`${at} border-x-[10px] ${fill}`} />
+    </>
   );
 };
 
