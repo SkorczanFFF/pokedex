@@ -16,8 +16,8 @@ const PAGES = [
 
 /**
  * The logo on the left and, from `md`, everything else on the right: the era,
- * the language, the two pages. Under `md` the right side folds into one MENU
- * button that drops the same four lines in a Game Boy menu box.
+ * the language, the two pages. Under `md` the right side folds into one
+ * hamburger button that drops the same four lines in a Game Boy menu box.
  */
 const Navbar = () => {
   const { t } = useTranslation();
@@ -63,11 +63,17 @@ const Navbar = () => {
             onClick={() => setOpen(!open)}
             aria-expanded={open}
             aria-controls={menuId}
-            className={`md:hidden px-2 py-1 text-xs cursor-pointer focus-ring ${
+            aria-label={t("nav.menu")}
+            className={`md:hidden p-2 cursor-pointer focus-ring ${
               open ? "bg-dex-yellow text-black" : "hover:bg-dex-red-dark"
             }`}
           >
-            {t("nav.menu")}
+            {/* The pixel font has no ☰. */}
+            <span aria-hidden="true" className="flex flex-col gap-[6px]">
+              {[1, 2, 3].map((bar) => (
+                <span key={bar} className="h-[4px] w-[28px] bg-current" />
+              ))}
+            </span>
           </button>
         </div>
       </div>

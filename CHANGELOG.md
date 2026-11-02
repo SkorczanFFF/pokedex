@@ -16,6 +16,12 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: on a phone the navbar opens its menu from a hamburger instead of the word Menu`
+
+- **Changed** — Under `md` the navbar's menu button is three bars instead of the word Menu,
+  drawn as boxes because the pixel font has no `☰`, and named “Menu” for a screen reader by
+  its label. It turns yellow while the menu is open, as the word did.
+
 ### `feat: the Types against bubble points at its button from whichever side it opens on, a Polish genus that is an adjective comes first, and About catches up`
 
 - **Added** — The Types against bubble has a point under the button's middle, drawn like the
