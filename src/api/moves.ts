@@ -1,5 +1,5 @@
 import type { Move } from "@/types/pokemon";
-import { get } from "./client";
+import { apiPath, get } from "./client";
 
 /**
  * One move, fetched only when a reader opens its row.
@@ -9,4 +9,4 @@ import { get } from "./client";
  * at roughly 5.5 kB, and PokéAPI offers no way to ask for fewer fields.
  */
 export const getMove = (name: string): Promise<Move> =>
-  get<Move>(`move/${name}`, `Failed to fetch move ${name}`);
+  get<Move>(apiPath`move/${name}`, `Failed to fetch move ${name}`);

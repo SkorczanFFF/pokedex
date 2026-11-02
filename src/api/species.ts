@@ -1,5 +1,5 @@
 import type { PokemonSpecies } from "@/types/pokemon";
-import { get, request } from "./client";
+import { apiPath, get, request } from "./client";
 
 /**
  * Name of the default form behind a species slug, or null if there is no such
@@ -15,7 +15,7 @@ import { get, request } from "./client";
 export const getDefaultVariety = async (
   species: string
 ): Promise<string | null> => {
-  const response = await request(`pokemon-species/${species}`);
+  const response = await request(apiPath`pokemon-species/${species}`);
   if (response.status === 404) return null;
   if (!response.ok) {
     throw new Error(`Failed to fetch species ${species}`);
@@ -32,6 +32,6 @@ export const getDefaultVariety = async (
  */
 export const getPokemonSpecies = (species: string): Promise<PokemonSpecies> =>
   get<PokemonSpecies>(
-    `pokemon-species/${species}`,
+    apiPath`pokemon-species/${species}`,
     `Failed to fetch species ${species}`
   );

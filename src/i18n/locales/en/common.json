@@ -89,6 +89,7 @@
     "list": "Error loading the Pokémon list",
     "details": "Error loading the Pokémon details",
     "types": "Error loading the type chart",
+    "page": "This page could not be shown",
     "retry": "Please try again later"
   },
   "filters": {

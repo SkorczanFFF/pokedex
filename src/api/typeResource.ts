@@ -1,5 +1,5 @@
 import type { TypeResource } from "@/types/typeResource";
-import { get } from "./client";
+import { apiPath, get } from "./client";
 
 /**
  * One type: its damage relations, today's and every earlier set, and every Pokémon of it. The chart is
@@ -8,4 +8,4 @@ import { get } from "./client";
  * generations and PokéAPI dates every change.
  */
 export const getType = (name: string): Promise<TypeResource> =>
-  get<TypeResource>(`type/${name}`, `Failed to fetch type ${name}`);
+  get<TypeResource>(apiPath`type/${name}`, `Failed to fetch type ${name}`);

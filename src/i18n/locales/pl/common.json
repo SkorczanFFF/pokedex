@@ -91,6 +91,7 @@
     "list": "Błąd wczytywania listy Pokémon",
     "details": "Błąd wczytywania szczegółów Pokémona",
     "types": "Błąd wczytywania tabeli typów",
+    "page": "Nie udało się wyświetlić tej strony",
     "retry": "Spróbuj ponownie później"
   },
   "filters": {

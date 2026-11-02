@@ -13,6 +13,19 @@ export class NotFoundError extends Error {
   }
 }
 
+// PokéAPI's names: lower case, digits, hyphens (Z-moves double them: "acid-downpour--physical").
+const SLUG = /^[a-z0-9-]+$/;
+
+const slug = (value: string | number): string => {
+  const name = String(value);
+  if (!SLUG.test(name)) throw new NotFoundError(`No resource named ${name}`);
+  return name;
+};
+
+/** A path built only from PokéAPI names and ids; any other value is not found, without a request. */
+export const apiPath = (strings: TemplateStringsArray, ...values: (string | number)[]): string =>
+  String.raw(strings, ...values.map(slug));
+
 /**
  * The raw response, for the two callers that have to tell one failure from
  * another: a Pokémon missing under its own name is retried as a species, and a

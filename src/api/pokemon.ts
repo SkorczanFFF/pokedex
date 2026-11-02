@@ -1,5 +1,5 @@
 import type { NamedApiResource, Pokemon, PokemonListResponse } from "@/types/pokemon";
-import { get, NotFoundError, request } from "./client";
+import { apiPath, get, NotFoundError, request } from "./client";
 import { getDefaultVariety } from "./species";
 
 export const getPokemonList = (
@@ -7,7 +7,7 @@ export const getPokemonList = (
   offset: number,
 ): Promise<PokemonListResponse> =>
   get<PokemonListResponse>(
-    `pokemon?limit=${limit}&offset=${offset}`,
+    apiPath`pokemon?limit=${limit}&offset=${offset}`,
     "Failed to fetch Pokemon list"
   );
 
@@ -26,7 +26,7 @@ export const getDexWindow = (id: number): Promise<PokemonListResponse> =>
   getPokemonList(3, Math.max(0, id - 2));
 
 export const getPokemonDetails = async (name: string): Promise<Pokemon> => {
-  const response = await request(`pokemon/${name}`);
+  const response = await request(apiPath`pokemon/${name}`);
   if (response.ok) {
     return response.json();
   }
@@ -43,7 +43,7 @@ export const getPokemonDetails = async (name: string): Promise<Pokemon> => {
     throw new NotFoundError(`No Pokemon named ${name}`);
   }
 
-  return get<Pokemon>(`pokemon/${fallback}`, `Failed to fetch Pokemon ${name}`);
+  return get<Pokemon>(apiPath`pokemon/${fallback}`, `Failed to fetch Pokemon ${name}`);
 };
 
 export const getAllPokemonNames = async (): Promise<NamedApiResource[]> => {

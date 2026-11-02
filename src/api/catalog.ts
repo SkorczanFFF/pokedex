@@ -1,5 +1,5 @@
 import type { PokemonGenerationResponse } from "@/types/pokemon";
-import { get } from "./client";
+import { apiPath, get } from "./client";
 
 /**
  * Which species a generation introduced, as a name list. The other membership
@@ -10,6 +10,6 @@ export const getPokemonByGeneration = (
   generationName: string
 ): Promise<PokemonGenerationResponse> =>
   get<PokemonGenerationResponse>(
-    `generation/${generationName}`,
+    apiPath`generation/${generationName}`,
     `Failed to fetch generation ${generationName}`
   );

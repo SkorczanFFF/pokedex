@@ -1,5 +1,5 @@
 import type { LocationEncounter } from "@/types/pokemon";
-import { get } from "./client";
+import { apiPath, get } from "./client";
 
 /**
  * Every place a Pokémon is met, in every game that has it.
@@ -10,6 +10,6 @@ import { get } from "./client";
  */
 export const getEncounters = (name: string): Promise<LocationEncounter[]> =>
   get<LocationEncounter[]>(
-    `pokemon/${name}/encounters`,
+    apiPath`pokemon/${name}/encounters`,
     `Failed to fetch encounters for ${name}`
   );

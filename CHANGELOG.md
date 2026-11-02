@@ -16,6 +16,25 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `fix: a name from a link is checked before it reaches the API, and a page that throws shows an error instead of a blank screen`
+
+- **Fixed** — `/versus?a=../type/fire`, or `/pokemon/..%2Ftype%2Ffire`, put the name straight
+  into the request path, the URL resolved the `..`, and the dex fetched `/type/fire` and
+  tried to draw a type as a Pokémon — a blank page from a link anyone could send. Every path
+  in `api/` is now built through `apiPath`, which takes only values in PokéAPI's own shape,
+  lower case, digits and hyphens, and finds nothing under any other without a request; the
+  shape was checked against every Pokémon, species, move, ability, type and generation the
+  API lists. Only PokéAPI was ever on the other end, read-only and without cookies; the same
+  pattern behind a login sends a signed-in request wherever the link says.
+- **Fixed** — The page went blank because nothing caught an error thrown while a page
+  rendered, and React 18 onwards answers that by unmounting everything, navbar and footer
+  with it, down to an empty `#root`. The routes now sit inside an `ErrorBoundary`
+  (`components/ErrorBoundary.tsx`), so such a page gives way to the error view — "This page
+  could not be shown" — and the rest of the app stays usable. The boundary clears itself on
+  the next navigation, keyed on the location, and only once it has failed: in the ordinary
+  run of things no page remounts, so the list keeps its search box and the details page its
+  picked sprite set as before.
+
 ### `fix: the font ships with the app and the dependencies move past their advisories`
 
 - **Fixed** — Press Start 2P is bundled from `@fontsource/press-start-2p` instead of linked

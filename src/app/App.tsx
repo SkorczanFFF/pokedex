@@ -1,4 +1,6 @@
+import type { ReactNode } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import {
   BrowserRouter,
   Navigate,
@@ -17,6 +19,8 @@ import { StadiumGamePage, StadiumPage } from "@/features/stadium/StadiumPage";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import ErrorView from "@/components/ErrorView";
 import { EraProvider } from "@/app/era/EraProvider";
 import { queryClient } from "./queryClient";
 import { paths } from "./routes";
@@ -27,6 +31,17 @@ const FormerVersusAddress = () => {
   return <Navigate to={`${paths.versus}${search}`} replace />;
 };
 
+/** A page that throws leaves the navbar and footer standing; any navigation tries again. */
+const PageBoundary = ({ children }: { children: ReactNode }) => {
+  const { key } = useLocation();
+  const { t } = useTranslation();
+  return (
+    <ErrorBoundary resetKey={key} fallback={<ErrorView message={t("error.page")} />}>
+      {children}
+    </ErrorBoundary>
+  );
+};
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -35,18 +50,20 @@ function App() {
           <div className="min-h-screen bg-dex-bg font-press-start flex flex-col">
             <Navbar />
             <main className="flex-grow pt-nav">
-              <Routes>
-                <Route path={paths.list} element={<PokemonListPage />} />
-                <Route path={paths.pokemon} element={<PokemonDetailsPage />} />
-                <Route path={paths.encounters} element={<EncountersPage />} />
-                <Route path={paths.types} element={<TypeChartPage />} />
-                <Route path={paths.versus} element={<VersusPage />} />
-                <Route path={paths.formerVersus} element={<FormerVersusAddress />} />
-                <Route path={paths.about} element={<AboutPage />} />
-                <Route path={paths.stadium} element={<StadiumPage />} />
-                <Route path={paths.stadiumGame} element={<StadiumGamePage />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <PageBoundary>
+                <Routes>
+                  <Route path={paths.list} element={<PokemonListPage />} />
+                  <Route path={paths.pokemon} element={<PokemonDetailsPage />} />
+                  <Route path={paths.encounters} element={<EncountersPage />} />
+                  <Route path={paths.types} element={<TypeChartPage />} />
+                  <Route path={paths.versus} element={<VersusPage />} />
+                  <Route path={paths.formerVersus} element={<FormerVersusAddress />} />
+                  <Route path={paths.about} element={<AboutPage />} />
+                  <Route path={paths.stadium} element={<StadiumPage />} />
+                  <Route path={paths.stadiumGame} element={<StadiumGamePage />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </PageBoundary>
             </main>
             <ScrollToTopButton />
             <Footer />
