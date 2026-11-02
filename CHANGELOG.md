@@ -16,6 +16,29 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `fix: the font ships with the app and the dependencies move past their advisories`
+
+- **Fixed** — Press Start 2P is bundled from `@fontsource/press-start-2p` instead of linked
+  from Google Fonts, so a visit no longer hands the visitor's address to Google before
+  anything is clicked — which a German court has held to need consent under the GDPR — and
+  the page has two origins fewer to trust, which a Content-Security-Policy will want. The
+  browser still fetches only the subsets a page draws: Latin and Latin Extended for Polish,
+  about 22 kB together. The family keeps its name, so `--font-press-start` is unchanged.
+- **Fixed** — `react-router-dom` goes from 7.7.0 to 7.18.5 and Vite from 7.0.5 to 7.3.7,
+  with the transitive packages `npm audit fix` could move inside their ranges — `tar`,
+  `rollup`, `postcss`, `picomatch` and the rest — and the floors in `package.json` raised to
+  the patched versions. None of the router's fourteen advisories reached this app: they are
+  for the framework mode, server rendering and RSC it does not use, and the two about
+  `<Link>` and `useNavigate` need an address from outside, which no link here takes. Vite's
+  were about the dev server, several on Windows: files outside the project read past
+  `server.fs` and through its WebSocket. `npm audit --omit=dev` now finds nothing. Left are
+  twelve moderate advisories that all come down to `minimatch` under ESLint and
+  typescript-eslint, which neither major line has fixed and whose only input is this repo's
+  own glob patterns.
+- **Fixed** — `package-lock.json` had Tailwind among the runtime dependencies where
+  `package.json` lists it as a dev one; the install that added the font put the two back in
+  line.
+
 ### `feat: the two stadiums' cups and who may enter them, under /stadium for now`
 
 - **Added** — `/stadium` forks into the two Nintendo 64 games, `/stadium/1` and
