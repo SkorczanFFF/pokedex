@@ -42,6 +42,7 @@ const SOURCES = [
   { key: "espeak", name: "eSpeak", href: LINKS.espeak },
   { key: "font", name: "Press Start 2P", href: LINKS.font },
   { key: "pokered", name: "pokered", href: LINKS.pokered },
+  { key: "bulbapedia", name: "Bulbapedia", href: LINKS.bulbapedia },
 ] as const;
 
 /** A Pokémon every reader knows, to show the pages that are about one. */
@@ -138,6 +139,9 @@ export const AboutPage = () => {
             </Page>
             <Page to={paths.versus} name={t("versus.title")}>
               {t("about.can.versus")}
+            </Page>
+            <Page to={paths.stadium} name={t("stadium.title")}>
+              {t("about.can.stadium")}
             </Page>
           </dl>
           <p className="text-gray-500">{t("about.can.settings")}</p>

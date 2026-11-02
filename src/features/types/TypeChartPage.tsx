@@ -9,7 +9,7 @@ import { GEN_SLUGS, genOrder, genRoman } from "@/domain/dex";
 import { chartChanges, type ChartChange, type Multiplier } from "@/domain/typeChart";
 import { useTypeLabel } from "@/i18n/labels";
 import { TypeChartTable } from "./TypeChartTable";
-import { VersusAd } from "./VersusAd";
+import { VersusAd } from "@/features/versus";
 
 /**
  * The type chart as of the era: what an attack of each type does to a Pokémon

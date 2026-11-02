@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { BALLS, STADIUM_CUPS, STADIUM_GAMES, STADIUM_TEAM, isStadiumGame } from "./stadium";
+import {
+  BALLS,
+  CASTLE_ROSTER,
+  STADIUM_CUPS,
+  STADIUM_GAMES,
+  STADIUM_TEAM,
+  isStadiumGame,
+  type StadiumGame,
+} from "./stadium";
 
 const cups = STADIUM_GAMES.flatMap((game) => STADIUM_CUPS[game].map((cup) => ({ game, cup })));
 
@@ -32,5 +40,23 @@ describe("stadium cups", () => {
       const levels = BALLS.map((ball) => cup.classLevels![ball]);
       expect(levels).toEqual([...levels].sort((a, b) => a - b));
     }
+  });
+});
+
+describe("the castles", () => {
+  const stops = (game: StadiumGame, region: string) =>
+    CASTLE_ROSTER[game].find((wing) => wing.region === region)!.stops;
+
+  it("puts eight gyms of three trainers and a leader before the first game's Elite Four and rival", () => {
+    const kanto = stops("1", "kanto");
+    expect(kanto.slice(0, 8).every((stop) => stop.fought.length === 4)).toBe(true);
+    expect(kanto.slice(8).map((stop) => stop.at)).toEqual(["elite-four", "champion"]);
+  });
+
+  it("climbs Johto before Kanto in the second, whose eight leaders stand alone before Red", () => {
+    expect(CASTLE_ROSTER["2"].map((wing) => wing.region)).toEqual(["johto", "kanto"]);
+    const kanto = stops("2", "kanto");
+    expect(kanto.slice(0, 8).every((stop) => stop.fought.length === 1)).toBe(true);
+    expect(kanto.at(-1)).toEqual({ at: "silver-cave", fought: ["Red"] });
   });
 });

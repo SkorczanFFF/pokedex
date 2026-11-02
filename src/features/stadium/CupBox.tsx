@@ -1,12 +1,10 @@
 import { Fragment, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { pokemonPath } from "@/app/routes";
-import { TEXT_LINK } from "@/components/buttons";
 import { GbSection } from "@/components/layout";
 import { Bullets } from "@/components/prose";
 import { BALLS, STADIUM_TEAM, type Cup } from "@/domain/stadium";
 import { useMoveLabel } from "@/i18n/labels";
+import { DexLink } from "./DexLink";
 
 const Row = ({ label, children }: { label: string; children: ReactNode }) => (
   <div className="contents">
@@ -15,8 +13,16 @@ const Row = ({ label, children }: { label: string; children: ReactNode }) => (
   </div>
 );
 
-/** One cup: the rules that are numbers as rows, the ones that are sentences under them. */
-export const CupBox = ({ cup, notes }: { cup: Cup; notes: readonly string[] }) => {
+/** One cup: the rules that are numbers as rows, the ones that are sentences under them, then `children`. */
+export const CupBox = ({
+  cup,
+  notes,
+  children,
+}: {
+  cup: Cup;
+  notes: readonly string[];
+  children?: ReactNode;
+}) => {
   const { t } = useTranslation();
   const moveLabel = useMoveLabel();
   const ball = (slug: (typeof BALLS)[number]) => t(`stadium.balls.${slug}`);
@@ -69,10 +75,7 @@ export const CupBox = ({ cup, notes }: { cup: Cup; notes: readonly string[] }) =
               : cup.banned.map((slug, i) => (
                   <Fragment key={slug}>
                     {i > 0 && ", "}
-                    {/* Spelled as the dex page heads it; `humanize` drops Ho-Oh's hyphen. */}
-                    <Link to={pokemonPath(slug)} className={`${TEXT_LINK} capitalize`}>
-                      {slug}
-                    </Link>
+                    <DexLink slug={slug} />
                   </Fragment>
                 ))}
           </Row>
@@ -87,13 +90,14 @@ export const CupBox = ({ cup, notes }: { cup: Cup; notes: readonly string[] }) =
         )}
         {cup.foes && (
           <Row label={t("stadium.row.foes")}>
-            {t(cup.foes.matchesYours ? "stadium.foesMatch" : "stadium.foesLevel", {
+            {t(cup.foes.matchesYours ? "stadium.foesMatch" : "stadium.level", {
               level: cup.foes.level,
             })}
           </Row>
         )}
       </dl>
       {notes.length > 0 && <Bullets items={notes} />}
+      {children}
     </GbSection>
   );
 };

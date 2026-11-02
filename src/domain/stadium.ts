@@ -103,3 +103,98 @@ export const STADIUM_CUPS: Record<StadiumGame, readonly Cup[]> = {
     { id: "rival", levels: ANY_LEVEL, banned: [] },
   ],
 };
+
+/** One stop on a castle's climb: a city's slug for a gym, else a stop named in the copy; leader last. */
+export interface CastleStop {
+  at: string;
+  fought: readonly string[];
+}
+
+/** The castles' stops by region; trainers by the class names the game prints. */
+export const CASTLE_ROSTER: Record<
+  StadiumGame,
+  readonly { region: "kanto" | "johto"; stops: readonly CastleStop[] }[]
+> = {
+  "1": [
+    {
+      region: "kanto",
+      stops: [
+        { at: "pewter", fought: ["Bug Boy", "Lad", "Jr.♂", "Brock"] },
+        { at: "cerulean", fought: ["Fisher", "Jr.♀", "Swimmer", "Misty"] },
+        { at: "vermilion", fought: ["Sailor", "Rocker", "Old Man", "Lt. Surge"] },
+        { at: "celadon", fought: ["Lass", "Beauty", "Cool♀", "Erika"] },
+        { at: "fuchsia", fought: ["Biker", "Tamer", "Juggler", "Koga"] },
+        { at: "saffron", fought: ["Cueball", "Burglar", "Medium", "Sabrina"] },
+        { at: "cinnabar", fought: ["Judoboy", "Psychic", "Nerd", "Blaine"] },
+        { at: "viridian", fought: ["Rocket", "Lab Man", "Cool♂", "Giovanni"] },
+        { at: "elite-four", fought: ["Lorelei", "Bruno", "Agatha", "Lance"] },
+        { at: "champion", fought: ["Rival"] },
+      ],
+    },
+  ],
+  "2": [
+    {
+      region: "johto",
+      stops: [
+        { at: "violet", fought: ["Bird Keeper Matt", "Falkner"] },
+        { at: "azalea", fought: ["Bug Catcher Chaz", "Twins Min & Lyn", "Bugsy"] },
+        { at: "goldenrod", fought: ["Lass Lois", "Beauty Rita", "Whitney"] },
+        { at: "ecruteak", fought: ["Medium Holly", "Sage Ty", "Morty"] },
+        { at: "cianwood", fought: ["Black Belt Nick", "Chuck"] },
+        { at: "olivine", fought: ["Jasmine"] },
+        { at: "rocket", fought: ["Grunt ♂", "Grunt ♀", "Executive ♀", "Executive ♂"] },
+        { at: "mahogany", fought: ["Boarder Alvin", "Skier Carol", "Pryce"] },
+        { at: "blackthorn", fought: ["Cooltrainer Gloria", "Cooltrainer Vince", "Clair"] },
+        { at: "elite-four", fought: ["Will", "Koga", "Bruno", "Karen"] },
+        { at: "champion", fought: ["Lance"] },
+      ],
+    },
+    {
+      region: "kanto",
+      stops: [
+        { at: "pewter", fought: ["Brock"] },
+        { at: "cerulean", fought: ["Misty"] },
+        { at: "vermilion", fought: ["Lt. Surge"] },
+        { at: "celadon", fought: ["Erika"] },
+        { at: "fuchsia", fought: ["Janine"] },
+        { at: "saffron", fought: ["Sabrina"] },
+        { at: "cinnabar", fought: ["Blaine"] },
+        { at: "viridian", fought: ["Blue"] },
+        { at: "silver-cave", fought: ["Red"] },
+      ],
+    },
+  ],
+};
+
+/** The first game's prize for the castle's rival: one of these, at random. */
+export const CASTLE_PRIZES: Record<StadiumGame, readonly { pokemon: string; level: number }[]> = {
+  "1": [
+    { pokemon: "bulbasaur", level: 5 },
+    { pokemon: "charmander", level: 5 },
+    { pokemon: "squirtle", level: 5 },
+    { pokemon: "hitmonlee", level: 20 },
+    { pokemon: "hitmonchan", level: 20 },
+    { pokemon: "eevee", level: 25 },
+    { pokemon: "omanyte", level: 20 },
+    { pokemon: "kabuto", level: 20 },
+  ],
+  "2": [],
+};
+
+type GiftPokemon = "psyduck" | "pikachu" | "farfetchd" | "gligar";
+
+/** A Pokémon the game hands over with a move it could not otherwise have; the copy says what for. */
+export const STADIUM_GIFTS: Record<
+  StadiumGame,
+  readonly { pokemon: GiftPokemon; level?: number; move: string }[]
+> = {
+  "1": [
+    { pokemon: "psyduck", level: 15, move: "amnesia" },
+    // Taught to your own Pikachu, so no level of its own.
+    { pokemon: "pikachu", move: "surf" },
+  ],
+  "2": [
+    { pokemon: "farfetchd", level: 5, move: "baton-pass" },
+    { pokemon: "gligar", level: 5, move: "earthquake" },
+  ],
+};

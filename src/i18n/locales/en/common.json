@@ -292,6 +292,7 @@
       "encounters": "Places, levels and chances, game by game; a chance is summed within one set of conditions, because PokéAPI's own total sometimes passes 100%.",
       "types": "What an attack of each type does to a Pokémon of each other, as of the era, with the cells that once read differently listed underneath.",
       "versus": "Two Pokémon on the battle screen: what each one's types do to the other — the product over two types, so ×4 and ×¼ — base stats back to back, and a Moves tab that calculates a hit: a move for each side, the level and the stats to hand, the damage, the share of HP and the hits to a knockout. One alone shows its weaknesses. The pair, the abilities and the moves live in the address, so a matchup is a link.",
+      "stadium": "The cups of both Nintendo 64 Stadiums and what each lets in, the Gym Leader Castles trainer by trainer, what each game unlocks and hands out, its other modes, and how its battles differ from the handheld games.",
       "settings": "The language and the era are settings, not views: remembered in the browser, not in the address."
     },
     "not": {
@@ -317,17 +318,18 @@
         "wiki": "Polish entries, genera, move names and descriptions — CC BY-SA",
         "espeak": "the voice that reads the entry, running in the browser through meSpeak — GNU GPL",
         "font": "the typeface — SIL Open Font License",
-        "pokered": "the trainer's back sprite"
+        "pokered": "the trainer's back sprite",
+        "bulbapedia": "the Stadium pages' cups, castles, prizes and modes, told in our own words"
       },
       "trademark": "Pokémon and Pokémon character names are trademarks of Nintendo, Game Freak and The Pokémon Company. This is a fan project, non-commercial and unaffiliated with any of them."
     }
   },
   "stadium": {
     "title": "Pokémon Stadium",
-    "intro": "The cups of both Nintendo 64 Stadiums, and what a Pokémon needs to be let into each.",
+    "intro": "The cups of both Nintendo 64 Stadiums and what a Pokémon needs to be let into each, the Gym Leader Castles, what each game unlocks and hands out, its other modes and how its battles differ from the handheld games.",
     "switch": "Stadium games",
     "general": "Every cup",
-    "source": "The rules as <bp>Bulbapedia</bp> records them, checked against <serebii>Serebii</serebii>.",
+    "source": "Gathered from <bp>Bulbapedia</bp>; the cups' rules also checked against <serebii>Serebii</serebii>.",
     "games": {
       "1": {
         "name": "Pokémon Stadium",
@@ -392,15 +394,145 @@
     "nobody": "nobody",
     "eligibleValue_one": "{{count}} species",
     "eligibleValue_other": "{{count}} species",
-    "foesLevel": "Lv. {{level}}",
+    "level": "Lv. {{level}}",
     "foesMatch": "Lv. {{level}}, or your highest Pokémon's level when that is higher",
+    "sections": {
+      "prizes": "Unlocks and prizes",
+      "modes": "Beyond the cups",
+      "mechanics": "How its battles differ from the handheld games"
+    },
+    "castle": {
+      "at": {
+        "elite-four": "Elite Four",
+        "champion": "Champion",
+        "rocket": "Team Rocket",
+        "silver-cave": "Silver Cave"
+      },
+      "prize": "Beating the rival hands over one of these, at random:"
+    },
+    "modes": {
+      "1": [
+        {
+          "name": "Free Battle",
+          "text": "One to four players, or the computer, under a cup's rules or Anything Goes: any level, one to six Pokémon, and team battles with two players to a side and up to three Pokémon each."
+        },
+        {
+          "name": "Battle Now!",
+          "text": "A battle with no picking: each side is dealt one of two ready-made teams."
+        },
+        {
+          "name": "Kids Club",
+          "text": "Nine mini-games for one to four players, the computer filling the empty seats."
+        },
+        {
+          "name": "GB Tower",
+          "text": "Red, Blue and Yellow played on the television through the Transfer Pak, in a border of your choice."
+        },
+        {
+          "name": "Pokémon Lab",
+          "text": "With a cartridge in the Transfer Pak: boxes for Pokémon and items, trades between two cartridges through two Transfer Paks, the Pokédex, and the prizes the game hands out."
+        },
+        {
+          "name": "Hall of Fame",
+          "text": "Every team that wins a cup's last class or the castle is written in, one entry to a species; a newer one replaces the older."
+        },
+        {
+          "name": "Gallery",
+          "text": "In the American release only: photographs of your Pokémon or the rentals in any arena, printable as stickers."
+        }
+      ],
+      "2": [
+        {
+          "name": "Free Battle",
+          "text": "One to four players, two to a side if they like, against each other or Cal, the computer; any arena unlocked, a cup's rules or your own."
+        },
+        {
+          "name": "Battle Now!",
+          "text": "Six random Pokémon from a small pool for each side, three into battle: level 40 and mostly unevolved in Round 1, level 70 and evolved in Round 2; against Cal at three difficulties."
+        },
+        {
+          "name": "Event Battle",
+          "text": "Two players, Pokémon from cartridges only, a cup's rules or your own, against the clock: 10 to 90 seconds a turn, 5 to 90 minutes a match. When time runs out, more Pokémon left wins, then more HP left; failing both, a draw."
+        },
+        {
+          "name": "Mini-games",
+          "text": "Twelve mini-games for one to four players in White City's Kid's Club."
+        },
+        {
+          "name": "GB Tower",
+          "text": "Red, Blue, Yellow, Gold, Silver and Crystal on the television. Load Max plays smoothly after a longer wait; Load Little starts at once and loads as it goes."
+        },
+        {
+          "name": "Pokémon Lab",
+          "text": "Professor Oak's: trades between cartridges, a 3D Pokédex with maps of Johto and Kanto, and a PC that can also keep Pokémon on the Stadium 2 cartridge. Items move between games of one generation in the Color Case (Gen I) and the Metal Case (Gen II)."
+        },
+        {
+          "name": "Pokémon Academy",
+          "text": "Earl's lessons on battling, test battles with set Pokémon, and a library of items, Pokémon and tactics that Crystal in the Transfer Pak extends."
+        },
+        {
+          "name": "My Room",
+          "text": "Your room from Gold, Silver or Crystal in 3D, to decorate as in the game."
+        },
+        {
+          "name": "Mystery Gift",
+          "text": "One gift a day for each Gen II cartridge."
+        }
+      ]
+    },
+    "unlocks": {
+      "1": [
+        "The GB Tower becomes the Doduo tower, at double speed, after the Poké Cup or the Prime Cup in Round 1, and the Dodrio tower, at triple speed, after both.",
+        "In Round 2 Mew joins the Prime Cup's rentals."
+      ],
+      "2": [
+        "The GB Tower's Doduo speed, twice as fast, comes with the castle or every cup: in Round 1 for the Gen I games, in Round 2 for Gen II. Its Dodrio speed comes with both: four times as fast for Gen I, three times for Gen II, which also needs the Elite Four beaten on that cartridge."
+      ]
+    },
+    "gifts": {
+      "psyduck": "For all 151 species in the Hall of Fame.",
+      "pikachu": "Taught to your own Pikachu outside Japan, for the Prime Cup's Master Ball class won in Round 2 with every Pokémon taken straight from the cartridge rather than registered, without saving, and the Pikachu picked for the last battle.",
+      "farfetchd": "For beating the rival in Round 1.",
+      "gligar": "For beating the rival in Round 2; in Gen II no TM teaches it Earthquake."
+    },
+    "mechanics": {
+      "1": [
+        "Both teams are shown before the battle, and HP is shown as numbers.",
+        "No items in battle.",
+        "Sleep lasts no more than two turns.",
+        "A Pokémon that knocks its target out with a recoil move takes no recoil.",
+        "Wrap and the other binding moves end when the target switches, and a bound Pokémon still picks a move.",
+        "Critical hits follow a new formula, and any move's extra 1 in 256 chance to miss shrinks to 1 in 65,536.",
+        "Hyper Beam needs its recharge even after a miss or a knockout.",
+        "Struggle hits Ghosts, Psywave always does damage, Haze also cures the user's own status, and Transform fails on a Ditto.",
+        "Rest no longer fails 255 or 511 HP short of full, and lifts the stat cuts of burn and paralysis.",
+        "Swift and Bide miss a Pokémon that is underground or in the air.",
+        "Substitute blocks HP-draining moves and status conditions.",
+        "The message on how effective a hit was is right for a dual-type target; the damage always was.",
+        "Counter, Disable, Mimic, Mirror Move, Rage and Focus Energy lose their Gen I bugs."
+      ],
+      "2": [
+        "Both teams are always shown before the battle, and HP is shown as numbers.",
+        "Only an item that does something in battle can be held.",
+        "Dragon Fang and Dragon Scale both add 10% to Dragon moves.",
+        "Berserk Gene confuses for two to five turns, not 255; Metal Powder works only for an untransformed Ditto.",
+        "Belly Drum fails below half HP instead of raising Attack two stages.",
+        "Present has 40 power four times in ten, 80 three times, 120 once, and two times in ten heals the target a quarter of its HP, failing at full.",
+        "Counter fails after a missed Fissure or Horn Drill.",
+        "Stats stop at 999 instead of rolling over.",
+        "Raising a burned Pokémon's Attack, or a paralysed one's Speed, sets the status's cut aside.",
+        "Sleep lasts two to four turns, as in Crystal's Battle Tower.",
+        "When both sides are down to their last Pokémon, a recoil move that wins costs no recoil."
+      ]
+    },
     "notes": {
       "1": {
         "petit": [
           "Only Pokémon that have not evolved, which takes in Farfetch'd and Ditto: they never do."
         ],
         "castle": [
-          "Eight gyms of four battles each, three trainers and then the leader; after them the Elite Four and the rival."
+          "A new team may be picked before each gym; the rival is faced with the team that beat the Elite Four.",
+          "Trainers go by Stadium's own class names, cut to seven letters: Bug Boy, Lad, Lab Man."
         ],
         "mewtwo": [
           "Opens once every cup and the Castle are cleared.",
@@ -415,7 +547,9 @@
           "No Pokémon of your own and no rentals of your choosing: each attempt deals out {{entered}} random rentals with random moves, and the opponents' teams are random too."
         ],
         "castle": [
-          "Johto's eight gyms with Team Rocket on the way, then the Elite Four and Lance; after them Kanto's eight gyms, and Red last."
+          "Rentals come from the Poké Cup, at level 50.",
+          "Kanto opens once Johto is cleared, and its leaders can be taken in any order.",
+          "Clearing the Elite Four with six Pokémon of your own, no rentals, lets one of them relearn a move it could once learn by level: before Gen III, the only way."
         ],
         "rival": [
           "Opens once every cup and the Castle are cleared.",

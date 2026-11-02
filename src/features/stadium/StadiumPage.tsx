@@ -15,7 +15,10 @@ import {
   type StadiumGame,
 } from "@/domain/stadium";
 import { useScrollTopOn } from "@/features/shared/useScrollTopOn";
+import { TypeChartAd } from "@/features/types";
+import { VersusAd } from "@/features/versus";
 import { CupBox } from "./CupBox";
+import { CastleRoster, MechanicsBox, ModesBox, PrizesBox } from "./GameSections";
 
 const SOURCES: Record<StadiumGame, { bulbapedia: string; serebii: string }> = {
   "1": { bulbapedia: LINKS.bulbapediaStadium, serebii: LINKS.serebiiStadium },
@@ -43,11 +46,12 @@ export const StadiumPage = () => {
           ))}
         </ul>
       </GbBox>
+      <WayOn />
     </Screen>
   );
 };
 
-/** One game's cups, under the rules every one of them shares. */
+/** One game: the rules every cup shares, the cups, then what the game unlocks, its other modes and its mechanics. */
 export const StadiumGamePage = () => {
   const { game } = useParams<{ game: string }>();
   useScrollTopOn(game);
@@ -73,8 +77,13 @@ const GameCups = ({ game }: { game: StadiumGame }) => {
           />
         </GbSection>
         {STADIUM_CUPS[game].map((cup) => (
-          <CupBox key={cup.id} cup={cup} notes={notes[cup.id] ?? []} />
+          <CupBox key={cup.id} cup={cup} notes={notes[cup.id] ?? []}>
+            {cup.id === "castle" && <CastleRoster game={game} />}
+          </CupBox>
         ))}
+        <PrizesBox game={game} />
+        <ModesBox game={game} />
+        <MechanicsBox game={game} />
         <p className="text-[10px] leading-relaxed text-gray-500">
           <Trans
             i18nKey="stadium.source"
@@ -85,9 +94,18 @@ const GameCups = ({ game }: { game: StadiumGame }) => {
           />
         </p>
       </div>
+      <WayOn />
     </Screen>
   );
 };
+
+/** Last, as the chart and Versus end on each other: the way on to a matchup and to the chart. */
+const WayOn = () => (
+  <div className="mt-10 space-y-4">
+    <VersusAd />
+    <TypeChartAd />
+  </div>
+);
 
 /** The other game a step away, the way the fork offered both. */
 const GameSwitch = () => {

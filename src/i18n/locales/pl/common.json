@@ -305,6 +305,7 @@
       "encounters": "Lokacje, poziomy i szanse, gra po grze; szansa jest sumowana w obrębie jednego zestawu warunków, bo własna suma PokéAPI przekracza czasem 100%.",
       "types": "Co atak każdego typu robi Pokémonowi każdego innego, według ery, z listą komórek, które kiedyś czytały się inaczej.",
       "versus": "Dwa Pokémony na ekranie walki: co typy jednego robią drugiemu — z iloczynem po dwóch typach, więc ×4 i ×¼ — statystyki bazowe plecami do siebie i zakładka Ruchy, która liczy trafienie: ruch dla każdej strony, poziom i statystyki pod ręką, obrażenia, procent HP i po ilu trafieniach pada. Jeden sam pokazuje swoje słabości. Para, umiejętności i ruchy siedzą w adresie, więc starcie jest linkiem.",
+      "stadium": "Puchary obu Stadionów z Nintendo 64 i to, kogo wpuszczają, Gym Leader Castle trener po trenerze, co każda gra odblokowuje i rozdaje, jej pozostałe tryby i czym jej walki różnią się od gier na Game Boya.",
       "settings": "Język i era to ustawienia, nie widoki: zapamiętane w przeglądarce, nie w adresie."
     },
     "not": {
@@ -330,17 +331,18 @@
         "wiki": "polskie wpisy, rodzaje, nazwy i opisy ruchów — CC BY-SA",
         "espeak": "głos czytający wpis, w przeglądarce przez meSpeak — GNU GPL",
         "font": "czcionka — SIL Open Font License",
-        "pokered": "sprite pleców trenera"
+        "pokered": "sprite pleców trenera",
+        "bulbapedia": "puchary, zamki, nagrody i tryby na stronach Stadium, opisane własnymi słowami"
       },
       "trademark": "Pokémon i nazwy Pokémonów są znakami towarowymi Nintendo, Game Freak i The Pokémon Company. To projekt fanowski, niekomercyjny i niezwiązany z żadną z tych firm."
     }
   },
   "stadium": {
     "title": "Pokémon Stadium",
-    "intro": "Puchary obu Stadionów z Nintendo 64 i to, czego Pokémon potrzebuje, żeby go do nich wpuszczono.",
+    "intro": "Puchary obu Stadionów z Nintendo 64 i to, czego Pokémon potrzebuje, żeby go do nich wpuszczono, Gym Leader Castle, co każda gra odblokowuje i rozdaje, jej pozostałe tryby i czym jej walki różnią się od gier na Game Boya.",
     "switch": "Gry Stadium",
     "general": "W każdym pucharze",
-    "source": "Zasady według <bp>Bulbapedii</bp>, sprawdzone z <serebii>Serebii</serebii>.",
+    "source": "Zebrane z <bp>Bulbapedii</bp>; zasady pucharów sprawdzone też z <serebii>Serebii</serebii>.",
     "games": {
       "1": {
         "name": "Pokémon Stadium",
@@ -407,15 +409,145 @@
     "eligibleValue_few": "{{count}} gatunki",
     "eligibleValue_many": "{{count}} gatunków",
     "eligibleValue_other": "{{count}} gatunku",
-    "foesLevel": "poz. {{level}}",
+    "level": "poz. {{level}}",
     "foesMatch": "poz. {{level}}, albo poziom Twojego najwyższego Pokémona, jeśli ten jest wyższy",
+    "sections": {
+      "prizes": "Odblokowania i nagrody",
+      "modes": "Poza pucharami",
+      "mechanics": "Czym walki różnią się od gier na Game Boya"
+    },
+    "castle": {
+      "at": {
+        "elite-four": "Elitarna Czwórka",
+        "champion": "Mistrz",
+        "rocket": "Zespół R",
+        "silver-cave": "Silver Cave"
+      },
+      "prize": "Za rywala dostajesz losowo jednego z nich:"
+    },
+    "modes": {
+      "1": [
+        {
+          "name": "Free Battle",
+          "text": "Od jednego do czterech graczy albo komputer, na zasadach pucharu lub Anything Goes: dowolny poziom, od jednego do sześciu Pokémonów i walki drużynowe, po dwóch graczy na stronę, każdy z najwyżej trzema Pokémonami."
+        },
+        {
+          "name": "Battle Now!",
+          "text": "Walka bez wybierania: każda strona dostaje jedną z dwóch gotowych drużyn."
+        },
+        {
+          "name": "Kids Club",
+          "text": "Dziewięć mini-gier dla jednego do czterech graczy; wolne miejsca zajmuje komputer."
+        },
+        {
+          "name": "GB Tower",
+          "text": "Red, Blue i Yellow na ekranie telewizora przez Transfer Pak, w wybranej ramce."
+        },
+        {
+          "name": "Pokémon Lab",
+          "text": "Z kartridżem w Transfer Paku: pudła na Pokémony i przedmioty, wymiany między dwoma kartridżami przez dwa Transfer Paki, Pokédex i nagrody, które rozdaje gra."
+        },
+        {
+          "name": "Hall of Fame",
+          "text": "Wpisuje każdą drużynę, która wygra ostatnią klasę pucharu albo zamek, jeden wpis na gatunek; nowszy zastępuje starszy."
+        },
+        {
+          "name": "Gallery",
+          "text": "Tylko w wydaniu amerykańskim: zdjęcia Twoich Pokémonów albo wypożyczonych na dowolnej arenie, do wydrukowania jako naklejki."
+        }
+      ],
+      "2": [
+        {
+          "name": "Free Battle",
+          "text": "Od jednego do czterech graczy, jeśli chcą, to po dwóch na stronę, przeciw sobie albo Calowi, czyli komputerowi; dowolna odblokowana arena, zasady pucharu albo własne."
+        },
+        {
+          "name": "Battle Now!",
+          "text": "Każda strona dostaje sześć losowych Pokémonów z małej puli, do walki idą trzy: w Round 1 na poziomie 40 i przeważnie nierozwinięte, w Round 2 na 70 i rozwinięte; z Calem na trzech poziomach trudności."
+        },
+        {
+          "name": "Event Battle",
+          "text": "Dwóch graczy, tylko Pokémony z kartridży, zasady pucharu albo własne, na czas: od 10 do 90 sekund na turę, od 5 do 90 minut na mecz. Gdy czas minie, wygrywa ten, komu zostało więcej Pokémonów, potem więcej HP; inaczej remis."
+        },
+        {
+          "name": "Mini-gry",
+          "text": "Dwanaście mini-gier dla jednego do czterech graczy w Kid's Clubie w White City."
+        },
+        {
+          "name": "GB Tower",
+          "text": "Red, Blue, Yellow, Gold, Silver i Crystal na ekranie telewizora. Load Max gra płynnie po dłuższym wczytywaniu, Load Little rusza od razu i doczytuje w trakcie."
+        },
+        {
+          "name": "Pokémon Lab",
+          "text": "Laboratorium profesora Oaka: wymiany między kartridżami, Pokédex 3D z mapami Johto i Kanto oraz PC, który przechowuje Pokémony także na kartridżu Stadium 2. Przedmioty przechodzą między grami jednej generacji w Color Case (Gen I) i Metal Case (Gen II)."
+        },
+        {
+          "name": "Pokémon Academy",
+          "text": "Lekcje walki u Earla, walki testowe z narzuconymi Pokémonami i biblioteka przedmiotów, Pokémonów i taktyki, którą poszerza Crystal w Transfer Paku."
+        },
+        {
+          "name": "My Room",
+          "text": "Twój pokój z Gold, Silver albo Crystal w 3D, do urządzenia jak w grze."
+        },
+        {
+          "name": "Mystery Gift",
+          "text": "Jeden prezent dziennie dla każdego kartridża Gen II."
+        }
+      ]
+    },
+    "unlocks": {
+      "1": [
+        "GB Tower zmienia się w wieżę Doduo, z podwójną prędkością, po Poké Cup albo Prime Cup w Round 1, a w wieżę Dodrio, z potrójną, po obu.",
+        "W Round 2 Mew dołącza do wypożyczanych w Prime Cup."
+      ],
+      "2": [
+        "Prędkość Doduo w GB Tower, dwa razy szybciej, przychodzi z zamkiem albo wszystkimi pucharami: w Round 1 dla gier Gen I, w Round 2 dla Gen II. Prędkość Dodrio przychodzi z jednym i drugim: cztery razy szybciej dla Gen I, trzy dla Gen II, która wymaga jeszcze pokonanej Elitarnej Czwórki na tym kartridżu."
+      ]
+    },
+    "gifts": {
+      "psyduck": "Za wszystkie 151 gatunków w Hall of Fame.",
+      "pikachu": "Uczy się go Twój Pikachu, poza Japonią, za klasę Master Ball w Prime Cup wygraną w Round 2, gdy każdy Pokémon pochodzi prosto z kartridża, a nie z rejestracji, bez zapisywania gry, a Pikachu jest wybrany do ostatniej walki.",
+      "farfetchd": "Za pokonanie rywala w Round 1.",
+      "gligar": "Za pokonanie rywala w Round 2; w Gen II żaden TM nie uczy go Wstrząsu."
+    },
+    "mechanics": {
+      "1": [
+        "Obie drużyny są widoczne przed walką, a HP pokazuje liczby.",
+        "W walce nie ma przedmiotów.",
+        "Sen trwa najwyżej dwie tury.",
+        "Pokémon, który powali cel ruchem z odrzutem, nie dostaje odrzutu.",
+        "Omotanie i inne ruchy wiążące kończą się, gdy cel się wycofa, a związany Pokémon nadal wybiera ruch.",
+        "Trafienia krytyczne liczy nowy wzór, a dodatkowa szansa 1 na 256 na pudło każdego ruchu spada do 1 na 65 536.",
+        "Hiper promień wymaga tury ładowania także po pudle i po nokaucie.",
+        "Szamotanie trafia Duchy, Psychofala zawsze zadaje obrażenia, Mgiełka leczy też status użytkownika, a Transformacja nie działa na Ditto.",
+        "Odpoczynek nie zawodzi już 255 albo 511 HP przed pełnym i znosi spadki statystyk od oparzenia i paraliżu.",
+        "Gwiezdny pęd i Cierpliwość pudłują w Pokémona pod ziemią albo w powietrzu.",
+        "Zastępca chroni przed ruchami wysysającymi HP i przed statusami.",
+        "Komunikat o skuteczności trafienia jest poprawny przy celu o dwóch typach; obrażenia zawsze były.",
+        "Kontra, Wyłączenie, Mimikra, Lustrzany ruch, Wściekłość i Skupienie energii tracą błędy z Gen I."
+      ],
+      "2": [
+        "Obie drużyny są zawsze widoczne przed walką, a HP pokazuje liczby.",
+        "Trzymać można tylko przedmiot, który coś robi w walce.",
+        "Dragon Fang i Dragon Scale dodają po 10% smoczym ruchom.",
+        "Berserk Gene dezorientuje na dwie do pięciu tur, nie na 255; Metal Powder działa tylko na nieprzemienionego Ditto.",
+        "Bębniący brzuch poniżej połowy HP zawodzi, zamiast podnieść Atak o dwa stopnie.",
+        "Prezent ma moc 40 cztery razy na dziesięć, 80 trzy razy, 120 raz, a dwa razy na dziesięć leczy cel o ćwierć HP, zawodząc przy pełnym.",
+        "Kontra zawodzi po chybionej Szczelinie albo Świdrorogu.",
+        "Statystyki zatrzymują się na 999, zamiast się przekręcać.",
+        "Podniesienie Ataku oparzonemu albo Szybkości sparaliżowanemu pomija spadek od statusu.",
+        "Sen trwa od dwóch do czterech tur, jak w Battle Tower z Crystal.",
+        "Gdy obu stronom został ostatni Pokémon, wygrywający ruch z odrzutem nie kosztuje odrzutu."
+      ]
+    },
     "notes": {
       "1": {
         "petit": [
           "Tylko Pokémony, które nie ewoluowały — a więc także Farfetch'd i Ditto, które nie ewoluują wcale."
         ],
         "castle": [
-          "Osiem sal po cztery walki, trzech trenerów i lider; po nich Elitarna Czwórka i rywal."
+          "Przed każdą salą można wybrać nową drużynę; z rywalem walczysz tą, która pokonała Elitarną Czwórkę.",
+          "Trenerzy noszą nazwy klas ze Stadium, skrócone do siedmiu liter: Bug Boy, Lad, Lab Man."
         ],
         "mewtwo": [
           "Otwiera się po ukończeniu wszystkich pucharów i Gym Leader Castle.",
@@ -430,7 +562,9 @@
           "Ani własnych Pokémonów, ani wybranych wypożyczonych: każde podejście rozdaje {{entered}} losowych wypożyczonych z losowymi ruchami, a drużyny przeciwników też są losowe."
         ],
         "castle": [
-          "Osiem sal Johto z Zespołem R po drodze, potem Elitarna Czwórka i Lance; po nich osiem sal Kanto, a na końcu Red."
+          "Wypożyczone pochodzą z Poké Cup, na poziomie 50.",
+          "Kanto otwiera się po ukończeniu Johto, a jego liderów można brać w dowolnej kolejności.",
+          "Pokonanie Elitarnej Czwórki szóstką własnych Pokémonów, bez wypożyczonych, pozwala jednemu z nich przypomnieć sobie ruch, którego mógł się kiedyś nauczyć na poziomie: przed Gen III jedyny sposób."
         ],
         "rival": [
           "Otwiera się po ukończeniu wszystkich pucharów i Gym Leader Castle.",

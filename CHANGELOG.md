@@ -16,6 +16,39 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `feat: each Stadium page walks its castle trainer by trainer and says what the game unlocks, hands out, offers besides the cups and changes in battle`
+
+- **Added** — The Gym Leader Castle box lists every stop: in the first game Kanto's eight gyms
+  of three trainers and a leader, the Elite Four and the rival, and the eight Pokémon one of
+  which the rival hands over, each a link to its dex page; in the second Johto's gyms with
+  Team Rocket on the way, the Elite Four and Lance, then Kanto's eight leaders and Red.
+  Trainers keep the class names the games print, `♂` and `♀` included: the pixel font has
+  neither, so `components/PixelSigns.tsx` draws them on its own eight-to-the-em grid.
+- **Added** — Unlocks and prizes: what speeds the GB Tower and what Round 2 lends, and the
+  Pokémon handed over with a move they could not otherwise have — Amnesia Psyduck and the
+  Surf a Pikachu can learn in the first game, Baton Pass Farfetch'd and Earthquake Gligar in
+  the second — with the conditions for each.
+- **Added** — Beyond the cups: a sentence on each of the game's other modes, from Free Battle
+  and Battle Now! to the Lab, the Academy and Mystery Gift; and, closed until opened, how
+  its battles differ from the handheld games'.
+- **Changed** — The castle notes say what the list does not: a new team before each gym,
+  rentals at level 50, Kanto in any order, the move a clean Elite Four run relearns. A Pokémon
+  link on these pages is one `DexLink`, and “Lv.” one `stadium.level` key where the
+  opponents' row had its own.
+- **Changed** — The data sits in `domain/stadium.ts` beside the cups (`CASTLE_ROSTER`,
+  `CASTLE_PRIZES`, `STADIUM_GIFTS`), read from Bulbapedia's game, castle, mini-game and GB
+  Tower pages; where those disagree — the GB Tower's unlocks, which round gives which
+  Stadium 2 prize — the game pages win over the stub that contradicts them. About lists
+  the Stadium pages and credits Bulbapedia.
+- **Added** — The Stadium hub and both game pages end on the two ads the chart and Versus
+  already end on each other with: Meowth and Jigglypuff squared up for Versus, the starters'
+  corner of the chart for the type chart.
+- **Changed** — Each ad moves to the feature it advertises — `VersusAd` to `versus/`,
+  `TypeChartAd` to `types/` — and leaves through that feature's `index.ts`, so three pages
+  take each from one place. The chart ad no longer needs the chart: its Fire, Water and Grass
+  corner is written out, being the same in every generation, and the count of the rest comes
+  from the era's types, so it costs no request at all.
+
 ### `feat: on a phone the navbar opens its menu from a hamburger instead of the word Menu`
 
 - **Changed** — Under `md` the navbar's menu button is three bars instead of the word Menu,

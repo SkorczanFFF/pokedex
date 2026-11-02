@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTypeChart } from "@/api/useTypeChart";
+import { TypeChartAd } from "@/features/types";
 import { useEra } from "@/app/era/context";
 import { Arrow } from "@/components/Arrow";
 import { InlineError } from "@/components/ErrorView";
@@ -12,7 +13,6 @@ import type { DexEra } from "@/domain/era";
 import { AbilityPicker } from "./AbilityPicker";
 import { BattleField } from "./BattleField";
 import { PokemonPicker } from "./PokemonPicker";
-import { TypeChartAd } from "./TypeChartAd";
 import { VersusMessage } from "./VersusMessage";
 import type { Fighter, Side, Tab } from "./model";
 import { useFighter } from "./useFighter";
@@ -106,11 +106,9 @@ export const VersusPage = () => {
       </GbBox>
 
       {/* Last, as the chart page ends on Versus: the way back to all of it. */}
-      {chart && (
-        <div className="mt-10">
-          <TypeChartAd chart={chart} />
-        </div>
-      )}
+      <div className="mt-10">
+        <TypeChartAd />
+      </div>
     </Screen>
   );
 };
