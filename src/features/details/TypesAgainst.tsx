@@ -101,16 +101,20 @@ export const TypesAgainst = ({ pokemon }: { pokemon: Pokemon }) => {
   );
 };
 
-/** The bubble's point, towards the button: a black triangle, and a white one inside it over the frame. */
+/**
+ * The bubble's point, towards the button: a black triangle, and a white one inside it over
+ * the frame. Each runs 2px past its edge, into the black frame and the white box, so no
+ * rounding on a phone's screen opens a seam between point and bubble.
+ */
 const Tail = ({ x, above }: { x: number; above: boolean }) => {
   const [frame, fill] = above
-    ? ["bottom-1 border-t-[12px] border-t-black", "bottom-2.5 border-t-[10px] border-t-white"]
-    : ["top-1 border-b-[12px] border-b-black", "top-2.5 border-b-[10px] border-b-white"];
+    ? ["bottom-1 border-t-[14px] border-t-black", "bottom-2.5 border-t-[12px] border-t-white"]
+    : ["top-1 border-b-[14px] border-b-black", "top-2.5 border-b-[12px] border-b-white"];
   const at = "absolute -translate-x-1/2 border-x-transparent";
   return (
     <>
-      <span aria-hidden="true" style={{ left: x }} className={`${at} border-x-[12px] ${frame}`} />
-      <span aria-hidden="true" style={{ left: x }} className={`${at} border-x-[10px] ${fill}`} />
+      <span aria-hidden="true" style={{ left: x }} className={`${at} border-x-[14px] ${frame}`} />
+      <span aria-hidden="true" style={{ left: x }} className={`${at} border-x-[12px] ${fill}`} />
     </>
   );
 };

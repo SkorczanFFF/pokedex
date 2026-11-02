@@ -16,6 +16,14 @@ This file starts here. Everything before it lives in `git log` and has not been 
 
 ## [Unreleased]
 
+### `fix: the Types against bubble's point meets its frame without a seam on a phone`
+
+- **Fixed** — On a phone a 1px line of the page showed between the bubble and its point: the
+  black triangle ended exactly at the frame's outer edge and the white one at its inner
+  edge, and a screen of 2.6 or 3 pixels to the CSS pixel rounded the two apart. Both now run
+  2px past those edges, into black frame and white box, at the same 45°, so the point looks
+  as it did and no rounding opens a gap.
+
 ### `feat: the navbar puts the language beside the logo and Stadium among the pages in Retro, Versus last, and the footer keeps GitHub and About`
 
 - **Changed** — From `md` the language switch stands beside the Pokédex logo and the right
